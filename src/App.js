@@ -4,6 +4,7 @@ import HeaderComponent from './Component/HeaderComponent';
 import Footer from './Component/FooterComponent';
 import HomePage from './Pages/HomePage';
 import { LoginPage } from './Pages/Login/LoginPage';
+import RegisterPage from './Pages/Login/RegisterPage';
 function App() {
   return (
     <HashRouter>
@@ -14,6 +15,7 @@ function App() {
 
         {/* Login */}
         <Route path='/login' Component={LoginPage}></Route>
+        <Route path='/register' Component={RegisterPage} />
       </Routes>
 
       <Footer></Footer>

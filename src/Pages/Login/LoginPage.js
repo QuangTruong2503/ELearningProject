@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import LoaderButton from '../../Component/Loader/LoaderButton.js';
+import { NavLink } from "react-router-dom";
 export const LoginPage = () => {
     const apiURL= process.env.REACT_APP_API_URL;
     const [isLoading, setIsLoading] = useState(false)
@@ -108,7 +109,7 @@ export const LoginPage = () => {
                 <p className="text-center fw-bold mx-3 mb-0 text-muted">Hoặc</p>
               </div>
               <div className="d-flex justify-content-center align-items-center mb-4 ">
-                <a className="text-decoration-none" href="/login">Tạo tài khoản mới</a>
+                <NavLink className="text-decoration-none" to="/register">Tạo tài khoản mới</NavLink>
               </div>
             </form>
           </div>

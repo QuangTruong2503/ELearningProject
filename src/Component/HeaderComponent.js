@@ -11,8 +11,8 @@ function HeaderComponent() {
     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <FontAwesomeIcon icon={faBars} />
     </button>
-    <div className="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+    <div className="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
+      <ul className="navbar-nav mb-2 mb-lg-0">
         <li className="nav-item">
           <a className="nav-link active" aria-current="page" href="/">Home</a>
         </li>
@@ -32,7 +32,10 @@ function HeaderComponent() {
         </li>
 
       </ul>
-      <NavLink className="btn btn-outline-primary" to={'/login'}>Đăng nhập</NavLink>
+      <div className="d-flex gap-2">
+        <NavLink className="btn btn-outline-primary" to={'/register'}>Đăng ký</NavLink>
+        <NavLink className="btn btn-outline-primary" to={'/login'}>Đăng nhập</NavLink>
+      </div>
     </div>
   </div>
 </nav>
