@@ -1,7 +1,7 @@
-import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
+import { NavLink } from "react-router-dom";
 
 function HeaderComponent() {
   return (
@@ -32,7 +32,7 @@ function HeaderComponent() {
         </li>
 
       </ul>
-      <button className="btn btn-outline-primary" type="submit">Đăng nhập</button>
+      <NavLink className="btn btn-outline-primary" to={'/login'}>Đăng nhập</NavLink>
     </div>
   </div>
 </nav>
