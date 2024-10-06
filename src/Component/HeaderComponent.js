@@ -2,8 +2,14 @@ import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { NavLink } from "react-router-dom";
-
+import Cookies from 'js-cookie';
 function HeaderComponent() {
+  const loginCookies = Cookies.get('loginToken');
+
+  const handleLogout = () =>{
+    Cookies.remove('loginToken');
+    window.location.reload();
+  }
   return (
 <nav className="navbar navbar-expand-lg bg-body-tertiary">
   <div className="container">
@@ -32,10 +38,17 @@ function HeaderComponent() {
         </li>
 
       </ul>
-      <div className="d-flex gap-2">
-        <NavLink className="btn btn-outline-primary" to={'/register'}>Đăng ký</NavLink>
-        <NavLink className="btn btn-outline-primary" to={'/login'}>Đăng nhập</NavLink>
-      </div>
+      {loginCookies === undefined &&
+        <div className="d-flex gap-2">
+          <NavLink className="btn btn-outline-primary" to={'/register'}>Đăng ký</NavLink>
+          <NavLink className="btn btn-outline-primary" to={'/login'}>Đăng nhập</NavLink>
+        </div>
+      }
+      {loginCookies !== undefined &&
+        <div className="d-flex gap-2">
+            <button className="btn btn-danger" onClick={() => handleLogout()}>Đăng xuất</button>
+        </div>
+      }
     </div>
   </div>
 </nav>

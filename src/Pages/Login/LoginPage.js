@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import LoaderButton from '../../Component/Loader/LoaderButton.js';
 import { NavLink } from "react-router-dom";
+import {handleFetchLogin} from '../../API/loginAPI.js';
+import setCookies from "../../Helpers/Cookies.js";
+import Cookies from 'js-cookie';
 export const LoginPage = () => {
-    const apiURL= process.env.REACT_APP_API_URL;
+    const loginCookies = Cookies.get('loginToken');
+
     const [isLoading, setIsLoading] = useState(false)
     const [loginData, setLoginData] = useState({
         userNameOrEmail: '',
@@ -20,24 +24,19 @@ export const LoginPage = () => {
         e.preventDefault();
         try{
             setIsLoading(true)
-            const response = await fetch(`${apiURL}/Login`, {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(loginData),
-            });
-            if(!response.ok){
-                const result = await response.json();
-                console.log(response.status())
-                toast.error(result.message);
-                return;
+            const result = await handleFetchLogin(loginData);
+            if(result === undefined){
+              toast.error("Gặp lỗi khi đăng nhập.");
+              return;
             }
-            const result = await response.json();
             if(!result.isLogin)
-                return toast.error(result.message);
+              return toast.error(result.message);
             toast.success(result.message)
             console.log(result);
+            setCookies('loginToken', result.token);
+            setCookies('isLogin', result.isLogin);
+            return;
+
         }
         catch(err){
             console.error(err.message);
@@ -47,7 +46,14 @@ export const LoginPage = () => {
             setIsLoading(false)
         }
 
-    }
+    };
+    useEffect(() =>{
+      if(loginCookies !== undefined){
+        setTimeout(() =>{
+          window.location.href = '/';
+        }, 1000)
+      }
+    }, [loginCookies])
   return (
     <section className="vh-100">
       <div className="container py-5 h-100">
