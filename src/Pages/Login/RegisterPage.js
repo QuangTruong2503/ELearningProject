@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import LoaderButton from "../../Component/Loader/LoaderButton";
 import toast from "react-hot-toast";
+import { NavLink } from "react-router-dom";
 const RegisterPage = () => {
     const apiURL = process.env.REACT_APP_API_URL;
     const [registerData, setRegisterData] = useState({
@@ -73,7 +74,9 @@ const RegisterPage = () => {
           <div className="col-12 col-lg-9 col-xl-7">
             <div className="card shadow-2-strong card-registration rounded-2">
               <div className="card-body p-4 p-md-5">
-                <h3 className="mb-4 pb-2 pb-md-0 mb-md-5">Đăng Ký Tài Khoản</h3>
+                <div className="text-center">
+                  <h3 className="mb-4 pb-2 pb-md-0 mb-md-5 text-primary">Đăng Ký Tài Khoản</h3>
+                </div>
                 <form onSubmit={handleRegister}>
                   <div className="row">
                     <div className="col-md-12 mb-4">
@@ -84,10 +87,11 @@ const RegisterPage = () => {
                         <input
                           id="userName"
                           type="text"
-                          className="form-control form-control-lg"
+                          className="form-control form-control-lg "
                           name="user_name"
                           required
                           onChange={handleChangeData}
+                          placeholder="user123"
                         />
                       </div>
                     </div>
@@ -99,7 +103,7 @@ const RegisterPage = () => {
                         <input
                           id="password"
                           type="password"
-                          className="form-control form-control-lg"
+                          className="form-control form-control-lg "
                           name="hashed_password"
                           onChange={handleChangeData}
                         />
@@ -113,7 +117,7 @@ const RegisterPage = () => {
                         <input
                           id="confirmPassword"
                           type="password"
-                          className={`form-control form-control-lg ${passwordMatch? '' :'border-danger'}`}
+                          className={`form-control form-control-lg  ${passwordMatch? '' :'border-danger'}`}
                           required
                           onChange={e => setConfirmPassword(e.target.value)}
                         />
@@ -129,15 +133,16 @@ const RegisterPage = () => {
                     <div className="col-md-6 mb-4">
                       <div data-mdb-input-init className="form-outline">
                         <label className="form-label" htmlFor="firstName">
-                          Họ và đệm
+                          Họ
                         </label>
                         <input
                           type="text"
                           id="firstName"
-                          className="form-control form-control-lg"
+                          className="form-control form-control-lg "
                           name="first_name"
                           required
                           onChange={handleChangeData}
+                          placeholder="Nguyễn Văn"
                         />
                       </div>
                     </div>
@@ -149,17 +154,18 @@ const RegisterPage = () => {
                         <input
                           type="text"
                           id="lastName"
-                          className="form-control form-control-lg"
+                          className="form-control form-control-lg "
                           name="last_name"
                           required
                           onChange={handleChangeData}
+                          placeholder="Nam"
                         />
                       </div>
                     </div>
                   </div>
 
                   <div className="row">
-                    <div className="col-md-6 mb-4 pb-2">
+                    <div className="col-md-12 mb-4 pb-2">
                       <div data-mdb-input-init className="form-outline">
                         <label className="form-label" htmlFor="emailAddress">
                           Email
@@ -171,6 +177,7 @@ const RegisterPage = () => {
                           name="email"
                           required
                           onChange={handleChangeData}
+                          placeholder="test@gmail.com"
                         />
                       </div>
                     </div>
@@ -211,6 +218,17 @@ const RegisterPage = () => {
                       className="btn btn-primary btn-lg w-75"
                       type="submit"
                     >ĐĂNG KÝ</button>
+                  </div>
+                  <div className="divider d-flex align-items-center justify-content-center my-4">
+                  <p className="text-center fw-bold mx-3 mb-0 text-muted">
+                    Đã có tài khoản?
+                  </p>
+                </div>
+
+                <div className="d-flex justify-content-center">
+                  <NavLink className="text-decoration-none" to="/login">
+                    Đăng nhập tài khoản
+                  </NavLink>
                   </div>
                 </form>
               </div>

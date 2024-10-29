@@ -2,7 +2,7 @@ import React from 'react'
 
 function HomePage() {
   return (
-    <div className='container min-vh-100'>HomePage</div>
+    <div className='container min-vh-100'>HomePages</div>
   )
 }
 
