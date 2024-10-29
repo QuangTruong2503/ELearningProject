@@ -1,4 +1,4 @@
-const apiURL = 'https://elearningapi.up.railway.app/api';
+const apiURL = process.env.REACT_APP_API_URL;
 
 export const handleFetchLogin = async (loginData) =>{
     try{
