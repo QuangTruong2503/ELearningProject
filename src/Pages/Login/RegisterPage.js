@@ -1,241 +1,270 @@
 import React, { useEffect, useState } from "react";
 import LoaderButton from "../../Component/Loader/LoaderButton";
-import toast from "react-hot-toast";
-import { NavLink } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
+import { NavLink, useNavigate } from "react-router-dom";
+import { checkAccountExists, registerAccount } from "../../API/registerAPI";
 const RegisterPage = () => {
-    const apiURL = process.env.REACT_APP_API_URL;
-    const [registerData, setRegisterData] = useState({
-        "user_name": "",
-        "last_name": "",
-        "first_name": "",
-        "email": "",
-        "hashed_password": ""
-      });
-      const [confirmPassword, setConfirmPassword] = useState("");
-      const [passwordMatch, setPasswordMatch] = useState(true);
+  const navigate = useNavigate();
+  const [registerData, setRegisterData] = useState({
+    user_name: "",
+    last_name: "",
+    first_name: "",
+    email: "",
+    hashed_password: "",
+    role_id: "",
+  });
+  //Dữ liệu vai trò
+  const roleList = [
+    { value: "student", name: "Học sinh/sinh viên" },
+    { value: "teacher", name: "Giáo viên" },
+  ];
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordMatch, setPasswordMatch] = useState(true);
+  const [checkAvailable, setCheckAvailable] = useState(false); //Kiểm tra tài khoản không tồn tại sẽ được đăng ký tiếp
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-      const [isLoading, setIsLoading] = useState(false);
-      //Hàm cập nhật dữ liệu khi nhập
-      const handleChangeData = (e) =>{
-        const {name, value} = e.target;
-        setRegisterData(prev => ({
-            ...prev,
-            [name]: value
-        }));
+  //Hiển thị mật khẩu
+  const [showPassword, setShowPassword] = useState(false);
+  const togglePasswordVisibility = () => {
+    setShowPassword((prevState) => !prevState);
+  };
+  //Hàm cập nhật dữ liệu khi nhập
+  const handleChangeData = (e) => {
+    const { name, value } = e.target;
+    setRegisterData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+  //Kiểm tra mật khẩu trùng khớp
+  useEffect(() => {
+    if (confirmPassword !== registerData.hashed_password) {
+      setPasswordMatch(false);
+    } else if (confirmPassword === registerData.hashed_password)
+      setPasswordMatch(true);
+    if (confirmPassword === "") setPasswordMatch(true);
+  }, [confirmPassword, registerData.hashed_password]);
+
+  //Kiểm tra tài khoản tồn tại trong database
+  const hanldeCheckAccount = async (e) => {
+    e.preventDefault();
+    setErrorMessage("");
+    setIsLoading(true);
+    const username = registerData.user_name;
+    const email = registerData.email;
+    const result = await checkAccountExists(username, email);
+    if (result.isSuccess === false) {
+      setErrorMessage(result.message);
+      setIsLoading(false);
+      return;
+    } else {
+      setIsLoading(false);
+      setErrorMessage("");
+      setCheckAvailable(true);
+      return;
+    }
+  };
+
+  //Đăng ký tài khoản
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    try {
+      setIsLoading(true);
+      const result = await registerAccount(registerData);
+      if (!result.isSuccess) {
+        toast.error(result.message);
+        return;
       }
-      //Kiểm tra mật khẩu trùng khớp
-      useEffect(() =>{
-        if(confirmPassword !== registerData.hashed_password){
-            setPasswordMatch(false);
-        }
-        else if(confirmPassword === registerData.hashed_password)
-            setPasswordMatch(true);
-        if(confirmPassword === "")
-            setPasswordMatch(true)
-      },[confirmPassword]);
-      useEffect(() =>{
-        console.log(registerData)
-      },[registerData])
-      //Post API dữ liệu
-      const handleRegister = async (e) =>{
-        e.preventDefault();
-        try{
-            setIsLoading(true);
-            const response = await fetch(`${apiURL}/Users`,{
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(registerData)
-            });
-            if(!response.ok)
-                console.log(response.statusText);
-            const result = await response.json();
-            if(!result.isSuccess){
-                console.log(result);
-                toast.error(result.message);
-                return;
-            }
-            console.log(result);
-            toast.error(result.message);
-        }
-        catch(err){
-            console.error(err.message);
-            setIsLoading(false)
-        }
-        finally{
-            setIsLoading(false);
-        }
-      }
+      toast.success(result.message);
+      setTimeout(() => {
+        navigate("/login");
+      }, 1000);
+    } catch (err) {
+      console.error(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
-    <section className="gradient-custom">
+    <section className="min-vh-100 d-flex align-items-center">
       <div className="container py-5 h-100">
         <div className="row justify-content-center align-items-center h-100">
-          <div className="col-12 col-lg-9 col-xl-7">
-            <div className="card shadow-2-strong card-registration rounded-2">
-              <div className="card-body p-4 p-md-5">
-                <div className="text-center">
-                  <h3 className="mb-4 pb-2 pb-md-0 mb-md-5 text-primary">Đăng Ký Tài Khoản</h3>
-                </div>
-                <form onSubmit={handleRegister}>
-                  <div className="row">
-                    <div className="col-md-12 mb-4">
-                      <div data-mdb-input-init className="form-outline">
-                        <label className="form-label" htmlFor="userName">
-                          Tên tài khoản
-                        </label>
-                        <input
-                          id="userName"
-                          type="text"
-                          className="form-control form-control-lg "
-                          name="user_name"
-                          required
-                          onChange={handleChangeData}
-                          placeholder="user123"
-                        />
-                      </div>
-                    </div>
-                    <div className="col-md-6 mb-4">
-                      <div data-mdb-input-init className="form-outline">
-                        <label className="form-label" htmlFor="password">
-                          Mật khẩu
-                        </label>
-                        <input
-                          id="password"
-                          type="password"
-                          className="form-control form-control-lg "
-                          name="hashed_password"
-                          onChange={handleChangeData}
-                        />
-                      </div>
-                    </div>
-                    <div className="col-md-6 mb-4">
-                      <div data-mdb-input-init className="form-outline">
-                        <label className="form-label" htmlFor="confirmPassword">
-                          Xác nhận mật khẩu
-                        </label>
-                        <input
-                          id="confirmPassword"
-                          type="password"
-                          className={`form-control form-control-lg  ${passwordMatch? '' :'border-danger'}`}
-                          required
-                          onChange={e => setConfirmPassword(e.target.value)}
-                        />
-                      </div>
-                    </div>
+          <div className="col-12 col-lg-8 col-xl-6">
+            <div className="card shadow border-0 rounded-4 p-5 bg-white">
+              <div className="text-center mb-4">
+                <h3 className="text-primary">Đăng Ký Tài Khoản</h3>
+              </div>
+              {!checkAvailable ? (
+                <form onSubmit={hanldeCheckAccount}>
+                  <div className="mb-4">
+                    <label className="form-label" htmlFor="userName">
+                      Tên tài khoản
+                    </label>
+                    <input
+                      id="userName"
+                      type="text"
+                      className="form-control"
+                      name="user_name"
+                      required
+                      onChange={handleChangeData}
+                      value={registerData.user_name}
+                    />
                   </div>
-                  <div className="col-12">
-                    {!passwordMatch&&
-                        <p className="text-danger">Mật khẩu không trùng khớp</p>    
-                    }
+                  <div className="mb-4">
+                    <label className="form-label" htmlFor="emailAddress">
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      id="emailAddress"
+                      className="form-control"
+                      name="email"
+                      required
+                      onChange={handleChangeData}
+                      value={registerData.email}
+                    />
                   </div>
-                  <div className="row">
-                    <div className="col-md-6 mb-4">
-                      <div data-mdb-input-init className="form-outline">
-                        <label className="form-label" htmlFor="firstName">
-                          Họ
-                        </label>
-                        <input
-                          type="text"
-                          id="firstName"
-                          className="form-control form-control-lg "
-                          name="first_name"
-                          required
-                          onChange={handleChangeData}
-                          placeholder="Nguyễn Văn"
-                        />
-                      </div>
-                    </div>
-                    <div className="col-md-6 mb-4">
-                      <div data-mdb-input-init className="form-outline">
-                        <label className="form-label" htmlFor="lastName">
-                          Tên
-                        </label>
-                        <input
-                          type="text"
-                          id="lastName"
-                          className="form-control form-control-lg "
-                          name="last_name"
-                          required
-                          onChange={handleChangeData}
-                          placeholder="Nam"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="row">
-                    <div className="col-md-12 mb-4 pb-2">
-                      <div data-mdb-input-init className="form-outline">
-                        <label className="form-label" htmlFor="emailAddress">
-                          Email
-                        </label>
-                        <input
-                          type="email"
-                          id="emailAddress"
-                          className="form-control form-control-lg"
-                          name="email"
-                          required
-                          onChange={handleChangeData}
-                          placeholder="test@gmail.com"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  {/* <div className="row">
-                    <div className="col-12">
-                    <div className="form-check form-check-inline">
-                        <input
-                          className="form-check-input"
-                          type="radio"
-                          name="user_role"
-                          id="student"
-                          value="0"
-                          onClick={handleChangeData}
-                        />
-                        <label className="form-check-label" htmlFor="student">
-                          Học sinh/ Sinh viên
-                        </label>
-                      </div>
-                      <div className="form-check form-check-inline">
-                        <input
-                          className="form-check-input"
-                          type="radio"
-                          name="user_role"
-                          id="teacher"
-                          value="1"
-                          onClick={handleChangeData}
-                        />
-                        <label className="form-check-label" htmlFor="teacher">
-                          Giáo viên
-                        </label>
-                      </div>
-                    </div>
-                  </div> */}
-                  <div className="mt-4 pt-2 d-flex justify-content-center">
+                  {errorMessage && (
+                    <div className="text-danger mb-3">{errorMessage}</div>
+                  )}
+                  <div className="d-flex justify-content-center">
                     <button
-                      data-mdb-ripple-init
                       className="btn btn-primary btn-lg w-75"
                       type="submit"
-                    >ĐĂNG KÝ</button>
-                  </div>
-                  <div className="divider d-flex align-items-center justify-content-center my-4">
-                  <p className="text-center fw-bold mx-3 mb-0 text-muted">
-                    Đã có tài khoản?
-                  </p>
-                </div>
-
-                <div className="d-flex justify-content-center">
-                  <NavLink className="text-decoration-none" to="/login">
-                    Đăng nhập tài khoản
-                  </NavLink>
+                    >
+                      {isLoading ? <LoaderButton /> : "Đăng Ký"}
+                    </button>
                   </div>
                 </form>
+              ) : (
+                <form onSubmit={handleRegister}>
+                  <div className="mb-4">
+                    <label className="form-label" htmlFor="firstName">
+                      Họ
+                    </label>
+                    <input
+                      type="text"
+                      id="firstName"
+                      className="form-control"
+                      name="first_name"
+                      required
+                      onChange={handleChangeData}
+                      value={registerData.first_name}
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <label className="form-label" htmlFor="lastName">
+                      Tên
+                    </label>
+                    <input
+                      type="text"
+                      id="lastName"
+                      className="form-control"
+                      name="last_name"
+                      required
+                      onChange={handleChangeData}
+                      value={registerData.last_name}
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <label className="form-label" htmlFor="password">
+                      Mật khẩu
+                    </label>
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      id="password"
+                      className={`form-control ${
+                        passwordMatch ? "" : "border-danger"
+                      }`}
+                      name="hashed_password"
+                      required
+                      onChange={handleChangeData}
+                      value={registerData.hashed_password}
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <label className="form-label" htmlFor="confirmPassword">
+                      Xác nhận mật khẩu
+                    </label>
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      id="confirmPassword"
+                      className={`form-control ${
+                        passwordMatch ? "" : "border-danger"
+                      }`}
+                      required
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                    />
+                  </div>
+                  {!passwordMatch && (
+                    <p className="text-danger">Mật khẩu không trùng khớp</p>
+                  )}
+                  <div className="mb-4">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      id="showPasswordCheckbox"
+                      onChange={togglePasswordVisibility}
+                      checked={showPassword}
+                    />
+                    <label
+                      htmlFor="showPasswordCheckbox"
+                      className="ms-2 form-check-label"
+                    >
+                      Hiển thị mật khẩu
+                    </label>
+                  </div>
+                  <div className="mb-4">
+                    <label className="form-label" htmlFor="selectRole">
+                      Chọn vai trò
+                    </label>
+                    <select
+                      id="selectRole"
+                      className="form-select"
+                      required
+                      onChange={handleChangeData}
+                      name="role_id"
+                      value={registerData.role_id}
+                    >
+                      <option value="" disabled>
+                        Chọn vai trò
+                      </option>
+                      {roleList.map((item, index) => (
+                        <option key={index} value={item.value}>
+                          {item.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="d-flex justify-content-center">
+                    <button
+                      className="btn btn-primary btn-lg w-75"
+                      type="submit"
+                    >
+                      {isLoading ? <LoaderButton /> : "Đăng Ký"}
+                    </button>
+                  </div>
+                </form>
+              )}
+              <div className="divider d-flex align-items-center justify-content-center my-4">
+                <p className="text-center fw-bold mx-3 mb-0 text-muted">
+                  Đã có tài khoản?
+                </p>
+              </div>
+              <div className="d-flex justify-content-center">
+                <NavLink
+                  className="text-decoration-none text-primary"
+                  to="/login"
+                >
+                  Đăng nhập tài khoản
+                </NavLink>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <Toaster />
     </section>
   );
 };

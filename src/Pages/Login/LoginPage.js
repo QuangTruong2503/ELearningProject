@@ -52,14 +52,14 @@ export const LoginPage = () => {
   return (
     <section className="min-vh-100 d-flex align-items-center">
       <div className="container py-5 h-100">
-        <div className="row d-flex align-items-center justify-content-center h-100">
-          <div className="col-md-7 col-lg-5 col-xl-5">
+        <div className="row justify-content-center align-items-center h-100">
+          <div className="col-12 col-lg-8 col-xl-6">
             <div className="card shadow border-0 rounded-4 p-4 bg-white">
-              <div className="text-center mb-3">
-              <h2 className="text-primary">ĐĂNG NHẬP</h2>
+              <div className="text-center mb-4">
+                <h3 className="text-primary">ĐĂNG NHẬP</h3>
               </div>
               <form onSubmit={handleClick}>
-                <div data-mdb-input-init className="form-outline mb-4">
+                <div className="mb-4">
                   <label className="form-label" htmlFor="userNameOrEmail">
                     Tài khoản hoặc email
                   </label>
@@ -73,7 +73,7 @@ export const LoginPage = () => {
                   />
                 </div>
 
-                <div data-mdb-input-init className="form-outline mb-4">
+                <div className="mb-4">
                   <label className="form-label" htmlFor="password">
                     Mật khẩu
                   </label>
@@ -96,8 +96,6 @@ export const LoginPage = () => {
                 <div className="d-flex justify-content-center mb-3">
                   <button
                     type="submit"
-                    data-mdb-button-init
-                    data-mdb-ripple-init
                     className="btn btn-primary w-75 py-2 fs-5"
                   >
                     {!isLoading && "ĐĂNG NHẬP"}
