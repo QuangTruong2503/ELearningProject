@@ -5,18 +5,24 @@ import Footer from './Component/FooterComponent';
 import HomePage from './Pages/HomePage';
 import { LoginPage } from './Pages/Login/LoginPage';
 import RegisterPage from './Pages/Login/RegisterPage';
+import AdminPage from './Pages/Admin/AdminPage';
 function App() {
   return (
     <HashRouter>
       <HeaderComponent></HeaderComponent>
 
-      <Routes>
-        <Route path='/' Component={HomePage}></Route>
+      <div className='web-content container'>
+        <Routes>
+          <Route path='/' Component={HomePage}></Route>
 
-        {/* Login */}
-        <Route path='/login' Component={LoginPage}></Route>
-        <Route path='/register' Component={RegisterPage} />
-      </Routes>
+          {/* Login */}
+          <Route path='/login' Component={LoginPage}></Route>
+          <Route path='/register' Component={RegisterPage} />
+
+          {/* Admin Panel */}
+          <Route path='admin/*' Component={AdminPage}></Route>
+        </Routes>
+      </div>
 
       <Footer></Footer>
     </HashRouter>
