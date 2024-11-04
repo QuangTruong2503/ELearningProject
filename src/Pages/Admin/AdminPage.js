@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink, Route, Routes } from "react-router-dom";
-import Test1 from "./Test1.js";
 import Test2 from "./Test2.js";
+import Users from "./Users/Users.js";
 function AdminPage() {
   return (
       <div className="row">
@@ -81,7 +81,7 @@ function AdminPage() {
         <div className="col-md-9 col-lg-10 px-4">
             <div className="container mt-5 p-4 bg-light rounded shadow">
                 <Routes>
-                    <Route path="test1" element={<Test1 />} />
+                    <Route path="test1" element={<Users />} />
                     <Route path="test2" element={<Test2 />} />
                 </Routes>
             </div>

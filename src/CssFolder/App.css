@@ -8,3 +8,12 @@ body{
 .web-content{
   min-height: 500px;
 }
+
+/* Modal */
+.modal-background{
+  background-color: rgba(0, 0, 0, 0.6);
+}
+.modal-content{
+  min-height: 50vh;
+  justify-content: center;
+}
