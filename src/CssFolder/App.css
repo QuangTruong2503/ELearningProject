@@ -8,6 +8,22 @@ body{
 .web-content{
   min-height: 500px;
 }
+/* Animation */
+.form-animation {
+  animation: FormAnimation 0.6s ease-out forwards;
+  position: relative;
+}
+
+@keyframes FormAnimation {
+  from {
+    top: -30px;
+    opacity: 0; /* Thêm fade-in cho mượt */
+  }
+  to {
+    top: 0;
+    opacity: 1;
+  }
+}
 
 /* Modal */
 .modal-background{

@@ -13,6 +13,7 @@ export const LoginPage = () => {
     userNameOrEmail: "",
     password: "",
   });
+  //Cập nhật dữ liệu khi nhập liệu
   const handleChangeData = (event) => {
     const { name, value } = event.target;
     setLoginData((prev) => ({
@@ -20,6 +21,7 @@ export const LoginPage = () => {
       [name]: value,
     }));
   };
+  //Đăng nhập
   const handleClick = async (e) => {
     e.preventDefault();
     try {
@@ -30,11 +32,14 @@ export const LoginPage = () => {
         return;
       }
       if (!result.isLogin) return toast.error(result.message);
-      toast.success(result.message);
-      console.log(result);
-      setCookies("loginToken", result.token);
-      setCookies("isLogin", result.isLogin);
-      return;
+      else{
+        const convertData = JSON.stringify(result.data);
+        setCookies("loginData", convertData);
+        toast.success(result.message);
+        setTimeout(() =>{
+          window.location.href = '/';
+        }, 1000)
+      }
     } catch (err) {
       console.error(err.message);
       setIsLoading(false);
@@ -52,7 +57,7 @@ export const LoginPage = () => {
   return (
     <section className="min-vh-100 d-flex align-items-center">
       <div className="container py-5 h-100">
-        <div className="row justify-content-center align-items-center h-100">
+        <div className="row justify-content-center align-items-center h-100 form-animation">
           <div className="col-12 col-lg-8 col-xl-6">
             <div className="card shadow border-0 rounded-4 p-4 bg-white">
               <div className="text-center mb-4">

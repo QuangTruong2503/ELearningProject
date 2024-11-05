@@ -1,6 +1,6 @@
 import { HashRouter, Route, Routes } from 'react-router-dom';
 import './CssFolder/App.css';
-import HeaderComponent from './Component/HeaderComponent';
+import HeaderComponent from './Component/Header/HeaderComponent.js';
 import Footer from './Component/FooterComponent';
 import HomePage from './Pages/HomePage';
 import { LoginPage } from './Pages/Login/LoginPage';

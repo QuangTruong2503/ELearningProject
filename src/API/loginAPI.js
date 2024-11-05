@@ -21,3 +21,16 @@ export const handleFetchLogin = async (loginData) =>{
         console.error(err.message);
     }
 }
+
+export const fetchVerifyToken = async (userToken) =>{
+    const response = await fetch(`${apiURL}/Login/token/${userToken}`,{
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    if(!response.ok)
+        console.log(response.statusText);
+    const result = await response.json();
+    return result;
+}
