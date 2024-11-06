@@ -1,5 +1,5 @@
 import { HashRouter, Route, Routes } from 'react-router-dom';
-import {SpeedInsights} from '@vercel/speed-insights/next';
+import {SpeedInsights} from '@vercel/speed-insights/react';
 import './CssFolder/App.css';
 import HeaderComponent from './Component/Header/HeaderComponent.js';
 import Footer from './Component/FooterComponent';
