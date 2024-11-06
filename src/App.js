@@ -1,4 +1,5 @@
 import { HashRouter, Route, Routes } from 'react-router-dom';
+import {SpeedInsights} from '@vercel/speed-insights/next';
 import './CssFolder/App.css';
 import HeaderComponent from './Component/Header/HeaderComponent.js';
 import Footer from './Component/FooterComponent';
@@ -23,7 +24,7 @@ function App() {
           <Route path='admin/*' Component={AdminPage}></Route>
         </Routes>
       </div>
-
+      <SpeedInsights />
       <Footer></Footer>
     </HashRouter>
   );
