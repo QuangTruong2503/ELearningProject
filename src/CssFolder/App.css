@@ -3,10 +3,13 @@
 }
 body{
   font-size: 16px;
-  background-color: #ECECEC;
+  /* background-color: #ECECEC; */
 }
 .web-content{
   min-height: 500px;
+}
+.box-shadow{
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 /* Animation */
 .form-animation {

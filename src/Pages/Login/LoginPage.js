@@ -55,7 +55,7 @@ export const LoginPage = () => {
     }
   }, [loginCookies]);
   return (
-    <section className="min-vh-100 d-flex align-items-center">
+    <section className="d-flex align-items-center">
       <div className="container py-5 h-100">
         <div className="row justify-content-center align-items-center h-100 form-animation">
           <div className="col-12 col-lg-8 col-xl-6">

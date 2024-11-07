@@ -1,7 +1,12 @@
 import React from 'react'
+import ViewBanner from '../Component/Home/ViewBanner'
+import AllSubjects from '../Component/Home/AllSubjects'
 function HomePage() {
   return (
-    <div className='container min-vh-100'>HomePages</div>
+    <div className='min-vh-100'>
+        <ViewBanner />
+        <AllSubjects />
+    </div>
   )
 }
 

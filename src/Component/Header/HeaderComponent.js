@@ -8,7 +8,7 @@ function HeaderComponent() {
   const loginCookiesName = "loginData";
   const loginCookies = Cookies.get(loginCookiesName);
   return (
-    <nav className="navbar navbar-expand-lg bg-white">
+    <nav className="navbar navbar-expand-lg box-shadow">
       <div className="container">
         <a className="navbar-brand text-primary fs-3" href="/">
           E-Learning

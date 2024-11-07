@@ -1,0 +1,125 @@
+.banner--content-box {
+    position: absolute;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.08);
+    padding: 2.4rem;
+    left: 5.2rem;
+    top: 4.4rem;
+    max-width: 440px;
+}
+
+@media (max-width: 992px) {
+    .carousel-inner {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .banner--content-box {
+        position: relative;
+        left: 0;
+        top: 0;
+        max-width: 100%;
+        display: flex;
+        flex-direction: column;
+        background-color: #fff;
+        padding: 1rem;
+    }
+
+    .banner--content-box h1 {
+        font-size: 20px;
+
+    }
+}
+
+
+/* ALL Subjects */
+.subject-topics {
+    padding: 1rem 3rem;
+}
+
+.topics-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    overflow-x: hidden;
+    padding: 1rem 0;
+}
+
+.topic-card {
+    flex: 0 0 auto;
+    width: 20%;
+    border: 1px solid #ddd;
+    padding: 1rem 1.5rem;
+    margin-right: 1rem;
+    text-align: center;
+    font-weight: bold;
+    white-space: nowrap;
+    background-color: #fff;
+    transition: background-color 0.3s;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+/* Adjust width on medium screens (tablets) */
+@media (max-width: 992px) {
+    .topic-card {
+        width: 30%;
+        /* Adjust width to 30% on medium screens */
+        margin-right: 0.5rem;
+        /* Adjust margin for better spacing */
+    }
+}
+
+/* Adjust width on smaller screens (mobile) */
+@media (max-width: 768px) {
+    .topic-card {
+        width: 45%;
+        /* Adjust width to 45% on smaller screens */
+        margin-bottom: 1rem;
+        /* Add margin at the bottom for vertical spacing */
+    }
+}
+
+/* Adjust width on extra-small screens */
+@media (max-width: 576px) {
+    .topic-card {
+        width: 100%;
+        /* Full width for extra-small screens */
+        margin-right: 0;
+        /* Remove right margin */
+    }
+}
+
+.topic-card:hover {
+    background-color: #f7f7f7;
+}
+
+.scroll-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    background-color: #333;
+    color: #fff;
+    border-radius: 50%;
+    position: absolute;
+
+    transform: translateY(-50%);
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.scroll-right {
+    right: 1rem;
+    top: 50%;
+}
+
+.scroll-left {
+    left: 1rem;
+    top: 50%;
+}
+
+.scroll-button:hover {
+    background-color: #555;
+}

@@ -12,7 +12,7 @@ function App() {
     <HashRouter>
       <HeaderComponent></HeaderComponent>
 
-      <div className='web-content container'>
+      <div className='web-content container-lg'>
         <Routes>
           <Route path='/' Component={HomePage}></Route>
 
