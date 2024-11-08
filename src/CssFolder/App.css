@@ -5,6 +5,9 @@ body{
   font-size: 16px;
   /* background-color: #ECECEC; */
 }
+a{
+  text-decoration: none;
+}
 .web-content{
   min-height: 500px;
 }
