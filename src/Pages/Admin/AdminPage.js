@@ -1,27 +1,43 @@
 import React from "react";
-import { NavLink, Route, Routes } from "react-router-dom";
-import Test2 from "./Test2.js";
+import {Route, Routes } from "react-router-dom";
 import Users from "./Users/Users.js";
+import CreateCourses from "./Courses/CreateCourses.js";
+import AdminDashboard from "../../Component/Admin/AdminDashboard.js";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
 function AdminPage() {
-  
+    const collapseData = [
+      {
+        title: "Người dùng",
+        data: [
+          {name: 'Danh sách người dùng', url: 'users/all'}
+        ],
+      },
+      {
+        title: "Khóa học",
+        data: [
+          {name: 'Tạo Khóa học', url: 'courses/create'}
+        ],
+      },
+    ];  
   return (
       <div className="row">
         {/* Nút Menu cho thiết bị di động */}
         <div className="mb-3 d-flex justify-content-start">
           <button
-            className="btn btn-outline-primary d-md-none mt-2 ms-2 d-flex align-items-center"
+            className="btn btn-outline-primary d-lg-none mt-2 ms-2 d-flex align-items-center"
             type="button"
             data-bs-toggle="offcanvas"
             data-bs-target="#offcanvasSidebar"
             aria-controls="offcanvasSidebar"
           >
-            <i className="bi bi-list"></i> Menu
+            <FontAwesomeIcon icon={faBars}/> Menu
           </button>
         </div>
 
         {/* Offcanvas Sidebar cho thiết bị di động */}
         <div
-          className="offcanvas offcanvas-start bg-light"
+          className="offcanvas offcanvas-start"
           tabIndex="-1"
           id="offcanvasSidebar"
           aria-labelledby="offcanvasSidebarLabel"
@@ -38,52 +54,24 @@ function AdminPage() {
             ></button>
           </div>
           <div className="offcanvas-body">
-            <ul className="nav flex-column">
-              <li className="nav-item mb-2">
-                <NavLink to="/" className="nav-link d-flex align-items-center">
-                  <i className="bi bi-house-door-fill me-2"></i> Trang chủ
-                </NavLink>
-              </li>
-              <li className="nav-item mb-2">
-                <NavLink
-                  to="/admin/test2"
-                  className="nav-link d-flex align-items-center"
-                >
-                  <i className="bi bi-house-door-fill me-2"></i> Test2
-                </NavLink>
-              </li>
-            </ul>
+            <AdminDashboard data={collapseData}/>
           </div>
         </div>
 
         {/* Sidebar cho màn hình lớn */}
-        <div className="col-md-3 col-lg-2 d-none d-md-block h-auto">
-          <div className="container mt-5 p-4 bg-light rounded shadow h-auto">
+        <div className="col-lg-3 d-md-none d-none d-lg-block h-auto">
+          <div className="container mt-5 p-4 rounded shadow h-auto">
             <h5 className="border-bottom pb-2">Dashboard</h5>
-            <ul className="nav flex-column">
-              <li className="nav-item mb-2">
-                <NavLink to="/admin/test1" className="nav-link d-flex align-items-center">
-                  <i className="bi bi-house-door-fill me-2"></i> Trang chủ
-                </NavLink>
-              </li>
-              <li className="nav-item mb-2">
-                <NavLink
-                  to="/admin/test2"
-                  className="nav-link d-flex align-items-center"
-                >
-                  <i className="bi bi-house-door-fill me-2"></i> Test2
-                </NavLink>
-              </li>
-            </ul>
+            <AdminDashboard data={collapseData}/>
           </div>
         </div>
 
         {/* Nội dung chính */}
-        <div className="col-md-9 col-lg-10 px-4">
-            <div className="container mt-5 p-4 bg-light rounded shadow">
+        <div className="col-md-12 col-lg-9 px-4">
+            <div className="container mt-5 p-4 rounded shadow">
                 <Routes>
-                    <Route path="test1" element={<Users />} />
-                    <Route path="test2" element={<Test2 />} />
+                    <Route path="users/all" element={<Users />} />
+                    <Route path="courses/create" element={<CreateCourses />} />
                 </Routes>
             </div>
           

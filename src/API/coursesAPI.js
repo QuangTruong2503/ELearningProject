@@ -21,3 +21,18 @@ export const fetchCoursesPublicBySubject = async (subject) =>{
         throw error; // Propagate error for further handling by caller
     }
 }
+
+//Thêm dữ liệu Course
+export const fetchCreateCourse = async (data) =>{
+    const response = await fetch(`${apiURL}/Courses`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            // Thêm các header khác nếu cần
+        },
+        body: JSON.stringify(data)
+    });
+    if (!response.ok) throw new Error('Error: ' + response.status);
+    const result = await response.json();
+    return result;
+}
