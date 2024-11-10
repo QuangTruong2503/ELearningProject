@@ -1,7 +1,7 @@
 const apiURL = process.env.REACT_APP_API_URL;
 
-export const fetchAllUsers = async () =>{
-    const response = await fetch(`${apiURL}/Users`,{
+export const fetchAllUsers = async (url) =>{
+    const response = await fetch(`${apiURL}/${url}`,{
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -12,6 +12,7 @@ export const fetchAllUsers = async () =>{
     const result = await response.json();
     return result;
 };
+
 //Lấy dữu liệu người dùng theo ID
 export const fetchUserByID = async (userID) =>{
     const response = await fetch(`${apiURL}/Users/${userID}`,{

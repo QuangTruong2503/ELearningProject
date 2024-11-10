@@ -1,3 +1,5 @@
+import { toast } from 'react-toastify';
+
 const apiURL = process.env.REACT_APP_API_URL;
 const Cookies = require('js-cookie'); 
 
@@ -25,7 +27,7 @@ export const fetchVerifyLogin = async () =>{
            return data;
         }
         else{
-            alert('Token không hợp lệ');
+            toast.error(result.message);
             Cookies.remove('loginData');
         }
     }

@@ -3,20 +3,20 @@ import { fetchAllUsers } from '../../../API/user';
 import UsersTable from '../../../Component/Table/UsersTable';
 
 function Users() {
-    const [users, setUsers] = useState([]);
+    const [data, setData] = useState([]);
     const handleFetchUsers = async () =>{
-        const results = await fetchAllUsers();
+        const results = await fetchAllUsers('Users');
         if(results === undefined){
             console.error("Không có dữ liệu")
             return;
         }
-        setUsers(results);
+        setData(results);
     }
     useEffect(() =>{
         handleFetchUsers();
     },[])
   return (
-    <UsersTable users={users} reloadData={handleFetchUsers}/>
+    <UsersTable data={data} reloadData={handleFetchUsers}/>
   )
 }
 

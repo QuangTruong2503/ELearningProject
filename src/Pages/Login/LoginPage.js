@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
 import LoaderButton from "../../Component/Loader/LoaderButton.js";
 import { NavLink } from "react-router-dom";
 import { handleFetchLogin } from "../../API/loginAPI.js";
 import setCookies from "../../Helpers/Cookies.js";
 import Cookies from "js-cookie";
+import { toast, ToastContainer } from "react-toastify";
 export const LoginPage = () => {
   const loginCookies = Cookies.get("loginToken");
 
@@ -124,7 +124,7 @@ export const LoginPage = () => {
           </div>
         </div>
       </div>
-      <Toaster />
+      <ToastContainer />
     </section>
   );
 };

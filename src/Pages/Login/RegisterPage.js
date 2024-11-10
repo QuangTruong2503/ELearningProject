@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import LoaderButton from "../../Component/Loader/LoaderButton";
-import toast, { Toaster } from "react-hot-toast";
 import { NavLink, useNavigate } from "react-router-dom";
 import { checkAccountExists, registerAccount } from "../../API/registerAPI";
+import { toast, ToastContainer } from "react-toastify";
 const RegisterPage = () => {
   const navigate = useNavigate();
   const [registerData, setRegisterData] = useState({
@@ -264,7 +264,7 @@ const RegisterPage = () => {
           </div>
         </div>
       </div>
-      <Toaster />
+      <ToastContainer />
     </section>
   );
 };

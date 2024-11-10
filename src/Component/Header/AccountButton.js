@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import { fetchVerifyToken } from "../../API/loginAPI";
-import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import { fetchVerifyLogin } from "../../Helpers/VerifyLogin";
 
 function AccountButton() {
     const navigate = useNavigate();
@@ -15,24 +15,19 @@ function AccountButton() {
   //Lấy dữ liệu từ Cookies
   const storedData = Cookies.get(loginCookiesName);
   const userData = storedData ? JSON.parse(storedData) : null;
-  const userToken = userData.token;
-  const handleVerifyToken = async (userToken) => {
-    const result = await fetchVerifyToken(userToken);
-    if(result === undefined)
+  const handleVerifyToken = async () => {
+    const result = await fetchVerifyLogin();
+    if(result !== undefined)
     {
-        toast.error('Kiểm tra token không thành công')
-        return;
+      setDecodedData(result);
     }
-    if(result.success === false)
-    {
-        toast.error('Token không hợp lệ')
-        return;
-    }
-    setDecodedData(JSON.parse(result.data))
   }
   useEffect(() =>{
-    handleVerifyToken(userToken);
-  }, [userToken])
+    if(storedData !== undefined)
+    {
+      handleVerifyToken();
+    }
+  }, [storedData])
   return (
     <div className="dropdown d-flex align-items-center">
       <button
@@ -82,7 +77,7 @@ function AccountButton() {
         </li>
         
       </ul>
-      <Toaster />
+      <ToastContainer />
     </div>
   );
 }
