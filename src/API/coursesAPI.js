@@ -13,6 +13,19 @@ export const fetchCourses = async (url) =>{
     const result = await response.json();
     return result;
 }
+//Lấy dữ liệu Course theo ID
+export const fetchCourseByID = async (ID) =>{
+    const response = await fetch(`${apiURL}/Courses/${ID}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            // Thêm các header khác nếu cần
+        },
+    });
+    if (!response.ok) throw new Error('Error: ' + response.status);
+    const result = await response.json();
+    return result;
+}
 
 export const fetchCoursesPublicBySubject = async (subject) =>{
     try {
@@ -40,6 +53,21 @@ export const fetchCoursesPublicBySubject = async (subject) =>{
 export const fetchCreateCourse = async (data) =>{
     const response = await fetch(`${apiURL}/Courses`, {
         method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            // Thêm các header khác nếu cần
+        },
+        body: JSON.stringify(data)
+    });
+    if (!response.ok) throw new Error('Error: ' + response.status);
+    const result = await response.json();
+    return result;
+}
+
+//Cập nhật dữ liệu Course
+export const fetchUpdateCourse = async (data) =>{
+    const response = await fetch(`${apiURL}/Courses`, {
+        method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
             // Thêm các header khác nếu cần

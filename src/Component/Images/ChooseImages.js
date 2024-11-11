@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../../CssFolder/Images.css";
 import { fetchUploadCloudinary } from "../../Helpers/UploadImageToCloudinary";
 
-function ChooseImages({ maxFile = 1, maxSize = 3, upload = false, uploadSuccess, category = '' }) {
+function ChooseImages({ maxFile = 1, maxSize = 3, upload = false, uploadSuccess, category = '', defaultImages }) {
     const [error, setError] = useState("");
     const [selectedImages, setSelectedImages] = useState([]);
 
@@ -49,7 +49,6 @@ function ChooseImages({ maxFile = 1, maxSize = 3, upload = false, uploadSuccess,
             handleUploadCloudinary();
         }
     }, [upload, selectedImages, category, uploadSuccess]);
-
     return (
         <div>
             <div
@@ -69,6 +68,14 @@ function ChooseImages({ maxFile = 1, maxSize = 3, upload = false, uploadSuccess,
                                 style={{ maxWidth: "200px", height: "auto" }}
                             />
                         ))}
+                        {selectedImages.length !== 0 && defaultImages !== undefined && (
+                            <img
+                            src={defaultImages}
+                            alt={``}
+                            className="img-thumbnail m-2"
+                            style={{ maxWidth: "200px", height: "auto" }}
+                        />
+                        )}
                     </div>
                     <p>
                         Kéo thả ảnh vào đây hoặc <strong>chọn từ máy tính</strong>

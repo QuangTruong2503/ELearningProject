@@ -8,14 +8,15 @@ import {
 import PaginationsComponent from "../PaginationsComponent";
 import TablePlaceHolder from "../PlaceHolder/TablePlaceHolder.js";
 import { fetchCourses } from "../../API/coursesAPI.js";
+import CourseDetail from "../../Pages/Admin/Courses/CourseDetail.js"
 
 function UsersTable({ reloadData, data = [] }) {
   const [datas, setDatas] = useState([]);
-  const [selectedData, setSelectedData] = useState(null);
+  const [selectedID, setselectedID] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [searchValues, setSearchValues] = useState("");
   const handleEdit = (userID) => {
-    setSelectedData(userID);
+    setselectedID(userID);
   };
   const handleReloadData = () => {
     reloadData();
@@ -120,7 +121,7 @@ if (result !== undefined) {
                         <button
                           className="dropdown-item text-success"
                           type="button"
-                        //   onClick={() => handleEdit(course.course_id)}
+                          onClick={() => handleEdit(course.courseID)}
                         >
                           Chỉnh sửa
                         </button>
@@ -152,13 +153,13 @@ if (result !== undefined) {
         />
       )}
       {/* Modal Chỉnh sửa dữ liệu */}
-      {/* {selectedUser && (
-        <UserDetail
-          userID={selectedUser}
-          onClose={() => setSelectedUser(null)}
+      {selectedID !== null && (
+        <CourseDetail
+          ID={selectedID}
+          onClose={() => setselectedID(null)}
           onSave={handleReloadData}
         />
-      )} */}
+      )}
     </div>
   );
 }

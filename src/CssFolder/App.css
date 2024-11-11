@@ -8,6 +8,9 @@ body{
 a{
   text-decoration: none;
 }
+.cursor-pointer{
+  cursor: pointer;
+}
 .web-content{
   min-height: 500px;
 }
