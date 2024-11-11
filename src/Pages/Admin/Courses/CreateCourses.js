@@ -1,11 +1,13 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import ChooseImages from "../../../Component/Images/ChooseImages";
+import LoaderButton from '../../../Component/Loader/LoaderButton.js';
 import { ToastContainer, toast } from "react-toastify";
 import { fetchCreateCourse } from "../../../API/coursesAPI";
 import { fetchVerifyLogin } from "../../../Helpers/VerifyLogin";
+import { fetchSubjects } from "../../../API/subjectsAPI";
 function CreateCourses() {
-  //Trạng thái upload
+  //Trạng thái upload nếu true sẽ tiến hành upload lên cloudinary
   const [uploadImage, setUploadImage] = useState(false);
   const [courseData, setCourseData] = useState({
     course_name: "",
@@ -15,6 +17,9 @@ function CreateCourses() {
     thumbnail: "",
     description: "",
   });
+  const [subjects, setSubjects] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [canInsert, setCanInsert] = useState(false);
   const handleChangeData = (e) => {
     const { name, value } = e.target;
     setCourseData((prev) => ({
@@ -22,25 +27,24 @@ function CreateCourses() {
       [name]: value,
     }));
   };
+  //Gán đường dẫn ảnh vào biến courseData
   const handleGetImage = (data) => {
-    setCourseData((prev) => ({
-      ...prev,
-      thumbnail: data[0].thumbnail,
-    }));
+    setUploadImage(false);
+    if (data && data.length > 0 && data[0].thumbnail) {
+      const url = data[0].thumbnail;
+      setCourseData((prev) => ({
+        ...prev,
+        thumbnail: url,
+      }));
+      setCanInsert(true);
+    } else {
+      console.warn("No valid thumbnail data provided.");
+    }
   };
   const handleSubmit = (e) => {
     e.preventDefault();
+    setIsLoading(true);
     setUploadImage(true);
-  };
-  const handleInsertCourse = async () => {
-    setUploadImage(false);
-    const result = await fetchCreateCourse(courseData);
-    if (result !== undefined) {
-      if (result.success === true) toast.success(result.message);
-      else {
-        toast.warning(result.message);
-      }
-    }
   };
   //Kiểm tra đăng nhập
   useEffect(() => {
@@ -53,8 +57,39 @@ function CreateCourses() {
         }));
       }
     };
+    //Lấy dữ liệu Subjects
+    const handleGetSubjects = async () => {
+      const result = await fetchSubjects();
+      if (result !== undefined) {
+        setSubjects(result);
+      }
+    };
+    handleGetSubjects();
     handleVerifyLogin();
   }, []);
+  //Thêm dữ liệu khóa học nếu đã có url ảnh
+  useEffect(() =>{
+    if(canInsert === true)
+    {
+      const handleInsertCourse = async () => {
+        setUploadImage(false);
+        const result = await fetchCreateCourse(courseData);
+        if (result !== undefined) {
+          if (result.success === true)
+          {
+            toast.success(result.message);
+            setTimeout(() =>{
+              window.location.reload();
+            }, 1500)
+          }
+          else {
+            toast.warning(result.message);
+          }
+        }
+      };
+      handleInsertCourse();
+    }
+  }, [canInsert, courseData])
   return (
     <div className="container my-5" style={{ width: "90%" }}>
       <h2 className="text-center mb-4">Tạo Khóa Học</h2>
@@ -88,15 +123,24 @@ function CreateCourses() {
 
         <div className="form-group col-md-6 col-12">
           <label htmlFor="subject_id">Môn học</label>
-          <input
-            type="text"
+          <select
             className="form-control"
             id="subject_id"
             name="subject_id"
-            maxLength="255"
             required
+            value={courseData.subject_id}
             onChange={handleChangeData}
-          />
+          >
+            <option value={""} disabled>
+              Chọn môn học
+            </option>
+            {subjects.length !== 0 &&
+              subjects.map((item, index) => (
+                <option value={item.subject_id} key={index}>
+                  {item.subject_name}
+                </option>
+              ))}
+          </select>
         </div>
 
         <div className="form-group">
@@ -113,14 +157,19 @@ function CreateCourses() {
           <ChooseImages
             category="courses"
             upload={uploadImage}
-            uploadSuccess={handleInsertCourse}
-            images={handleGetImage}
+            uploadSuccess={handleGetImage}
           />
         </div>
         <div className="text-center">
-          <button type="submit" className="btn btn-primary">
-            Tạo mới
-          </button>
+          {isLoading ? (
+            <button disabled type="submit" className="btn btn-primary">
+              <LoaderButton />
+            </button>
+          ) : (
+            <button  type="submit" className="btn btn-primary">
+              Tạo mới
+            </button>
+          )}
         </div>
       </form>
       <ToastContainer />

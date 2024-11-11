@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
 import { fetchVerifyLogin } from "../../Helpers/VerifyLogin";
 
 function AccountButton() {
@@ -77,7 +76,6 @@ function AccountButton() {
         </li>
         
       </ul>
-      <ToastContainer />
     </div>
   );
 }

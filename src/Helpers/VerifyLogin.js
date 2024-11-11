@@ -5,7 +5,11 @@ const Cookies = require('js-cookie');
 
 export const fetchVerifyLogin = async () =>{
     const loginCookies = Cookies.get('loginData');
-    if(loginCookies !== undefined)
+    if(loginCookies === undefined)
+    {
+        window.location.href = '/'
+    }
+    else
     {
         const loginData = JSON.parse(loginCookies);
         const token = loginData.token
@@ -22,7 +26,6 @@ export const fetchVerifyLogin = async () =>{
         const result = await response.json();
         if(result.success === true)
         {
-            console.log(result.message)
            const data = JSON.parse(result.data);
            return data;
         }

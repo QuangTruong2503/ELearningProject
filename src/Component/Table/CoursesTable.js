@@ -5,29 +5,29 @@ import {
   faRotateLeft,
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
-import UserDetail from "../../Pages/Admin/Users/UserDetail";
 import PaginationsComponent from "../PaginationsComponent";
-import { fetchAllUsers } from "../../API/user";
 import TablePlaceHolder from "../PlaceHolder/TablePlaceHolder.js";
+import { fetchCourses } from "../../API/coursesAPI.js";
 
 function UsersTable({ reloadData, data = [] }) {
-  const [userDatas, setUserDatas] = useState([]);
-  const [selectedUser, setSelectedUser] = useState(null);
+  const [datas, setDatas] = useState([]);
+  const [selectedData, setSelectedData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [searchValues, setSearchValues] = useState("");
   const handleEdit = (userID) => {
-    setSelectedUser(userID);
+    setSelectedData(userID);
   };
   const handleReloadData = () => {
     reloadData();
   };
+  //Khi người dùng chuyển trang
   const handleClickPage = async (numPage) => {
     setIsLoading(true)
-    const results = await fetchAllUsers(
-      `Users?page=${numPage}&search=${searchValues}`
+    const results = await fetchCourses(
+      `Courses?page=${numPage}&searchName=${searchValues}`
     );
     if (results !== undefined) {
-      setUserDatas(results);
+      setDatas(results);
       window.scrollTo({
         top: 0,
         left: 0,
@@ -36,25 +36,25 @@ function UsersTable({ reloadData, data = [] }) {
       setIsLoading(false);
     }
   };
-  //Tìm kiếm dữ liệu theo tên
-  const handleSearchUsers = async (e) => {
-    e.preventDefault();
-    const result = await fetchAllUsers(`Users?search=${searchValues}`);
-    if (result !== undefined) {
-      setUserDatas(result);
-    }
-  };
+  //Tìm kiếm dữ liệu theo tên khóa học
+const handleSearch = async (e) => {
+e.preventDefault();
+const result = await fetchCourses(`Courses?searchName=${searchValues}`);
+if (result !== undefined) {
+  setDatas(result);
+}
+};
   useEffect(() => {
     if (data.length !== 0) {
-      setUserDatas(data);
+      setDatas(data);
       setIsLoading(false);
     }
   }, [data]);
   return (
-    <>
-      <h2 className="text-center mb-5">DANH SÁCH THÀNH VIÊN</h2>
+    <div>
+        <h2 className="text-center mb-5">DANH SÁCH CÁC KHÓA HỌC</h2>
       <div className="d-flex justify-content-between">
-        <form className="col-md-4 d-flex gap-2" onSubmit={handleSearchUsers}>
+        <form className="col-md-4 d-flex gap-2" onSubmit={handleSearch}>
           <input
             type="search"
             className="form-control"
@@ -74,7 +74,7 @@ function UsersTable({ reloadData, data = [] }) {
             className="btn text-primary"
             onClick={() => {
               setIsLoading(true);
-              reloadData();
+              reloadData()
             }}
           >
             <FontAwesomeIcon className="text-xl" icon={faRotateLeft} /> Tải lại{" "}
@@ -85,27 +85,27 @@ function UsersTable({ reloadData, data = [] }) {
       <table className="table table-bordered table-striped mt-3">
         <thead className="thead-dark">
           <tr>
-            <th>Tài khoản</th>
-            <th>Họ và tên</th>
-            <th>Email</th>
-            <th>Ngày tạo</th>
-            <th>Vai trò</th>
-            <th>Tùy chọn</th>
+            <th>Khóa học</th>
+            <th>Người tạo</th>
+            <th>Môn học</th>
+            <th>Mã mời</th>
+            <th>Trạng thái</th>
+            <th>Tùy chỉnh</th>
           </tr>
         </thead>
         <tbody>
           {isLoading && <TablePlaceHolder numbCols={6} numbRows={10} />}
-          {userDatas.length !== 0 &&
+          {datas.length !== 0 &&
             !isLoading &&
-            userDatas.data.map((user, index) => (
+            datas.data.map((course, index) => (
               <tr key={index}>
-                <td>{user.user_name}</td>
+                <td>{course.courseName}</td>
                 <td>
-                  {user.first_name} {user.last_name}
+                  {course.teacherFullName}
                 </td>
-                <td>{user.email}</td>
-                <td>{new Date(user.created_at).toLocaleString()}</td>
-                <td>{user.role_id}</td>
+                <td>{course.subjectName}</td>
+                <td>{course.inviteCode}</td>
+                <td>{course.isPublic? 'Công khai' : 'Riêng tư'}</td>
                 <td>
                   <div className="dropdown d-flex align-content-center justify-content-center">
                     <button
@@ -120,7 +120,7 @@ function UsersTable({ reloadData, data = [] }) {
                         <button
                           className="dropdown-item text-success"
                           type="button"
-                          onClick={() => handleEdit(user.user_id)}
+                        //   onClick={() => handleEdit(course.course_id)}
                         >
                           Chỉnh sửa
                         </button>
@@ -144,22 +144,22 @@ function UsersTable({ reloadData, data = [] }) {
       </table>
       </div>
       {/* Paginations */}
-      {userDatas.length !== 0 && (
+      {datas.length !== 0 && (
         <PaginationsComponent
-          currentPage={userDatas.current}
-          totalPage={userDatas.pages}
+          currentPage={datas.currentPage}
+          totalPage={datas.totalPages}
           changePage={handleClickPage}
         />
       )}
       {/* Modal Chỉnh sửa dữ liệu */}
-      {selectedUser && (
+      {/* {selectedUser && (
         <UserDetail
           userID={selectedUser}
           onClose={() => setSelectedUser(null)}
           onSave={handleReloadData}
         />
-      )}
-    </>
+      )} */}
+    </div>
   );
 }
 

@@ -29,10 +29,10 @@ function CarouselCard({ courseData }) {
           </div>
         ))}
       </div>
-      <button class="carousel-btn prev" id="btnPrev" >
+      <button className="carousel-btn prev" id="btnPrev" >
         <FontAwesomeIcon icon={faAngleLeft}/>
       </button>
-      <button class="carousel-btn next" id="btnNext">
+      <button className="carousel-btn next" id="btnNext">
       <FontAwesomeIcon icon={faAngleRight}/>
       </button>
     </div>

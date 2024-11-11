@@ -4,10 +4,9 @@ import { NavLink } from "react-router-dom";
 import { handleFetchLogin } from "../../API/loginAPI.js";
 import setCookies from "../../Helpers/Cookies.js";
 import Cookies from "js-cookie";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 export const LoginPage = () => {
   const loginCookies = Cookies.get("loginToken");
-
   const [isLoading, setIsLoading] = useState(false);
   const [loginData, setLoginData] = useState({
     userNameOrEmail: "",
@@ -50,7 +49,7 @@ export const LoginPage = () => {
   useEffect(() => {
     if (loginCookies !== undefined) {
       setTimeout(() => {
-        window.location.href = "/";
+        window.location.href = '/'
       }, 1000);
     }
   }, [loginCookies]);
@@ -124,7 +123,6 @@ export const LoginPage = () => {
           </div>
         </div>
       </div>
-      <ToastContainer />
     </section>
   );
 };

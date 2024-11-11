@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../../CssFolder/Images.css";
 import { fetchUploadCloudinary } from "../../Helpers/UploadImageToCloudinary";
 
-function ChooseImages({ maxFile = 10, maxSize = 3, images, upload = false, uploadSuccess, category = '' }) {
+function ChooseImages({ maxFile = 1, maxSize = 3, upload = false, uploadSuccess, category = '' }) {
     const [error, setError] = useState("");
     const [selectedImages, setSelectedImages] = useState([]);
 
@@ -42,13 +42,13 @@ function ChooseImages({ maxFile = 10, maxSize = 3, images, upload = false, uploa
             const handleUploadCloudinary = async () => {
                 const result = await fetchUploadCloudinary(selectedImages, category);
                 if (result) {
-                    uploadSuccess();
-                    images(result);
+                    //Trả về đường dẫn ảnh của cloudinary sau khi upload thành công
+                    uploadSuccess(result);
                 }
             };
             handleUploadCloudinary();
         }
-    }, [upload, selectedImages, category, images, uploadSuccess]);
+    }, [upload, selectedImages, category, uploadSuccess]);
 
     return (
         <div>

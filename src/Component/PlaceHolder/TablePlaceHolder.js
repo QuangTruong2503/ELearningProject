@@ -25,7 +25,7 @@ function TablePlaceHolder({ numbCols = 0, numbRows = 0 }) {
             {colArrays.length !== 0 &&
               colArrays.map((item) => (
                 <td key={item}>
-                  <span class="placeholder placeholder-lg col-8"></span>
+                  <span className="placeholder placeholder-lg col-8"></span>
                 </td>
               ))}
           </tr>
