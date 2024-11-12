@@ -23,7 +23,7 @@ function UsersTable({ reloadData, data = [] }) {
 
   const handleReloadData = async () => {
     setIsLoading(true)
-    const results = await fetchAllUsers(`Users?page=${userDatas.current}&search=${searchValues}`);
+    const results = await fetchAllUsers(`Users?page=${userDatas.current}&search=${searchValues}`); 
     if(results !== null)
     {
       setUserDatas(results);
@@ -76,9 +76,6 @@ function UsersTable({ reloadData, data = [] }) {
       setIsLoading(false);
     }
   }, [data]);
-  useEffect(() =>{
-    console.log(selectedDelete);
-  },[selectedDelete])
   return (
     <>
       <h2 className="text-center mb-5">DANH SÁCH THÀNH VIÊN</h2>

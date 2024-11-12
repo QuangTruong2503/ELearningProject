@@ -11,7 +11,6 @@ function MyCourses() {
     const handleVerifyLogin = async () =>{
       const result = await fetchVerifyLogin();
       setUserData(result)
-      console.log(result);
     }
     handleVerifyLogin();
   },[])
@@ -24,7 +23,6 @@ function MyCourses() {
         if(results !== null)
         {
           setMyCourses(results);
-          console.log(results)
         }
       }
       handleGetMyCourses();
@@ -32,7 +30,7 @@ function MyCourses() {
   },[userData])
   return (
     <div>
-      <ListCourses title={'Khóa học của tôi'} data={mycourses} userID={userData.userID}/>
+      <ListCourses title={'Khóa học của tôi'} data={mycourses} userData={userData}/>
     </div>
   );
 }

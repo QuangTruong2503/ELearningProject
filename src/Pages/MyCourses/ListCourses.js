@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { fetchCoursesByTeacher } from "../../API/coursesAPI";
 import PaginationsComponent from "../../Component/PaginationsComponent";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
-function ListCourses({ title, data, userID }) {
+function ListCourses({ title, data, userData }) {
   const [courses, setCourses] = useState([]);
   const [searchValues, setSearchValues] = useState("");
+  const userID = userData? userData.userID : '';
   const handleGetMyCourses = async () => {
     const result = await fetchCoursesByTeacher(
       `Courses/teacher?id=${userID}&page=${data.currentPage}&search=${searchValues}`
@@ -33,9 +36,6 @@ function ListCourses({ title, data, userID }) {
       setCourses(data);
     }
   }, [data]);
-  useEffect(() => {
-    console.log(courses);
-  }, [courses]);
   return (
     <div>
       <div className="my-4">
@@ -43,7 +43,8 @@ function ListCourses({ title, data, userID }) {
       </div>
       <div className="course-overview">
         <h4>Course overview</h4>
-        <div className="d-flex align-items-center mb-4 d-flex gap-2">
+        <div className="d-flex align-items-center justify-content-between mb-4 d-flex gap-2">
+          <div className="d-flex gap-2">
           <form onSubmit={handleGetMyCourses}>
             <input
               type="text"
@@ -53,11 +54,17 @@ function ListCourses({ title, data, userID }) {
             />
           </form>
           <div className="d-flex gap-2">
-            <select className="form-select" style={{ width: "160px" }}>
+            <select className="form-select">
               <option>Sort by course name</option>
               <option>Sort by date</option>
             </select>
           </div>
+          </div>
+          {userData && userData.roleID !== 'student' && (
+          <div className="align-items-end">
+            <button className="btn btn-outline-success">Tạo khóa học <FontAwesomeIcon icon={faPlus}/></button>
+          </div>
+          )}
         </div>
         <div className="list-courses--content">
           {courses.data && courses.data.length > 0 ? (

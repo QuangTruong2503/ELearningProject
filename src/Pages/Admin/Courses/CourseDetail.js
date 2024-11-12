@@ -47,11 +47,10 @@ function UserDetail({ ID, onClose, onSave }) {
     setIsSaving(true);
     if(selectedImage !== '')
     {
-      console.log(selectedImage);
       const imageUploaded = await fetchUploadCloudinaryOneImage(selectedImage, 'Courses');
       if(imageUploaded !== null)
       {
-        console.log(imageUploaded)   
+        console.log(imageUploaded)
         const thumbnail = imageUploaded.thumbnail;
         setFormData((prev) => ({
           ...prev,

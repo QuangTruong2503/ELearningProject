@@ -189,6 +189,7 @@
   }
   .card-title{
     cursor: pointer;
+    transition: all 0.3s ease;
   }
   .card-title:hover{
     color: #007bff;

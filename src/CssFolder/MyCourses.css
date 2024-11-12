@@ -46,6 +46,7 @@
     height: auto; /* Đảm bảo ảnh giữ đúng tỷ lệ */
     max-height: 200px; /* Giới hạn chiều cao tối đa của ảnh */
     border-radius: 8px;
+    object-fit: cover;
 }
 
 
