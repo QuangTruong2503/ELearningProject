@@ -181,7 +181,7 @@ function UserDetail({ ID, onClose, onSave }) {
                   </div>
 
                   <div className="form-group mb-3 col-md-6">
-                    <label>ID Giáo viên</label>
+                    <label>Giáo viên</label>
                     <input
                       type="text"
                       value={formData.teacherFullName}

@@ -9,17 +9,26 @@ import UserDetail from "../../Pages/Admin/Users/UserDetail";
 import PaginationsComponent from "../PaginationsComponent";
 import { fetchAllUsers } from "../../API/user";
 import TablePlaceHolder from "../PlaceHolder/TablePlaceHolder.js";
+import { toast } from "react-toastify";
+import DeleteModal from "../Modal/DeleteModal.js";
+import { fetchDeleteData } from "../../API/fetchAPI.js";
 
 function UsersTable({ reloadData, data = [] }) {
   const [userDatas, setUserDatas] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [searchValues, setSearchValues] = useState("");
-  const handleEdit = (userID) => {
-    setSelectedUser(userID);
-  };
-  const handleReloadData = () => {
-    reloadData();
+
+  const [selectedDelete, setSelectedDelete] = useState(null);
+
+  const handleReloadData = async () => {
+    setIsLoading(true)
+    const results = await fetchAllUsers(`Users?page=${userDatas.current}&search=${searchValues}`);
+    if(results !== null)
+    {
+      setUserDatas(results);
+      setIsLoading(false)
+    }
   };
   const handleClickPage = async (numPage) => {
     setIsLoading(true)
@@ -44,12 +53,32 @@ function UsersTable({ reloadData, data = [] }) {
       setUserDatas(result);
     }
   };
+  const handleEdit = (userID) => {
+    setSelectedUser(userID);
+  };
+  const handleDelete = async () => {
+    if (selectedDelete !== null) {
+      const result = await fetchDeleteData(`Users/${selectedDelete}`);
+      if (result !== null) {
+        if (result.success) {
+          toast.success(result.message);
+          handleReloadData();
+          setSelectedDelete(null)
+          return;
+        }
+        toast.warning(result.message);
+      }
+    }
+  };
   useEffect(() => {
     if (data.length !== 0) {
       setUserDatas(data);
       setIsLoading(false);
     }
   }, [data]);
+  useEffect(() =>{
+    console.log(selectedDelete);
+  },[selectedDelete])
   return (
     <>
       <h2 className="text-center mb-5">DANH SÁCH THÀNH VIÊN</h2>
@@ -131,9 +160,15 @@ function UsersTable({ reloadData, data = [] }) {
                         </a>
                       </li>
                       <li>
-                        <a className="dropdown-item" href="/">
-                          Something else here
-                        </a>
+                      <button
+                            type="button"
+                            className="btn text-danger dropdown-item"
+                            data-bs-toggle="modal"
+                            data-bs-target="#staticBackdrop"
+                            onClick={() => setSelectedDelete(user.user_id)}
+                          >
+                            Xóa
+                          </button>
                       </li>
                     </ul>
                   </div>
@@ -159,6 +194,16 @@ function UsersTable({ reloadData, data = [] }) {
           onSave={handleReloadData}
         />
       )}
+
+      {/* Modal xóa dữ liệu */}
+      <DeleteModal
+        title={"Xóa dữ liệu người dung"}
+        content={
+          "Bạn có chắc chắn muốn xóa người dùng này? Sau khi xóa các thông tin liên quan như: Khóa học, bài làm... sẽ bị xóa."
+        }
+        onClose={() => setSelectedDelete(null)}
+        onDelete={handleDelete}
+      />
     </>
   );
 }

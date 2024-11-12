@@ -48,7 +48,27 @@ export const fetchCoursesPublicBySubject = async (subject) =>{
         throw error; // Propagate error for further handling by caller
     }
 }
+export const fetchCoursesByTeacher = async (url) =>{
+    try {
+        const response = await fetch(`${apiURL}/${url}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
 
+        if (!response.ok) {
+            throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
+
+        const result = await response.json();
+        return result;
+
+    } catch (error) {
+        console.error("Failed to fetch public courses by subject:", error);
+        throw error; // Propagate error for further handling by caller
+    }
+}
 //Thêm dữ liệu Course
 export const fetchCreateCourse = async (data) =>{
     const response = await fetch(`${apiURL}/Courses`, {

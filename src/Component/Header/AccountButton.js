@@ -53,9 +53,6 @@ function AccountButton() {
             {userData?.firstName} {userData?.lastName}
           </span>
         </li>
-        <li className="">
-          <span className="dropdown-item-text">{userData?.email}</span>
-        </li>
         <li>
           <hr className="dropdown-divider" />
         </li>

@@ -10,6 +10,7 @@ import RegisterPage from './Pages/Login/RegisterPage';
 import AdminPage from './Pages/Admin/AdminPage';
 import { ToastContainer } from 'react-toastify';
 import ScrollToTopButton from './Component/ScollToTopComponent.js';
+import MyCourses from './Pages/MyCourses/MyCourses.js';
 function App() {
   return (
     <HashRouter>
@@ -25,6 +26,9 @@ function App() {
 
           {/* Admin Panel */}
           <Route path='admin/*' Component={AdminPage}></Route>
+
+          {/* My Courses */}
+          <Route path='/my-courses' Component={MyCourses}/>
         </Routes>
       </div>
       <SpeedInsights />
