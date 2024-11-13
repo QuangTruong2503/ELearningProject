@@ -29,11 +29,13 @@ function HeaderComponent() {
           id="navbarSupportedContent"
         >
           <ul className="navbar-nav mb-2 mb-lg-0">
-            <li className="nav-item">
+            {loginCookies !== undefined &&(
+              <li className="nav-item">
               <NavLink to={'/my-courses'} className="nav-link active" aria-current="page">
                 Khóa học
               </NavLink>
             </li>
+            )}
           </ul>
           {loginCookies === undefined && (
             <div className="d-flex gap-2">

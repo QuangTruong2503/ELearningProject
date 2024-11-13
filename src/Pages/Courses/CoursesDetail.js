@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import '../../CssFolder/Course.css'
-import { fetchVerifyLogin } from '../../Helpers/VerifyLogin.js'
+import "../../CssFolder/Course.css";
+import Cookies from "js-cookie";
+import { fetchVerifyLogin } from "../../Helpers/VerifyLogin.js";
 function CoursesDetail() {
-    const {courseID} = useParams();
+  const { courseID } = useParams();
   const [courseData, setCourseData] = useState({
     courseID: "452cfab9-9fe1-11ef-8f8b-ce039959f5d6",
     courseName: "Sinh Học Phổ Thông",
@@ -18,27 +19,26 @@ function CoursesDetail() {
     subjectID: "biology",
     subjectName: "Sinh học",
   });
-  useEffect(() =>{
-    const handleVerifyLogin = async () =>{
+  useEffect(() => {
+    if (Cookies.get("loginData") !== undefined) {
+      const handleVerifyLogin = async () => {
         const result = await fetchVerifyLogin();
         console.log(result);
+      };
+      handleVerifyLogin();
     }
-    handleVerifyLogin();
-    window.scrollTo(0, 0)
-  },[])
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div class="course-container">
       <div
         class="course-header"
         style={{ backgroundImage: `url(${courseData.thumbnail})` }}
-
       >
         <div class="course-header-overlay">
           <h1>{courseData.courseName}</h1>
           <p class="subject">Môn học: {courseData.subjectName}</p>
-          <p class="description">
-            {courseData.description}
-          </p>
+          <p class="description">{courseData.description}</p>
         </div>
       </div>
 
@@ -48,7 +48,8 @@ function CoursesDetail() {
           <strong>Giáo viên:</strong> {courseData.teacherFullName}
         </p>
         <p>
-          <strong>Ngày tạo:</strong> {new Date(courseData.createdAt).toLocaleString()}
+          <strong>Ngày tạo:</strong>{" "}
+          {new Date(courseData.createdAt).toLocaleString()}
         </p>
       </div>
 
