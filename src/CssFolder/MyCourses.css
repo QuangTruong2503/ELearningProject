@@ -28,7 +28,7 @@
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
-    transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -37,7 +37,6 @@
 }
 
 .courses-card:hover {
-    transform: translateY(-10px);
     background-color: rgba(0, 0, 0, 0.05);
 }
 

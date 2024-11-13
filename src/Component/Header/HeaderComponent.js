@@ -4,6 +4,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import Cookies from "js-cookie";
 import AccountButton from "./AccountButton";
+import AttendCourse from "./AttendCourse";
 function HeaderComponent() {
   const loginCookiesName = "loginData";
   const loginCookies = Cookies.get(loginCookiesName);
@@ -30,7 +31,7 @@ function HeaderComponent() {
           <ul className="navbar-nav mb-2 mb-lg-0">
             <li className="nav-item">
               <NavLink to={'/my-courses'} className="nav-link active" aria-current="page">
-                Dashboard
+                Khóa học
               </NavLink>
             </li>
           </ul>
@@ -45,7 +46,10 @@ function HeaderComponent() {
             </div>
           )}
           {loginCookies !== undefined && (
-            <AccountButton />
+            <div className="d-flex gap-2">
+              <AttendCourse />
+              <AccountButton />
+            </div>
           )}
         </div>
       </div>

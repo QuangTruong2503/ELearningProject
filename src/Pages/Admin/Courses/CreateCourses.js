@@ -6,7 +6,9 @@ import { ToastContainer, toast } from "react-toastify";
 import { fetchCreateCourse } from "../../../API/coursesAPI";
 import { fetchVerifyLogin } from "../../../Helpers/VerifyLogin";
 import { fetchSubjects } from "../../../API/subjectsAPI";
+import { useNavigate } from "react-router-dom";
 function CreateCourses() {
+  const navigate = useNavigate();
   //Trạng thái upload nếu true sẽ tiến hành upload lên cloudinary
   const [uploadImage, setUploadImage] = useState(false);
   const [courseData, setCourseData] = useState({
@@ -50,7 +52,13 @@ function CreateCourses() {
   useEffect(() => {
     const handleVerifyLogin = async () => {
       const data = await fetchVerifyLogin();
+      //Nếu vai trò là student thì trở về màn hình chính
       if (data !== undefined) {
+        if(data.roleID === 'student')
+        {
+          toast.warning('Bạn không thể tạo khóa học vì là student');
+          navigate('/')
+        }
         setCourseData((prev) => ({
           ...prev,
           teacher_id: data.userID,
@@ -66,7 +74,7 @@ function CreateCourses() {
     };
     handleGetSubjects();
     handleVerifyLogin();
-  }, []);
+  }, [navigate]);
   //Thêm dữ liệu khóa học nếu đã có url ảnh
   useEffect(() =>{
     if(canInsert === true)

@@ -12,6 +12,7 @@ import { ToastContainer } from 'react-toastify';
 import ScrollToTopButton from './Component/ScollToTopComponent.js';
 import MyCourses from './Pages/MyCourses/MyCourses.js';
 import CoursesDetail from './Pages/Courses/CoursesDetail.js';
+import CreateCourses from './Pages/Admin/Courses/CreateCourses.js';
 function App() {
   return (
     <HashRouter>
@@ -31,14 +32,15 @@ function App() {
           {/* My Courses */}
           <Route path='/my-courses' Component={MyCourses}/>
 
-          {/* Course Detail */}
+          {/* Course */}
           <Route path='/course/:courseID' Component={CoursesDetail}/>
+          <Route path='/course/create' Component={CreateCourses}/>
         </Routes>
       </div>
       <SpeedInsights />
       <Footer></Footer>
       <ScrollToTopButton />
-      <ToastContainer />
+      <ToastContainer stacked={true}/>
     </HashRouter>
   );
 }

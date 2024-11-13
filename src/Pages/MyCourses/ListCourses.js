@@ -3,6 +3,7 @@ import { fetchCoursesByTeacher } from "../../API/coursesAPI";
 import PaginationsComponent from "../../Component/PaginationsComponent";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { NavLink } from "react-router-dom";
 
 function ListCourses({ title, data, userData }) {
   const [courses, setCourses] = useState([]);
@@ -60,9 +61,10 @@ function ListCourses({ title, data, userData }) {
             </select>
           </div>
           </div>
+          {/* Vai trò giáo viên hoặc admin có thể tạo khóa học*/}
           {userData && userData.roleID !== 'student' && (
           <div className="align-items-end">
-            <button className="btn btn-outline-success">Tạo khóa học <FontAwesomeIcon icon={faPlus}/></button>
+            <NavLink to={'/course/create'} className="btn btn-outline-success">Tạo khóa học <FontAwesomeIcon icon={faPlus}/></NavLink>
           </div>
           )}
         </div>

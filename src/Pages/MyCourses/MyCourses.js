@@ -16,7 +16,7 @@ function MyCourses() {
   },[])
   //Lấy dữ liệu khóa học sau khi kiểm tra đăng nhập
   useEffect(() =>{
-    if(userData.userID !== undefined)
+    if(userData !== undefined && userData.userID !== undefined)
     {
       const handleGetMyCourses = async () =>{
         const results = await fetchCoursesByTeacher(`Courses/teacher?id=${userData.userID}`)
@@ -27,10 +27,15 @@ function MyCourses() {
       }
       handleGetMyCourses();
     }
+    else{
+      
+    }
   },[userData])
   return (
     <div>
-      <ListCourses title={'Khóa học của tôi'} data={mycourses} userData={userData}/>
+      {mycourses.length !== 0 && (
+        <ListCourses title={'Khóa học của tôi'} data={mycourses} userData={userData}/>
+      )}
     </div>
   );
 }
