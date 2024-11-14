@@ -8,8 +8,13 @@ function DiscoveryCourses() {
     useEffect(() =>{
         const getCoursesPublicBySubject = async () =>{
             const math = await fetchCoursesPublicBySubject('math');
+            const english = await fetchCoursesPublicBySubject('english');
+            const history = await fetchCoursesPublicBySubject('history')
             setMathCourses(math);
+            setEnglishCourses(english);
+            setHistoryCourses(history);
         }
+        
         getCoursesPublicBySubject();
     },[])
     useEffect(() =>{
@@ -23,6 +28,18 @@ function DiscoveryCourses() {
             <div className='discovery-courses--item'>
                 <h4>Các Khóa học môn Toán</h4>
                 <CarouselCard courseData={mathCourses}/>
+            </div>
+        )}
+        {historyCourses.length !== 0 && (
+            <div className='discovery-courses--item'>
+                <h4>Các Khóa học Lịch Sử</h4>
+                <CarouselCard courseData={historyCourses}/>
+            </div>
+        )}
+        {englishCourses.length !== 0 && (
+            <div className='discovery-courses--item'>
+                <h4>Các Khóa học Tiếng Anh</h4>
+                <CarouselCard courseData={englishCourses}/>
             </div>
         )}
     </div>

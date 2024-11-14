@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import "../../CssFolder/Course.css";
 import Cookies from "js-cookie";
 import { fetchVerifyLogin } from "../../Helpers/VerifyLogin.js";
+import CourseCurriculum from "./CourseCurriculum.js";
 function CoursesDetail() {
   const { courseID } = useParams();
   const [courseData, setCourseData] = useState({
@@ -51,6 +52,11 @@ function CoursesDetail() {
           <strong>Ngày tạo:</strong>{" "}
           {new Date(courseData.createdAt).toLocaleString()}
         </p>
+      </div>
+
+      <div className="course-details">
+        <h2 className="mb-3">Nội dung khóa học</h2>
+        <CourseCurriculum />
       </div>
 
       <div class="join-section">

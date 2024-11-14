@@ -176,11 +176,14 @@
     margin: 10px;
     background-color: #fff;
     overflow: hidden;
-    transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease;
     cursor: pointer;
   }
   .carousel-card:hover{
     box-shadow: 0 0 7px 3px rgba(0, 0, 0, 0.1);
+  }
+  .carousel-card:hover .carousel-card img{
+    background: rgba(0, 0, 0, 0.1);
   }
   .carousel-card img {
     width: 100%;
