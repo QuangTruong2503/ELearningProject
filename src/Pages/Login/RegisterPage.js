@@ -86,6 +86,9 @@ const RegisterPage = () => {
       setIsLoading(false);
     }
   };
+  useEffect(() =>{
+    window.scrollTo(0, 0);
+  })
   return (
     <section className="min-vh-100 d-flex align-items-center">
       <div className="container py-5 h-100">

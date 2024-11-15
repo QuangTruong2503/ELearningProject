@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "../../CssFolder/Course.css";
 import Cookies from "js-cookie";
 import { fetchVerifyLogin } from "../../Helpers/VerifyLogin.js";
@@ -12,6 +12,7 @@ import {
 import { toast } from "react-toastify";
 import LoaderButton from "../../Component/Loader/LoaderButton.js";
 function CoursesDetail() {
+  const navigate = useNavigate()
   const { courseID } = useParams();
   const [userData, setUserData] = useState({});
   const [courseData, setCourseData] = useState({
@@ -36,8 +37,13 @@ function CoursesDetail() {
   const handleJoinCourse = async (e) => {
     e.preventDefault();
     setIsActing(true);
-    if (courseID === undefined && userData.userID === undefined) {
-      toast.warning("Lỗi không thể đọc mã khóa học và mã người dùng");
+    if(Cookies.get('loginData') === undefined)
+    {
+      navigate('/login');
+      return
+    }
+    if (courseID === undefined) {
+      toast.warning("Lỗi không thể đọc mã khóa học");
       setIsActing(false);
       return;
     }

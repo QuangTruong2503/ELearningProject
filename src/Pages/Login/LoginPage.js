@@ -52,6 +52,7 @@ export const LoginPage = () => {
         window.location.href = '/'
       }, 1000);
     }
+    window.scrollTo(0, 0);
   }, [loginCookies]);
   return (
     <section className="d-flex align-items-center">
