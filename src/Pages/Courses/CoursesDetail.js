@@ -4,46 +4,105 @@ import "../../CssFolder/Course.css";
 import Cookies from "js-cookie";
 import { fetchVerifyLogin } from "../../Helpers/VerifyLogin.js";
 import CourseCurriculum from "./CourseCurriculum.js";
+import { fetchCourseByID } from "../../API/coursesAPI.js";
+import {
+  fetchJoinCourse,
+  fetchUserInCourse,
+} from "../../API/enrollmentsAPI.js";
+import { toast } from "react-toastify";
+import LoaderButton from "../../Component/Loader/LoaderButton.js";
 function CoursesDetail() {
   const { courseID } = useParams();
+  const [userData, setUserData] = useState({});
   const [courseData, setCourseData] = useState({
-    courseID: "452cfab9-9fe1-11ef-8f8b-ce039959f5d6",
-    courseName: "Sinh Học Phổ Thông",
-    description: "Khóa học về sinh học cơ bản dành cho học sinh phổ thông",
-    inviteCode: "SH3456",
+    courseID: "",
+    courseName: "",
+    description: "",
+    inviteCode: "",
     isPublic: false,
-    createdAt: "2024-11-11T03:58:54",
-    thumbnail:
-      "https://res.cloudinary.com/brandocloud/image/upload/v1730959170/ELearning/Courses/courses-default.png",
-    teacherID: "283df8ef-98ba-4d80-8537-0f4d548c476f",
-    teacherFullName: "Tran Thanh",
-    subjectID: "biology",
-    subjectName: "Sinh học",
+    createdAt: "",
+    thumbnail: "",
+    teacherID: "",
+    teacherFullName: "",
+    subjectID: "",
+    subjectName: "",
   });
+  const [lessonsCount, setLessonsCount] = useState(0);
+  const [examsCount, setExamsCount] = useState(0);
+  const [userInCourse, setUserInCourse] = useState(false);
+  const [isActing, setIsActing] = useState(false);
+
+  //Hàm tham gia khóa học
+  const handleJoinCourse = async (e) => {
+    e.preventDefault();
+    setIsActing(true);
+    if (courseID === undefined && userData.userID === undefined) {
+      toast.warning("Lỗi không thể đọc mã khóa học và mã người dùng");
+      setIsActing(false);
+      return;
+    }
+    const result = await fetchJoinCourse(userData.userID, courseID);
+    if (result !== null) {
+      if (result.success === true) toast.success(result.message);
+      else if (result.success === false) toast.warning(result.message);
+      setTimeout(() =>{
+        window.location.reload();
+      }, 1500)
+    }
+  };
+
+  //Kiểm tra đăng nhập hợp lệ với token
   useEffect(() => {
     if (Cookies.get("loginData") !== undefined) {
       const handleVerifyLogin = async () => {
         const result = await fetchVerifyLogin();
-        console.log(result);
+        setUserData(result);
       };
       handleVerifyLogin();
     }
     window.scrollTo(0, 0);
   }, []);
+  //Lấy dữ liệu Course với ID
+  useEffect(() => {
+    if (courseID !== undefined) {
+      const handleGetCourseByID = async () => {
+        const results = await fetchCourseByID(courseID);
+        if (results !== null) {
+          setCourseData(results.data);
+          setExamsCount(results.examsCount);
+          setLessonsCount(results.lessonsCount);
+        }
+      };
+      handleGetCourseByID();
+    }
+  }, [courseID]);
+  //Kiểm tra dữ liệu người dùng đã tham gia khóa học chưa
+  useEffect(() => {
+    if (courseID !== undefined && userData.userID !== undefined) {
+      const handleCheckUserInCourse = async () => {
+        const result = await fetchUserInCourse(userData.userID, courseID);
+        if (result !== null) {
+          setUserInCourse(result.success);
+          console.log(result);
+        }
+      };
+      handleCheckUserInCourse();
+    }
+  }, [courseID, userData]);
   return (
-    <div class="course-container">
+    <div className="course-container">
       <div
-        class="course-header"
+        className="course-header"
         style={{ backgroundImage: `url(${courseData.thumbnail})` }}
       >
-        <div class="course-header-overlay">
+        <div className="course-header-overlay">
           <h1>{courseData.courseName}</h1>
-          <p class="subject">Môn học: {courseData.subjectName}</p>
-          <p class="description">{courseData.description}</p>
+          <p className="subject">Môn học: {courseData.subjectName}</p>
+          <p className="description">{courseData.description}</p>
         </div>
       </div>
 
-      <div class="course-details">
+      <div className="course-details">
         <h2>Thông tin khóa học</h2>
         <p>
           <strong>Giáo viên:</strong> {courseData.teacherFullName}
@@ -52,16 +111,32 @@ function CoursesDetail() {
           <strong>Ngày tạo:</strong>{" "}
           {new Date(courseData.createdAt).toLocaleString()}
         </p>
+        <p>
+          <strong>Bài học:</strong> {lessonsCount}
+        </p>
+        <p>
+          <strong>Bài kiểm tra:</strong> {examsCount}
+        </p>
       </div>
 
       <div className="course-details">
         <h2 className="mb-3">Nội dung khóa học</h2>
-        <CourseCurriculum />
+        <CourseCurriculum attended={userInCourse}/>
       </div>
 
-      <div class="join-section">
-        <button class="join-btn">Tham gia khóa học</button>
-      </div>
+      {!userInCourse && (
+        <form className="join-section" onSubmit={handleJoinCourse}>
+          {isActing ? (
+            <button disabled className="join-btn">
+              <LoaderButton />
+            </button>
+          ) : (
+            <button type="submit" className="join-btn">
+              Tham gia khóa học
+            </button>
+          )}
+        </form>
+      )}
     </div>
   );
 }
