@@ -82,7 +82,7 @@ function CreateCourses() {
       const handleInsertCourse = async () => {
         setUploadImage(false);
         const result = await fetchCreateCourse(courseData);
-        if (result !== undefined) {
+        if (result !== null) {
           if (result.success === true)
           {
             toast.success(result.message);
@@ -122,7 +122,7 @@ function CreateCourses() {
             id="is_public"
             name="is_public"
             onChange={handleChangeData}
-            value={true}
+            value={courseData.is_public}
           >
             <option value={true}>Công khai</option>
             <option value={false}>Riêng tư</option>

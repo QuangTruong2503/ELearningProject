@@ -34,7 +34,7 @@ function MyCourses() {
   return (
     <div>
       {mycourses.length !== 0 && (
-        <ListCourses title={'Khóa học của tôi'} data={mycourses} userData={userData}/>
+        <ListCourses title={'Khóa học đã tạo'} data={mycourses} userData={userData}/>
       )}
     </div>
   );
