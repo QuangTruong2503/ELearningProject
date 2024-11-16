@@ -79,3 +79,8 @@
     font-size: 20px;
     margin-bottom: 10px;
   }
+
+  .course-detail--page .list-group-item a:hover{
+    color: #333;
+    text-decoration: underline;
+  }
