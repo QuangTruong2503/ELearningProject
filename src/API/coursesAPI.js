@@ -48,6 +48,7 @@ export const fetchCoursesPublicBySubject = async (subject) =>{
         throw error; // Propagate error for further handling by caller
     }
 }
+//Lấy dữ liệu theo người tạo
 export const fetchCoursesByTeacher = async (url) =>{
     try {
         const response = await fetch(`${apiURL}/${url}`, {

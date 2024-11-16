@@ -40,11 +40,7 @@ function AttendCourse() {
             }
           };
           handleVerifyLogin();
-    }, [])
-    useEffect(() =>{
-        console.log(inviteCode);
-        console.log(userData.userID)
-    }, [inviteCode])
+    }, []);
   return (
     <div>
       <button
@@ -95,7 +91,7 @@ function AttendCourse() {
                     onChange={(e) => setInviteCode(e.target.value)}
                   />
                   <small id="codeHelp" className="form-text text-muted">
-                    Mã khóa học được người quản lý khóa học cung cấp.
+                    Mã được người quản lý khóa học cung cấp.
                   </small>
                 </div>
                 {onActing &&(

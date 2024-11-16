@@ -5,7 +5,7 @@ import { fetchCourseByID, fetchUpdateCourse } from "../../../API/coursesAPI.js";
 import { fetchSubjects } from "../../../API/subjectsAPI.js";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faImage } from "@fortawesome/free-solid-svg-icons";
 import { fetchUploadCloudinaryOneImage } from "../../../Helpers/UploadImageToCloudinary.js";
 function UserDetail({ ID, onClose, onSave }) {
   const [formData, setFormData] = useState({
@@ -67,9 +67,15 @@ function UserDetail({ ID, onClose, onSave }) {
     const file = event.target.files[0];
     if (file) {
       const fileSize = file.size / 1024 / 1024;
+      const fileName = file.name
+      console.log(fileName.length)
       if(fileSize > 3)
       {
         toast.warning('File ảnh không được vượt quá 3MB')
+        return;
+      }
+      if(fileName.length > 100){
+        toast.warning('File ảnh có tên quá dài!')
         return;
       }
       const imageUrl = URL.createObjectURL(file);
@@ -107,7 +113,6 @@ function UserDetail({ ID, onClose, onSave }) {
         setIsLoading(false);
         return;
       }
-      console.log(result);
       const data = result;
       setFormData({
         course_id: data.courseID,
@@ -132,9 +137,6 @@ function UserDetail({ ID, onClose, onSave }) {
     handleFetchCourseByID();
     handleGetSubjects();
   }, [ID]);
-  useEffect(() => {
-    console.log(formData);
-  }, [formData]);
 
   return (
     <div className="modal show d-block modal-background" tabIndex="-1">
@@ -247,7 +249,7 @@ function UserDetail({ ID, onClose, onSave }) {
                         src={formData.thumbnail}
                         alt="Khóa học"
                       />
-                      <label htmlFor="uploadImage" className="btn btn-outline-success d-inline-block mx-2">Chọn ảnh <FontAwesomeIcon icon={faPlus}/></label>
+                      <label htmlFor="uploadImage" className="btn btn-outline-success d-inline-block mx-2">Chọn ảnh <FontAwesomeIcon icon={faImage}/></label>
                       <input id="uploadImage" type="file" accept="image/*" className="d-none" onChange={handleImageChange} />
                     </div>
                   </div>

@@ -41,7 +41,8 @@ function AccountButton() {
           alt="User Avatar"
           width="40"
           height="40"
-          className="img-fluid"
+          className=""
+          style={{borderRadius: '50%', objectFit: 'fill'}}
         />
       </button>
       <ul

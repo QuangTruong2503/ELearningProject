@@ -19,7 +19,8 @@ function ViewBanner() {
               style={{
                 width: "4.8rem",
                 height: "4.8rem",
-                borderRadius: "100rem",
+                borderRadius: "50%",
+                objectFit: 'cover'
               }}
               alt="avatar"
               src={convertData.avatar}
