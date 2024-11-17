@@ -37,6 +37,7 @@ function AdminDashboard({
                     <NavLink
                       to={dataItem.url}
                       className="nav-link d-flex align-items-center"
+                      data-bs-dismiss="offcanvas"
                     >
                       {dataItem.name}
                     </NavLink>

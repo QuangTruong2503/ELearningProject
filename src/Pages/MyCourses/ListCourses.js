@@ -5,13 +5,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { NavLink, useNavigate } from "react-router-dom";
 import SpinnerLoader from "../../Component/Loader/SpinnerLoader";
-import {motion} from 'framer-motion'
+import { motion } from "framer-motion";
 function ListCourses({
   title,
   data,
   userData,
   create = false,
   loading = true,
+  myCourse = false,
 }) {
   const [courses, setCourses] = useState([]);
   const [searchValues, setSearchValues] = useState("");
@@ -51,7 +52,7 @@ function ListCourses({
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
-      opacity: 1, 
+      opacity: 1,
       transition: {
         duration: 1, // Hiệu ứng xuất hiện lần lượt
       },
@@ -94,52 +95,55 @@ function ListCourses({
           )}
         </div>
         {/* Danh sách các khóa học */}
-        {loading && (
-          <SpinnerLoader />
-        )}
+        {loading && <SpinnerLoader />}
         {!loading && (
           <motion.div
-          className="list-courses--content"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          {courses.data && courses.data.length > 0 ? (
-            courses.data.map((item, index) => (
-              <motion.div
-                className="courses-card"
-                key={index}
-                variants={containerVariants}
-                whileTap={{ scale: 0.95 }} // Thu nhỏ nhẹ khi click
-                onClick={() => navigate(`/course/${item.course_id}`)}
+            className="list-courses--content"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            {courses.data && courses.data.length > 0 ? (
+              courses.data.map((item, index) => (
+                <motion.div
+                  className="courses-card"
+                  key={index}
+                  variants={containerVariants}
+                  whileTap={{ scale: 0.95 }} // Thu nhỏ nhẹ khi click
+                  // Nếu được gọi trong MyCourse thì sẽ chuyển đến trang quản lý khi nhấn
+                  onClick={() => {
+                    myCourse
+                      ? navigate(`/manage-course/${item.course_id}/details`)
+                      : navigate(`/course/${item.course_id}`);
+                  }}
+                >
+                  <img src={item.thumbnail} alt="Course thumbnail" />
+                  <div>
+                    <p className="course-title mt-2">{item.course_name}</p>
+                    <p className="course-description">{item.description}</p>
+                  </div>
+                </motion.div>
+              ))
+            ) : (
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.2 }}
               >
-                <img src={item.thumbnail} alt="Course thumbnail" />
-                <div>
-                  <p className="course-title mt-2">{item.course_name}</p>
-                  <p className="course-description">{item.description}</p>
-                </div>
-              </motion.div>
-            ))
-          ) : (
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.2 }}
-            >
-              Không có khóa học nào.
-            </motion.p>
-          )}
-        </motion.div>
+                Không có khóa học nào.
+              </motion.p>
+            )}
+          </motion.div>
         )}
         {/* Paginations */}
         {!loading && (
           <div className="d-flex justify-content-center">
-          <PaginationsComponent
-            currentPage={courses.currentPage}
-            totalPage={courses.totalPages}
-            changePage={handleClickPage}
-          />
-        </div>
+            <PaginationsComponent
+              currentPage={courses.currentPage}
+              totalPage={courses.totalPages}
+              changePage={handleClickPage}
+            />
+          </div>
         )}
       </div>
     </div>

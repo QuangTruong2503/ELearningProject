@@ -48,7 +48,7 @@ function HeaderComponent() {
             </div>
           )}
           {loginCookies !== undefined && (
-            <div className="d-flex gap-2">
+            <div className="d-flex flex-lg-row flex-column gap-2">
               <AttendCourse />
               <AccountButton />
             </div>

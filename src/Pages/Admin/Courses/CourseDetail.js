@@ -142,7 +142,7 @@ function UserDetail({ ID, onClose, onSave }) {
     <div className="modal show d-block modal-background" tabIndex="-1">
       <div className="w-50 my-5 mx-auto">
         {isLoading && (
-          <div className="modal-content">
+          <div className="modal-content d-flex justify-content-center align-items-center">
             <SpinnerLoader />
           </div>
         )}

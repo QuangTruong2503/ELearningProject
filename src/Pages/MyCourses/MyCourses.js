@@ -45,7 +45,7 @@ function MyCourses() {
   return (
     <div>
       {mycourses.length !== 0 && (
-        <ListCourses title={'Khóa học đã tạo'} data={mycourses} userData={userData} create={true} loading={isLoading}/>
+        <ListCourses title={'Khóa học đã tạo'} data={mycourses} userData={userData} create={true} loading={isLoading} myCourse={true}/>
       )}
     </div>
   );

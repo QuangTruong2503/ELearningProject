@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "../../CssFolder/MyCourses.css";
-import ListCourses from "../MyCourses/ListCourses.js";
-import { fetchVerifyLogin } from "../../Helpers/VerifyLogin";
-import { fetchJoinedCoursesByUser } from "../../API/enrollmentsAPI";
+import ListCourses from "./ListCourses.js";
+import { fetchVerifyLogin } from "../../Helpers/VerifyLogin.js";
+import { fetchJoinedCoursesByUser } from "../../API/enrollmentsAPI.js";
 function AttendedCourses() {
   const [joinedCourses, setJoinedCourses] = useState([]);
   const [userData, setUserData] = useState({});

@@ -70,6 +70,20 @@ export const fetchCoursesByTeacher = async (url) =>{
         throw error; // Propagate error for further handling by caller
     }
 }
+//Kiểm tra người dùng là người sở hữu khóa học
+export const fetchCheckOwnerCourse = async (userID, courseID) =>{
+    const response = await fetch(`${apiURL}/Courses/check-owner-course?userID=${userID}&courseID=${courseID}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            // Thêm các header khác nếu cần
+        }
+    });
+    if (!response.ok) throw new Error('Error: ' + response.status);
+    const result = await response.json();
+    return result;
+}
+
 //Thêm dữ liệu Course
 export const fetchCreateCourse = async (data) =>{
     const response = await fetch(`${apiURL}/Courses`, {

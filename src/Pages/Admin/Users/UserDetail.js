@@ -4,7 +4,6 @@ import SpinnerLoader from "../../../Component/Loader/SpinnerLoader.js";
 import LoaderButton from "../../../Component/Loader/LoaderButton.js";
 import { toast } from "react-toastify";
 import { fetchUploadCloudinaryOneImage } from "../../../Helpers/UploadImageToCloudinary.js";
-import { fetchUpdateCourse } from "../../../API/coursesAPI.js";
 import { faImage } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 function UserDetail({ userID, onClose, onSave }) {
@@ -128,7 +127,7 @@ function UserDetail({ userID, onClose, onSave }) {
     <div className="modal show d-block modal-background" tabIndex="-1">
       <div className="modal-dialog">
         {isLoading && !dataEmpty && (
-          <div className="modal-content">
+          <div className="modal-content justify-content-center align-items-center">
             <SpinnerLoader />
           </div>
         )}
