@@ -17,10 +17,6 @@ function DiscoveryCourses() {
         
         getCoursesPublicBySubject();
     },[])
-    useEffect(() =>{
-        if(mathCourses.length !== 0)
-            console.log(mathCourses);
-    },[mathCourses])
   return (
     <div className='my-4 discovery-courses'>
         

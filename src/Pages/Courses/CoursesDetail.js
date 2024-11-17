@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import "../../CssFolder/Course.css";
 import Cookies from "js-cookie";
 import { fetchVerifyLogin } from "../../Helpers/VerifyLogin.js";
@@ -27,8 +27,6 @@ function CoursesDetail() {
     thumbnail: "",
     teacherID: "",
     teacherFullName: "",
-    subjectID: "",
-    subjectName: "",
   });
   const [lessonsData, setLessonsData] = useState([]);
   const [examsData, setExamsData] = useState([]);
@@ -83,7 +81,7 @@ function CoursesDetail() {
           if (courseResults !== null) {
             setCourseData(courseResults);
           }
-  
+
           // Fetch lessons data
           const lessonsResults = await fetchLessonsByCourse(courseID);
           if (lessonsResults !== null) {
@@ -91,9 +89,8 @@ function CoursesDetail() {
           }
 
           const examsResults = await fetchExamsByCourse(courseID);
-          if(examsResults !== null)
-          {
-            setExamsData(examsResults)
+          if (examsResults !== null) {
+            setExamsData(examsResults);
           }
         } catch (error) {
           console.error("Error fetching data:", error);
@@ -112,7 +109,6 @@ function CoursesDetail() {
         const result = await fetchUserInCourse(userData.userID, courseID);
         if (result !== null) {
           setUserInCourse(result.success);
-          console.log(result);
         }
       };
       handleCheckUserInCourse();
@@ -121,19 +117,19 @@ function CoursesDetail() {
   return (
     <div className="course-container">
       {isLoading && (
-        <div class="course-details p-4 border rounded placeholder-glow">
-          <p class="mb-4 placeholder col-12 bg-secondary"></p>
+        <div className="course-details p-4 border rounded placeholder-glow">
+          <p className="mb-4 placeholder col-12 bg-secondary"></p>
           <p>
-            <span class="placeholder col-6 bg-secondary"></span>
+            <span className="placeholder col-6 bg-secondary"></span>
           </p>
           <p>
-            <span class="placeholder col-4 bg-secondary"></span>
+            <span className="placeholder col-4 bg-secondary"></span>
           </p>
           <p>
-            <span class="placeholder col-2 bg-secondary"></span>
+            <span className="placeholder col-2 bg-secondary"></span>
           </p>
           <p>
-            <span class="placeholder col-2 bg-secondary"></span>
+            <span className="placeholder col-2 bg-secondary"></span>
           </p>
         </div>
       )}
@@ -145,31 +141,62 @@ function CoursesDetail() {
           >
             <div className="course-header-overlay">
               <h1>{courseData.courseName}</h1>
-              <p className="subject">Môn học: {courseData.subjectName}</p>
               <p className="description">{courseData.description}</p>
             </div>
           </div>
 
           <div className="course-details">
             <h2>Thông tin khóa học</h2>
-            <p>
-              <strong>Giáo viên:</strong> {courseData.teacherFullName}
-            </p>
-            <p>
-              <strong>Ngày tạo:</strong>{" "}
-              {new Date(courseData.createdAt).toLocaleString()}
-            </p>
-            <p>
-              <strong>Bài học:</strong> {lessonsData.length}
-            </p>
-            <p>
-              <strong>Bài kiểm tra:</strong> {examsData.length}
-            </p>
+            <div className="d-flex flex-column flex-lg-row flex-md-row w-75 justify-content-between">
+              <div>
+                <p className="d-flex gap-1">
+                  <strong>Giáo viên:</strong>
+                  <NavLink
+                    className="text-decoration-underline"
+                    to={`user/${courseData.teacherID}`}
+                  >
+                    {courseData.teacherFullName}
+                  </NavLink>
+                </p>
+                <p className="d-flex gap-1">
+                  <strong>Ngày tạo:</strong>{" "}
+                  {new Date(courseData.createdAt).toLocaleString()}
+                </p>
+                <p className="d-flex gap-1">
+                  <strong>Trạng thái:</strong>
+                  <span
+                    className={`badge ${
+                      courseData.isPublic ? "bg-success" : "bg-warning"
+                    }`}
+                  >
+                    {courseData.isPublic ? "Công khai" : "Riêng tư"}
+                  </span>
+                </p>
+                {/* Khóa học công khai sẽ hiện mã mời */}
+                {courseData.isPublic && (
+                  <p className="d-flex gap-1">
+                    <strong>Mã mời:</strong> {courseData.inviteCode}
+                  </p>
+                )}
+              </div>
+              <div>
+                <p className="d-flex gap-1">
+                  <strong>Bài học:</strong> {lessonsData.length}
+                </p>
+                <p className="d-flex gap-1">
+                  <strong>Bài kiểm tra:</strong> {examsData.length}
+                </p>
+              </div>
+            </div>
           </div>
 
           <div className="course-details">
             <h2 className="mb-3">Nội dung khóa học</h2>
-            <CourseCurriculum attended={userInCourse} lessons={lessonsData} exams={examsData} />
+            <CourseCurriculum
+              attended={userInCourse}
+              lessons={lessonsData}
+              exams={examsData}
+            />
           </div>
 
           {!userInCourse && (
@@ -179,7 +206,7 @@ function CoursesDetail() {
                   <LoaderButton />
                 </button>
               ) : (
-                courseData.teacherID !== userData.userID &&(
+                courseData.teacherID !== userData.userID && (
                   <button type="submit" className="join-btn">
                     Tham gia khóa học
                   </button>

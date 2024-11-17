@@ -118,9 +118,21 @@ function ListCourses({
                   }}
                 >
                   <img src={item.thumbnail} alt="Course thumbnail" />
-                  <div>
-                    <p className="course-title mt-2">{item.course_name}</p>
-                    <p className="course-description">{item.description}</p>
+                  <div className="d-flex flex-column align-items-start justify-content-start gap-1" style={{ padding: "10px" }}>
+                    <h5 className="card-title">{item.course_name}</h5>
+                    <p className="card-text">
+                      Đăng bởi: {item.teacherFullName}
+                    </p>
+                    <p className="card-text">
+                      Trạng thái:{" "}
+                      <span
+                        className={`badge ${
+                          item.is_public ? "bg-success" : "bg-warning"
+                        }`}
+                      >
+                        {item.is_public ? "Công khai" : "Riêng tư"}
+                      </span>
+                    </p>
                   </div>
                 </motion.div>
               ))

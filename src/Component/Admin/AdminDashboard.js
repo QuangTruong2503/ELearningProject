@@ -33,11 +33,10 @@ function AdminDashboard({
             >
               <div className="accordion-body">
                 {item.data.map((dataItem, dataIndex) => (
-                    <li className="nav-item mb-2" key={dataIndex}>
+                  <li className="nav-item mb-2" key={dataIndex}>
                     <NavLink
                       to={dataItem.url}
                       className="nav-link d-flex align-items-center"
-                      data-bs-dismiss="offcanvas"
                     >
                       {dataItem.name}
                     </NavLink>
