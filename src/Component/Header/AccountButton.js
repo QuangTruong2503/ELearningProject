@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import { fetchVerifyLogin } from "../../Helpers/VerifyLogin";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBook, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import { faCodepen } from "@fortawesome/free-brands-svg-icons";
 
 function AccountButton() {
     const navigate = useNavigate();
@@ -59,17 +62,27 @@ function AccountButton() {
         </li>
         {decodedData.roleID === 'admin' && (
             <li>
-                <button className="dropdown-item text-primary py-2" onClick={() => navigate('/admin')}>
-                    Trang quản lý
+                <button className="dropdown-item text-primary py-2 d-flex gap-2" onClick={() => navigate('/admin')}>
+                <span><FontAwesomeIcon icon={faCodepen}/></span>
+                <span>Trang quản lý</span>
+                </button>
+            </li>
+        )}
+        {decodedData.roleID !== 'student' && (
+            <li>
+                <button className="dropdown-item  py-2 d-flex gap-2" onClick={() => navigate('/my-courses')}>
+                    <span><FontAwesomeIcon icon={faBook}/></span>
+                    <span>Khóa học của tôi</span>
                 </button>
             </li>
         )}
         <li>
           <button
-            className="dropdown-item text-danger py-2"
+            className="dropdown-item text-danger py-2 d-flex gap-2"
             onClick={() => handleLogout()}
           >
-            Đăng xuất
+            <span><FontAwesomeIcon icon={faRightFromBracket}/></span>
+            <span>Đăng xuất</span>
           </button>
         </li>
         

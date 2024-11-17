@@ -3,7 +3,7 @@ import { fetchCoursesByTeacher } from "../../API/coursesAPI";
 import PaginationsComponent from "../../Component/PaginationsComponent";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import SpinnerLoader from "../../Component/Loader/SpinnerLoader";
 import {motion} from 'framer-motion'
 function ListCourses({
@@ -16,6 +16,7 @@ function ListCourses({
   const [courses, setCourses] = useState([]);
   const [searchValues, setSearchValues] = useState("");
   const userID = userData ? userData.userID : "";
+  const navigate = useNavigate();
   const handleGetMyCourses = async (e) => {
     e.preventDefault();
     const result = await fetchCoursesByTeacher(
@@ -110,6 +111,7 @@ function ListCourses({
                 key={index}
                 variants={containerVariants}
                 whileTap={{ scale: 0.95 }} // Thu nhỏ nhẹ khi click
+                onClick={() => navigate(`/course/${item.course_id}`)}
               >
                 <img src={item.thumbnail} alt="Course thumbnail" />
                 <div>

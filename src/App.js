@@ -13,6 +13,7 @@ import ScrollToTopButton from './Component/ScollToTopComponent.js';
 import MyCourses from './Pages/MyCourses/MyCourses.js';
 import CoursesDetail from './Pages/Courses/CoursesDetail.js';
 import CreateCourses from './Pages/Admin/Courses/CreateCourses.js';
+import AttendedCourses from './Pages/AttendedCourses/AttendedCourses.js';
 function App() {
   return (
     <HashRouter>
@@ -31,6 +32,9 @@ function App() {
 
           {/* My Courses */}
           <Route path='/my-courses' Component={MyCourses}/>
+
+          {/* Khóa học đã tham gia */}
+          <Route path='/attended-courses' Component={AttendedCourses}/>
 
           {/* Course */}
           <Route path='/course/:courseID' Component={CoursesDetail}/>

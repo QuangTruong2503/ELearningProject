@@ -179,9 +179,11 @@ function CoursesDetail() {
                   <LoaderButton />
                 </button>
               ) : (
-                <button type="submit" className="join-btn">
-                  Tham gia khóa học
-                </button>
+                courseData.teacherID !== userData.userID &&(
+                  <button type="submit" className="join-btn">
+                    Tham gia khóa học
+                  </button>
+                )
               )}
             </form>
           )}

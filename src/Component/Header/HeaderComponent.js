@@ -31,7 +31,7 @@ function HeaderComponent() {
           <ul className="navbar-nav mb-2 mb-lg-0">
             {loginCookies !== undefined &&(
               <li className="nav-item">
-              <NavLink to={'/my-courses'} className="nav-link active" aria-current="page">
+              <NavLink to={'/attended-courses'} className="nav-link active" aria-current="page">
                 Khóa học
               </NavLink>
             </li>
