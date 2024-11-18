@@ -7,6 +7,10 @@ import { fetchCheckOwnerCourse } from "../../../API/coursesAPI.js";
 import { toast } from "react-toastify";
 import ManageCourseDashboard from "./ManageCourseDashboard.js";
 import EditCourse from "./EditCourse.js";
+import JoinedUsers from "./JoinedUsers.js";
+import Lessons from './Lessons.js'
+import Exams from './Exams.js'
+import FinishCourse from "./FinishCourse.js";
 function AdminPage() {
     const {courseID} = useParams();
     const navigate = useNavigate();
@@ -15,6 +19,23 @@ function AdminPage() {
           name: "Thông tin",
           url: "details",
         },
+        {
+          name: "Bài học",
+          url: "lessons",
+        },
+        {
+          name: "Bài kiểm tra",
+          url: "exams",
+        },
+        {
+          name: "Thành viên",
+          url: "joined-users",
+        }
+        ,
+        {
+          name: "Kết thúc",
+          url: "finish-course",
+        }
       ];
     //Kiểm tra token
     useEffect(() =>{
@@ -88,6 +109,10 @@ function AdminPage() {
             <div className="container mt-5 p-4 rounded shadow min-vh-100">
                 <Routes>
                     <Route path="details" Component={EditCourse}/>
+                    <Route path="lessons" Component={Lessons}/>
+                    <Route path="exams" Component={Exams}/>
+                    <Route path="joined-users" Component={JoinedUsers}/>
+                    <Route path="finish-course" Component={FinishCourse}/>
                 </Routes>
             </div>
           

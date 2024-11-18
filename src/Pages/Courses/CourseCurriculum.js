@@ -17,7 +17,7 @@ function CourseCurriculum({ attended, lessons = [], exams = [] }) {
                 aria-expanded="false"
                 aria-controls={`collapse${index}`}
               >
-                <strong>{item.lesson_Name}</strong>
+                <strong>{item.lessonData.lesson_Name}</strong>
               </button>
             </h2>
 
@@ -30,19 +30,26 @@ function CourseCurriculum({ attended, lessons = [], exams = [] }) {
             >
               {/* Nếu đã tham gia khóa học thì hiển thị khóa học */}
               <div className="accordion-body">
-                {attended && (
+                {(attended) && (
                   <ol className="list-group list-group-numbered">
-                    <li className="list-group-item">
-                      <NavLink>Bài học đầu tiên</NavLink>
-                    </li>
+                    {item.lessonLink !== undefined &&
+                      item.lessonLink.map((lesLink, lesLinkIndex) => (
+                        <li className="list-group-item" key={lesLinkIndex}>
+                          <NavLink to={lesLink.link_URL}>
+                            {lesLink.link_Name}
+                          </NavLink>
+                        </li>
+                      ))}
                   </ol>
                 )}
                 {!attended && (
                   <ol className="list-group">
-                    <li className="list-group-item">Bài học đầu tiên</li>
-                    <li className="list-group-item">Bài học đầu tiên</li>
-                    <li className="list-group-item">Bài học đầu tiên</li>
-                    <li className="list-group-item">Bài học đầu tiên</li>
+                    {item.lessonLink !== undefined &&
+                      item.lessonLink.map((lesLink, lesLinkIndex) => (
+                        <li className="list-group-item" key={lesLinkIndex}>
+                          {lesLink.link_Name}
+                        </li>
+                      ))}
                   </ol>
                 )}
               </div>

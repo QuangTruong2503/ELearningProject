@@ -1,8 +1,22 @@
 const apiURL = process.env.REACT_APP_API_URL;
 
-//Lấy dữ liệu các khóa học người dùng đã tham gia
+//Lấy dữ liệu các khóa học của người dùng đã tham gia
 export const fetchJoinedCoursesByUser = async (url) =>{
     const response = await fetch(`${apiURL}/${url}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            // Thêm các header khác nếu cần
+        },
+    });
+    if (!response.ok) throw new Error('Error: ' + response.status);
+    const result = await response.json();
+    return result;
+}
+
+//Lấy dữ liệu tất học sinh đã tham gia khóa học theo courseID
+export const fetchUsersByCourse = async (url) =>{
+    const response = await fetch(`${apiURL}/Enrollments/${url}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

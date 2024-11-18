@@ -17,7 +17,6 @@ function ManageCourseDashboard({
             <NavLink
               to={item.url}
               className="nav-link d-flex align-items-center"
-              data-bs-dismiss="offcanvas"
             >
               {item.name}
             </NavLink>
