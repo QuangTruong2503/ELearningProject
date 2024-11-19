@@ -18,7 +18,11 @@ function ManageCourseDashboard({
               to={item.url}
               className="nav-link d-flex align-items-center"
             >
-              {item.name}
+              <span className="d-none d-lg-block">{item.name}</span>
+              {/* hiển thị trong offcanvas khi nhấn sẽ đóng canvas */}
+              <span data-bs-dismiss="offcanvas" className="d-lg-none">
+                {item.name}
+              </span>
             </NavLink>
           </li>
         ))}

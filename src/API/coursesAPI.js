@@ -113,3 +113,17 @@ export const fetchUpdateCourse = async (data) =>{
     const result = await response.json();
     return result;
 }
+
+//Xóa dữ liệu khóa học với nhập mật khẩu xác nhận
+export const fetchConfirmPassForDelete = async (courseID, password) =>{
+    const response = await fetch(`${apiURL}/Courses/confirm-password-delete-course?courseID=${courseID}&password=${password}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            // Thêm các header khác nếu cần
+        },
+    });
+    if (!response.ok) throw new Error('Error: ' + response.status);
+    const result = await response.json();
+    return result;
+}

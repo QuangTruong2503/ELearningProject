@@ -65,7 +65,7 @@ function ListCourses({
       </div>
       <div className="course-overview">
         <h4>Course overview</h4>
-        <div className="d-flex align-items-center justify-content-between mb-4 d-flex gap-2">
+        <div className="d-flex flex-lg-row flex-md-row align-items-center justify-content-between mb-4 gap-2 flex-column">
           <div className="d-flex gap-2">
             <form onSubmit={handleGetMyCourses}>
               <input
@@ -89,7 +89,7 @@ function ListCourses({
                 to={"/course/create"}
                 className="btn btn-outline-success"
               >
-                Tạo khóa học <FontAwesomeIcon icon={faPlus} />
+                Tạo mới <FontAwesomeIcon icon={faPlus} />
               </NavLink>
             </div>
           )}
