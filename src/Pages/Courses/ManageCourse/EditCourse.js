@@ -237,7 +237,7 @@ function UserDetail() {
               </div>
               <div className="form-group mb-3 col-md-12 d-flex flex-column">
                 <label>Hình ảnh</label>
-                <div className="d-flex align-items-end">
+                <div className="d-flex align-items-start gap-1 flex-column flex-lg-row align-items-lg-end flex-md-row align-items-md-end">
                   <img
                     style={{ width: "200px", height: "150px" }}
                     src={formData.thumbnail}
