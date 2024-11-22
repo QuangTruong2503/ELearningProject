@@ -11,6 +11,7 @@ import JoinedUsers from "./JoinedUsers.js";
 import Lessons from './Lessons.js'
 import Exams from './Exams.js'
 import FinishCourse from "./FinishCourse.js";
+import EditExam from "./EditExam.js";
 function AdminPage() {
     const {courseID} = useParams();
     const navigate = useNavigate();
@@ -110,7 +111,11 @@ function AdminPage() {
                 <Routes>
                     <Route path="details" Component={EditCourse}/>
                     <Route path="lessons" Component={Lessons}/>
+
                     <Route path="exams" Component={Exams}/>
+                    <Route path="exams/detail/:examID" Component={EditExam}/>
+
+
                     <Route path="joined-users" Component={JoinedUsers}/>
                     <Route path="finish-course" Component={FinishCourse}/>
                 </Routes>

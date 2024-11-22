@@ -325,6 +325,7 @@ function Lessons() {
           >
             <button
               className="btn btn-light"
+              type="button"
               onClick={() => handleRefreshData()}
             >
               <FontAwesomeIcon icon={faArrowRotateLeft} /> Hủy thay đổi
