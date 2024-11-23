@@ -1,0 +1,44 @@
+/* General styling for question cards */
+.question.card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  
+  /* Styling for radio options */
+  .question-option {
+    cursor: pointer;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    transition: background-color 0.2s, border-color 0.2s;
+  }
+  
+  .question-option:hover {
+    background-color: #f1f1f1;
+    border-color: #aaa;
+  }
+  
+  /* Styling when an option is selected */
+  .question-option--checked{
+    border: 1px solid #0d6efd;
+    color: #0d6efd;
+    border-radius: 5px;
+    padding: 10px;  
+    transition: background-color 0.2s, color 0.2s;
+    cursor: pointer;
+  }
+  
+  /* Responsive styling */
+  @media (max-width: 768px) {
+    .question-option {
+      text-align: center;
+    }
+  
+    .question-options {
+      flex-direction: column;
+    }
+  }
+  

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { fetchExamByID } from "../../../API/examsAPI";
+import ExamQuestions from "../../../Component/ManageCourse/ExamQuestions";
 
 function EditExam() {
   const { examID } = useParams();
@@ -11,7 +12,7 @@ function EditExam() {
     exam_time: 0,
     hide_result: false,
     created_at: "",
-    finished_at: null,
+    finished_at: '',
     course_id: "",
   });
   // Hàm xử lý thay đổi dữ liệu
@@ -30,14 +31,14 @@ function EditExam() {
   useEffect(() => {
     if(examID !== undefined)
     {
-        const handleGetExamByID = async () =>{
-            const result = await fetchExamByID(examID);
-            if(result !== null)
+        const handleGetData = async () =>{
+            const resultExam = await fetchExamByID(examID);
+            if(resultExam !== null)
             {
-                setExamDetail(result)
+                setExamDetail(resultExam)
             }
         }
-        handleGetExamByID();
+        handleGetData();
     }
   }, [examID]);
   return (
@@ -146,6 +147,8 @@ function EditExam() {
           </button>
         </div>
       </form>
+      {/* Questions */}
+      <ExamQuestions examData={examDetail}/>
     </div>
   );
 }
