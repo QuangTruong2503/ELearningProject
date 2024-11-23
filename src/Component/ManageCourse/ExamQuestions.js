@@ -1,11 +1,22 @@
 import React, { useState, useEffect } from "react";
 import "../../CssFolder/Exam.css";
 import { useParams } from "react-router-dom";
-import { fetchQuestionsByExam } from "../../API/questionAPI";
+import {
+  fetchQuestionsByExam,
+  fetchUpsertQuestionsAndOptions,
+} from "../../API/questionAPI";
 import PaginationsComponent from "../PaginationsComponent";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPencil, faPlus, faSave } from "@fortawesome/free-solid-svg-icons";
+import {
+  faGear,
+  faPencil,
+  faPlus,
+  faSave,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 import { v4 as uuidv4 } from "uuid";
+import { toast } from "react-toastify";
+import LoaderButton from "../Loader/LoaderButton";
 function ExamQuestions({ examData }) {
   const { examID } = useParams();
   const [questionsData, setQuestionsData] = useState([
@@ -29,6 +40,7 @@ function ExamQuestions({ examData }) {
   const optionLabels = ["A", "B", "C", "D", "E", "F", "G", "H"];
   const [editing, setEditing] = useState("");
   const [reload, setReload] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   //Lấy dữ liệu các câu hỏi
   useEffect(() => {
@@ -52,15 +64,14 @@ function ExamQuestions({ examData }) {
       }
 
       const averageScore = examData.total_score / questionsData.length;
-      const oldQuestionScore = questionsData[0].scores
-      if(averageScore !== oldQuestionScore)
-      {
+      const oldQuestionScore = questionsData[0].scores;
+      if (averageScore !== oldQuestionScore) {
         setQuestionsData((prevQuestions) =>
-            prevQuestions.map((question) => ({
-              ...question,
-              scores: averageScore,
-            }))
-          );
+          prevQuestions.map((question) => ({
+            ...question,
+            scores: averageScore,
+          }))
+        );
       }
     };
     distributeScoresEvenly();
@@ -127,12 +138,12 @@ function ExamQuestions({ examData }) {
   //Thêm câu hỏi mới
   const handleAddQuestion = () => {
     const newQuestion = {
-      questionId: `temp-${Date.now()}`, // Tạo ID tạm thời
+      questionId: uuidv4(), // Tạo ID tạm thời
       questionText: "Câu hỏi mới",
       scores: 1.0,
       examId: examID,
       options: [
-        { optionId: uuidv4(), optionText: "Lựa chọn A", isCorrect: false },
+        { optionId: uuidv4(), optionText: "Lựa chọn A", isCorrect: true },
         { optionId: uuidv4(), optionText: "Lựa chọn B", isCorrect: false },
         { optionId: uuidv4(), optionText: "Lựa chọn C", isCorrect: false },
         { optionId: uuidv4(), optionText: "Lựa chọn D", isCorrect: false },
@@ -142,7 +153,30 @@ function ExamQuestions({ examData }) {
     setQuestionsData((prevQuestions) => [newQuestion, ...prevQuestions]);
     setEditing(newQuestion.questionId); // Đặt câu hỏi vừa thêm vào chế độ chỉnh sửa
   };
+  //Xóa câu hỏi
+  const handleDeleteQuestion = (questionID) => {
+    const filteredQuestions = questionsData.filter(
+      (question) => question.questionId !== questionID
+    );
+    setQuestionsData(filteredQuestions);
+  };
 
+  //Upsert dữ liệu
+  const handleUpsertQuestions = async () => {
+    setIsLoading(true);
+    try {
+      const result = await fetchUpsertQuestionsAndOptions(questionsData);
+      if (result !== null && result.success === true) {
+        toast.success(result.message);
+      } else {
+        toast.error("Gặp lỗi khi cập nhật dữ liệu");
+      }
+    } catch (ex) {
+      console.log(ex.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <div id="questionContainer">
       <hr />
@@ -157,8 +191,9 @@ function ExamQuestions({ examData }) {
           key={question.questionId}
           className="question card mb-4 p-3 shadow-sm"
         >
-          <div className="d-flex justify-content-between mb-3">
+          <div className="d-flex flex-column-reverse flex-lg-row flex-md-row justify-content-between mb-3">
             <div className="position-relative d-inline-flex w-100">
+                {/* Mở input để nhập */}
               {editing === question.questionId ? (
                 <textarea
                   className="form-control w-100"
@@ -181,6 +216,7 @@ function ExamQuestions({ examData }) {
               )}
             </div>
             <div>
+                {/* Mở chế độ edit */}
               {editing === question.questionId ? (
                 <button
                   className="btn btn-success fs-6 ms-2"
@@ -189,16 +225,39 @@ function ExamQuestions({ examData }) {
                   <FontAwesomeIcon icon={faSave} />
                 </button>
               ) : (
-                <button
-                  className="btn btn-success fs-6 ms-2"
-                  onClick={() => setEditing(question.questionId)}
-                >
-                  <FontAwesomeIcon icon={faPencil} />
-                </button>
+                <div className="btn-group">
+                  <button
+                    className="btn fs-6 ms-2"
+                    aria-expanded="false"
+                    data-bs-toggle="dropdown"
+                  >
+                    <FontAwesomeIcon icon={faGear} />
+                  </button>
+                  <ul className="dropdown-menu">
+                    <li>
+                      <button
+                        className="dropdown-item btn text-success"
+                        onClick={() => setEditing(question.questionId)}
+                      >
+                        Chỉnh sửa <FontAwesomeIcon icon={faPencil} />
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        className="dropdown-item btn text-danger"
+                        onClick={() =>
+                          handleDeleteQuestion(question.questionId)
+                        }
+                      >
+                        Xóa <FontAwesomeIcon icon={faTrash} />
+                      </button>
+                    </li>
+                  </ul>
+                </div>
               )}
             </div>
           </div>
-          <div className="question-options row gap-2 justify-content-evenly">
+          <div className="question-options row gap-1 justify-content-evenly">
             {question.options.map((option, optionIndex) =>
               editing === question.questionId ? (
                 <textarea
@@ -258,7 +317,21 @@ function ExamQuestions({ examData }) {
         >
           Đặt lại
         </button>
-        <button className="btn btn-success">Lưu thay đổi</button>
+        {isLoading ? (
+          <button
+            className="btn btn-success"
+            type="button"
+          >
+            <LoaderButton />
+          </button>
+        ) : (
+          <button
+            className="btn btn-success"
+            onClick={() => handleUpsertQuestions()}
+          >
+            Lưu thay đổi
+          </button>
+        )}
       </div>
     </div>
   );

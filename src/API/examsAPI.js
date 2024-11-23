@@ -26,3 +26,18 @@ export const fetchExamByID = async (id) =>{
     const result = await response.json();
     return result;
 }
+
+//Cập nhật dữ liệu exam
+export const fetchUpdateExam = async (data) =>{
+    const response = await fetch(`${apiURL}/Exams/update-exam`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            // Thêm các header khác nếu cần
+        },
+        body: JSON.stringify(data)
+    });
+    if (!response.ok) throw new Error('Error: ' + response.status);
+    const result = await response.json();
+    return result;
+}

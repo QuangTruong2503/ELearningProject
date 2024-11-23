@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { fetchExamByID } from "../../../API/examsAPI";
+import { fetchExamByID, fetchUpdateExam } from "../../../API/examsAPI";
 import ExamQuestions from "../../../Component/ManageCourse/ExamQuestions";
+import { toast } from "react-toastify";
+import LoaderButton from "../../../Component/Loader/LoaderButton";
 
 function EditExam() {
   const { examID } = useParams();
+  const [isLoading, setIsLoading] = useState(false);
+  const [reload, setReload] = useState(false)
   const [examDetail, setExamDetail] = useState({
     exam_id: "",
     exam_name: "",
@@ -12,7 +16,7 @@ function EditExam() {
     exam_time: 0,
     hide_result: false,
     created_at: "",
-    finished_at: '',
+    finished_at: "",
     course_id: "",
   });
   // Hàm xử lý thay đổi dữ liệu
@@ -20,31 +24,46 @@ function EditExam() {
     const { id, value, type } = e.target;
     setExamDetail((prevData) => ({
       ...prevData,
-      [id]: type === "number" ? Number(value) : type === "checkbox" ? e.target.checked : value,
+      [id]:
+        type === "number"
+          ? Number(value)
+          : type === "checkbox"
+          ? e.target.checked
+          : value,
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form data submitted:", examDetail);
-  };
   useEffect(() => {
-    if(examID !== undefined)
-    {
-        const handleGetData = async () =>{
-            const resultExam = await fetchExamByID(examID);
-            if(resultExam !== null)
-            {
-                setExamDetail(resultExam)
-            }
+    if (examID !== undefined) {
+      const handleGetData = async () => {
+        const resultExam = await fetchExamByID(examID);
+        if (resultExam !== null) {
+          setExamDetail(resultExam);
+          console.log(resultExam)
         }
-        handleGetData();
+      };
+      handleGetData();
     }
-  }, [examID]);
+  }, [examID, reload]);
+
+  //Cập nhật
+  const handleUpdateExam = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    const result = await fetchUpdateExam(examDetail);
+    if (result !== null) {
+      if (result.success) {
+        toast.success(result.message);
+      } else {
+        toast.warning(result.message);
+      }
+      setIsLoading(false);
+    }
+  };
   return (
     <div className="container mt-5">
       <h3 className="mb-4 text-center">Chỉnh Sửa Bài Kiểm Tra</h3>
-      <form className="d-flex flex-column gap-1" onSubmit={handleSubmit}>
+      <form className="d-flex flex-column gap-1" onSubmit={handleUpdateExam} onReset={() => setReload(!reload)}>
         <div className="row mb-3">
           <div className="col-md-12">
             <label htmlFor="exam_name" className="form-label">
@@ -55,6 +74,7 @@ function EditExam() {
               id="exam_name"
               className="form-control"
               value={examDetail.exam_name}
+              required
               onChange={handleChange}
             />
           </div>
@@ -68,6 +88,7 @@ function EditExam() {
               type="number"
               id="total_score"
               className="form-control"
+              required
               value={examDetail.total_score}
               onChange={handleChange}
             />
@@ -80,6 +101,7 @@ function EditExam() {
               type="number"
               id="exam_time"
               className="form-control"
+              required
               value={examDetail.exam_time}
               onChange={handleChange}
             />
@@ -96,6 +118,7 @@ function EditExam() {
               className="form-control"
               value={examDetail.created_at}
               readOnly
+              disabled
             />
           </div>
           <div className="col-md-6">
@@ -123,6 +146,7 @@ function EditExam() {
               id="hide_result"
               className="form-select"
               value={examDetail.hide_result}
+              required
               onChange={(e) =>
                 setExamDetail((prevData) => ({
                   ...prevData,
@@ -138,17 +162,26 @@ function EditExam() {
             </small>
           </div>
         </div>
-        <div className="d-flex justify-content-center gap-2">
+        <div
+          className="d-flex justify-content-center gap-2"
+        >
           <button type="reset" className="btn btn-secondary">
             Đặt Lại
           </button>
-          <button type="submit" className="btn btn-primary me-2">
-            Lưu Thay Đổi
-          </button>
+          {/* Nút lưu */}
+          {isLoading ? (
+            <button type="button" disabled className="btn btn-primary me-2">
+              <LoaderButton />
+            </button>
+          ) : (
+            <button type="submit" className="btn btn-primary me-2">
+              Lưu Thay Đổi
+            </button>
+          )}
         </div>
       </form>
       {/* Questions */}
-      <ExamQuestions examData={examDetail}/>
+      <ExamQuestions examData={examDetail} />
     </div>
   );
 }
