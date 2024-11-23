@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import {Route, Routes } from "react-router-dom";
 import Users from "./Users/Users.js";
-import CreateCourses from "./Courses/CreateCourses.js";
 import AdminDashboard from "../../Component/Admin/AdminDashboard.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
@@ -20,7 +19,6 @@ function AdminPage() {
         title: "Khóa học",
         data: [
           {name: 'Danh sách Khóa học', url: 'courses'},
-          {name: 'Tạo Khóa học', url: 'courses/create'},
         ],
       },
     ];
@@ -91,7 +89,6 @@ function AdminPage() {
                     {/* Users */}
                     <Route path="users/all" element={<Users />} />
                     {/* Courses */}
-                    <Route path="courses/create" element={<CreateCourses />} />
                     <Route path="courses" element={<Courses />}/>
                 </Routes>
             </div>

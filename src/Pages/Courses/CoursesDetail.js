@@ -13,8 +13,6 @@ import { toast } from "react-toastify";
 import LoaderButton from "../../Component/Loader/LoaderButton.js";
 import { fetchLessonsByCourse } from "../../API/lessonsAPI.js";
 import { fetchExamsByCourse } from "../../API/examsAPI.js";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen } from "@fortawesome/free-solid-svg-icons";
 function CoursesDetail() {
   const navigate = useNavigate();
   const { courseID } = useParams();
@@ -216,12 +214,6 @@ function CoursesDetail() {
               )}
             </form>
           )}
-          {userData.userID !== undefined &&
-            userData.userID === courseData.teacherID && (
-              <div className="d-flex justify-content-end"><NavLink to={`/manage-course/${courseID}/details`} className="btn btn-lg btn-success mt-3">
-              <FontAwesomeIcon icon={faPen} /> Chỉnh Sửa
-            </NavLink></div>
-            )}
         </div>
       )}
     </div>

@@ -1,12 +1,14 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import ChooseImages from "../../../Component/Images/ChooseImages";
-import LoaderButton from '../../../Component/Loader/LoaderButton.js';
+import ChooseImages from "../../Component/Images/ChooseImages.js";
+import LoaderButton from '../../Component/Loader/LoaderButton.js';
 import { ToastContainer, toast } from "react-toastify";
-import { fetchCreateCourse } from "../../../API/coursesAPI";
-import { fetchVerifyLogin } from "../../../Helpers/VerifyLogin";
-import { fetchSubjects } from "../../../API/subjectsAPI";
-import { useNavigate } from "react-router-dom";
+import { fetchCreateCourse } from "../../API/coursesAPI";
+import { fetchVerifyLogin } from "../../Helpers/VerifyLogin";
+import { fetchSubjects } from "../../API/subjectsAPI";
+import { NavLink, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 function CreateCourses() {
   const navigate = useNavigate();
   //Trạng thái upload nếu true sẽ tiến hành upload lên cloudinary
@@ -99,7 +101,11 @@ function CreateCourses() {
     }
   }, [canInsert, courseData])
   return (
-    <div className="container my-5" style={{ width: "90%" }}>
+
+    <div className="d-flex justify-content-center">
+      <div className="col-md-8 col-lg-8 px-4">
+      <div className="container my-5 p-4 rounded shadow" style={{ width: "90%" }}>
+        <NavLink className="btn text-primary" to={'/my-courses'}><FontAwesomeIcon icon={faArrowLeft}/> Quay lại</NavLink>
       <h2 className="text-center mb-4">Tạo Khóa Học</h2>
       <form className="row row-gap-3" onSubmit={handleSubmit}>
         <div className="form-group col-md-6 col-12">
@@ -181,6 +187,8 @@ function CreateCourses() {
         </div>
       </form>
       <ToastContainer />
+    </div>
+      </div>
     </div>
   );
 }

@@ -12,9 +12,10 @@ import { ToastContainer } from 'react-toastify';
 import ScrollToTopButton from './Component/ScollToTopComponent.js';
 import MyCourses from './Pages/MyCourses/MyCourses.js';
 import CoursesDetail from './Pages/Courses/CoursesDetail.js';
-import CreateCourses from './Pages/Admin/Courses/CreateCourses.js';
+import CreateCourses from './Pages/Courses/CreateCourses.js';
 import AttendedCourses from './Pages/MyCourses/AttendedCourses.js';
 import ManageCourse from './Pages/Courses/ManageCourse/ManageCourse.js';
+import ProfileUserPage from './Pages/ProfileUserPage.js';
 function App() {
   return (
     <HashRouter>
@@ -30,6 +31,9 @@ function App() {
 
           {/* Admin Panel */}
           <Route path='admin/*' Component={AdminPage}></Route>
+
+          {/* User */}
+          <Route path='user/:userID' Component={ProfileUserPage}/>
 
           {/* My Courses */}
           <Route path='/my-courses' Component={MyCourses}/>
