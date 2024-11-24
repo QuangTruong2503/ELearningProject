@@ -5,14 +5,17 @@ import { NavLink } from "react-router-dom";
 import Cookies from "js-cookie";
 import AccountButton from "./AccountButton";
 import AttendCourse from "./AttendCourse";
+import logoImage from "../../Images/qstudy-high-resolution-logo-transparent.png";
 function HeaderComponent() {
   const loginCookiesName = "loginData";
   const loginCookies = Cookies.get(loginCookiesName);
   return (
     <nav className="navbar navbar-expand-lg box-shadow">
       <div className="container">
-        <a className="navbar-brand text-primary fs-3" href="/">
-          E-Learning
+        
+        <a className="navbar-brand text-primary fs-4 d-flex gap-2 align-items-center" href="/">
+          <img className="cursor-pointer" src={logoImage} alt="qstudy" style={{width: '3rem'}}/>
+          <span>QStudy</span>
         </a>
         <button
           className="btn text-primary header-navbar--toggle d-lg-none"

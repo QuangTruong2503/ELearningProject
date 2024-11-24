@@ -21,10 +21,10 @@ function ManageCourseDashboard({
     <ul className="nav flex-column">
       <div className="accordion accordion-flush d-none d-lg-block" id="accordionDashboard">
         {data.map((item, index) => (
-          <li className={`nav-item mb-2 ${lastPart === item.url ? 'manage-course--item-focus' : ''}`} key={index}>
+          <li className={`nav-item  mb-2 ${lastPart === item.url ? 'manage-course--item-focus' : ''}`} key={index}>
             <NavLink
               to={item.url}
-              className="nav-link d-flex align-items-center w-auto"
+              className="nav-link text-black d-flex align-items-center w-auto"
             >
               <span>{item.name}</span>
             </NavLink>

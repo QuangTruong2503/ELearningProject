@@ -90,3 +90,6 @@
     scale: 1.02;
     font-weight: 500;
   }
+  .manage-course--item-focus a{
+    color: #2579f2!important;
+  }

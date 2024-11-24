@@ -55,7 +55,7 @@ function AttendCourse() {
       <ul className="list-group list-unstyled d-lg-none text-blue">
       <li>
         <button
-        className="dropdown-item d-lg-none"
+        className="nav-link d-lg-none"
         data-bs-toggle="modal"
         data-bs-target="#attendCourseModal"
       >

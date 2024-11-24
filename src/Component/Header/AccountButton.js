@@ -11,7 +11,7 @@ function AccountButton() {
   const loginCookiesName = "loginData";
   const handleLogout = () => {
     Cookies.remove(loginCookiesName);
-    window.location.reload();
+    window.location.href = "/";
   };
   const [decodedData, setDecodedData] = useState({});
   //Lấy dữ liệu từ Cookies
