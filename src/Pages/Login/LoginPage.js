@@ -12,12 +12,14 @@ export const LoginPage = () => {
     userNameOrEmail: "",
     password: "",
   });
+  //Loại bỏ khoảng trống
+  const removeSpaces = (str) => str.replace(/\s+/g, '');
   //Cập nhật dữ liệu khi nhập liệu
   const handleChangeData = (event) => {
     const { name, value } = event.target;
     setLoginData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: removeSpaces(value),
     }));
   };
   //Đăng nhập
@@ -59,11 +61,11 @@ export const LoginPage = () => {
       <div className="container py-5 h-100">
         <div className="row justify-content-center align-items-center h-100 form-animation">
           <div className="col-12 col-lg-8 col-xl-6">
-            <div className="card shadow border-0 rounded-4 p-4 bg-white">
+            <div className="card shadow border-0 rounded-4 p-4 bg-white d-flex align-items-center">
               <div className="text-center mb-4">
                 <h3 className="text-primary">ĐĂNG NHẬP</h3>
               </div>
-              <form onSubmit={handleClick}>
+              <form className="w-75" onSubmit={handleClick}>
                 <div className="mb-4">
                   <label className="form-label" htmlFor="userNameOrEmail">
                     Tài khoản hoặc email
@@ -71,7 +73,7 @@ export const LoginPage = () => {
                   <input
                     type="text"
                     id="userNameOrEmail"
-                    className="form-control form-control-lg"
+                    className="form-control "
                     name="userNameOrEmail"
                     required
                     onChange={handleChangeData}
@@ -85,7 +87,7 @@ export const LoginPage = () => {
                   <input
                     type="password"
                     id="password"
-                    className="form-control form-control-lg"
+                    className="form-control "
                     name="password"
                     required
                     onChange={handleChangeData}
@@ -101,7 +103,7 @@ export const LoginPage = () => {
                 <div className="d-flex justify-content-center mb-3">
                   <button
                     type="submit"
-                    className="btn btn-primary w-75 py-2 fs-5"
+                    className="btn btn-primary w-100 py-2"
                   >
                     {!isLoading && "ĐĂNG NHẬP"}
                     {isLoading && <LoaderButton />}

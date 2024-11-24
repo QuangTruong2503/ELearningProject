@@ -254,6 +254,8 @@ function Lessons() {
                                     href={lesLink.link_URL}
                                     className="overflow-hidden"
                                     style={{ maxHeight: "50px" }}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                   >
                                     {lesLink.link_URL}
                                   </a>

@@ -3,8 +3,12 @@ import LoaderButton from "../../Component/Loader/LoaderButton";
 import { NavLink, useNavigate } from "react-router-dom";
 import { checkAccountExists, registerAccount } from "../../API/registerAPI";
 import { toast, ToastContainer } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 const RegisterPage = () => {
   const navigate = useNavigate();
+  //Loại bỏ khoảng trống
+  const removeSpaces = (str) => str.replace(/\s+/g, "");
   const [registerData, setRegisterData] = useState({
     user_name: "",
     last_name: "",
@@ -86,15 +90,22 @@ const RegisterPage = () => {
       setIsLoading(false);
     }
   };
-  useEffect(() =>{
+  useEffect(() => {
     window.scrollTo(0, 0);
-  })
+  });
   return (
-    <section className="min-vh-100 d-flex align-items-center">
+    <section className="d-flex align-items-center">
       <div className="container py-5 h-100">
         <div className="row justify-content-center align-items-center h-100 form-animation">
           <div className="col-12 col-lg-8 col-xl-6">
             <div className="card shadow border-0 rounded-4 p-5 bg-white">
+              {checkAvailable && (
+                <div className="d-flex justify-content-start">
+                  <button className="btn text-primary d-flex align-items-center gap-1" onClick={() => setCheckAvailable(false)}>
+                    <FontAwesomeIcon icon={faArrowLeft} /> Quay lại
+                  </button>
+                </div>
+              )}
               <div className="text-center mb-4">
                 <h3 className="text-primary">Đăng Ký Tài Khoản</h3>
               </div>
@@ -110,7 +121,12 @@ const RegisterPage = () => {
                       className="form-control"
                       name="user_name"
                       required
-                      onChange={handleChangeData}
+                      onChange={(e) =>
+                        setRegisterData((prev) => ({
+                          ...prev,
+                          user_name: removeSpaces(e.target.value),
+                        }))
+                      }
                       value={registerData.user_name}
                     />
                   </div>
@@ -124,7 +140,12 @@ const RegisterPage = () => {
                       className="form-control"
                       name="email"
                       required
-                      onChange={handleChangeData}
+                      onChange={(e) =>
+                        setRegisterData((prev) => ({
+                          ...prev,
+                          email: removeSpaces(e.target.value),
+                        }))
+                      }
                       value={registerData.email}
                     />
                   </div>

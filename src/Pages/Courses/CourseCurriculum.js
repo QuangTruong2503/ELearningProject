@@ -35,7 +35,7 @@ function CourseCurriculum({ attended, lessons = [], exams = [] }) {
                     {item.lessonLink !== undefined &&
                       item.lessonLink.map((lesLink, lesLinkIndex) => (
                         <li className="list-group-item" key={lesLinkIndex}>
-                          <NavLink to={lesLink.link_URL}>
+                          <NavLink target="_blank" to={lesLink.link_URL}>
                             {lesLink.link_Name}
                           </NavLink>
                         </li>

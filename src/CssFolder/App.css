@@ -8,6 +8,15 @@ body{
 a{
   text-decoration: none;
 }
+.header-navbar{
+  background-color: #2579f2;
+}
+.header-navbar--toggle:focus{
+  border-color: #2579f2;
+}
+.text-blue{
+  color: #2579f2;
+}
 .cursor-pointer{
   cursor: pointer;
 }

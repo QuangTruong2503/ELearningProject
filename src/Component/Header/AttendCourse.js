@@ -45,23 +45,35 @@ function AttendCourse() {
     <div>
       <button
         type="button"
-        className="btn btn-primary"
+        className="btn btn-primary d-none d-lg-block"
         data-bs-toggle="modal"
-        data-bs-target="#exampleModal"
+        data-bs-target="#attendCourseModal"
       >
         Nhập mã
       </button>
+      {/* Danh cho man hinh nho */}
+      <ul className="list-group list-unstyled d-lg-none text-blue">
+      <li>
+        <button
+        className="dropdown-item d-lg-none"
+        data-bs-toggle="modal"
+        data-bs-target="#attendCourseModal"
+      >
+        Nhập mã
+      </button>
+        </li>
+      </ul>
       <div
         className="modal fade"
-        id="exampleModal"
+        id="attendCourseModal"
         tabIndex="-1"
-        aria-labelledby="exampleModalLabel"
+        aria-labelledby="attendCourseModal"
         aria-hidden="true"
       >
         <div className="modal-dialog modal-dialog-centered modal-lg">
           <div className="modal-content">
             <div className="modal-header">
-              <h1 className="modal-title fs-5" id="exampleModalLabel">
+              <h1 className="modal-title fs-5" id="attendCourseLabel">
                 Tham gia khóa học
               </h1>
               <button

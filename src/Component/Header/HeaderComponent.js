@@ -15,7 +15,7 @@ function HeaderComponent() {
           E-Learning
         </a>
         <button
-          className="navbar-toggler text-primary"
+          className="btn text-primary header-navbar--toggle d-lg-none"
           data-bs-toggle="collapse"
           data-bs-target="#navbarSupportedContent"
           aria-controls="navbarSupportedContent"
@@ -31,7 +31,7 @@ function HeaderComponent() {
           <ul className="navbar-nav nav mb-2 mb-lg-0">
             {loginCookies !== undefined &&(
               <li className="nav-item">
-              <NavLink to={'/attended-courses'} className="nav-link" aria-current="page">
+              <NavLink to={'/attended-courses'} className="nav-link text-blue" aria-current="page">
                 Khóa học
               </NavLink>
             </li>

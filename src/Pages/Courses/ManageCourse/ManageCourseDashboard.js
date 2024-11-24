@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 
 function ManageCourseDashboard({
@@ -8,21 +8,37 @@ function ManageCourseDashboard({
       url: "",
     },
   ],
-}) {
+}) 
+{
+  const [lastPart, setLastPart] = useState('');
+  const hash = window.location.hash; // Lấy phần hash từ URL
+  useEffect(() =>{
+    const parts = hash.split('/'); // Tách chuỗi theo dấu '/'
+    const lastPart = parts[parts.length - 1]; // Phần cuối là "details"
+    setLastPart(lastPart)
+  },[hash])
   return (
     <ul className="nav flex-column">
-      <div className="accordion accordion-flush" id="accordionDashboard">
+      <div className="accordion accordion-flush d-none d-lg-block" id="accordionDashboard">
         {data.map((item, index) => (
-          <li className="nav-item mb-2" key={index}>
+          <li className={`nav-item mb-2 ${lastPart === item.url ? 'manage-course--item-focus' : ''}`} key={index}>
             <NavLink
               to={item.url}
-              className="nav-link d-flex align-items-center"
+              className="nav-link d-flex align-items-center w-auto"
             >
-              <span className="d-none d-lg-block">{item.name}</span>
-              {/* hiển thị trong offcanvas khi nhấn sẽ đóng canvas */}
-              <span data-bs-dismiss="offcanvas" className="d-lg-none">
-                {item.name}
-              </span>
+              <span>{item.name}</span>
+            </NavLink>
+          </li>
+        ))}
+      </div>
+      <div className="accordion accordion-flush d-lg-none" id="accordionDashboard">
+        {data.map((item, index) => (
+          <li data-bs-dismiss="offcanvas" className={`nav-item mb-2 ${lastPart === item.url ? 'manage-course--item-focus' : ''}`} key={index}>
+            <NavLink
+              to={item.url}
+              className="nav-link d-flex align-items-center w-auto"
+            >
+              <span>{item.name}</span>
             </NavLink>
           </li>
         ))}
