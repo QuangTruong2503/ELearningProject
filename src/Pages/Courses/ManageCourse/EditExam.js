@@ -4,11 +4,13 @@ import { fetchExamByID, fetchUpdateExam } from "../../../API/examsAPI";
 import ExamQuestions from "../../../Component/ManageCourse/ExamQuestions";
 import { toast } from "react-toastify";
 import LoaderButton from "../../../Component/Loader/LoaderButton";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 function EditExam() {
   const { examID } = useParams();
   const [isLoading, setIsLoading] = useState(false);
-  const [reload, setReload] = useState(false)
+  const [reload, setReload] = useState(false);
   const [examDetail, setExamDetail] = useState({
     exam_id: "",
     exam_name: "",
@@ -39,7 +41,7 @@ function EditExam() {
         const resultExam = await fetchExamByID(examID);
         if (resultExam !== null) {
           setExamDetail(resultExam);
-          console.log(resultExam)
+          console.log(resultExam);
         }
       };
       handleGetData();
@@ -62,8 +64,20 @@ function EditExam() {
   };
   return (
     <div className="container mt-5">
+      <div className="d-flex justify-content-start">
+        <button
+          className="btn text-primary d-flex align-items-center gap-1"
+          onClick={() => window.history.back()}
+        >
+          <FontAwesomeIcon icon={faArrowLeft} /> Quay lại
+        </button>
+      </div>
       <h3 className="mb-4 text-center">Chỉnh Sửa Bài Kiểm Tra</h3>
-      <form className="d-flex flex-column gap-1" onSubmit={handleUpdateExam} onReset={() => setReload(!reload)}>
+      <form
+        className="d-flex flex-column gap-1"
+        onSubmit={handleUpdateExam}
+        onReset={() => setReload(!reload)}
+      >
         <div className="row mb-3">
           <div className="col-md-12">
             <label htmlFor="exam_name" className="form-label">
@@ -162,9 +176,7 @@ function EditExam() {
             </small>
           </div>
         </div>
-        <div
-          className="d-flex justify-content-center gap-2"
-        >
+        <div className="d-flex justify-content-center gap-2">
           <button type="reset" className="btn btn-secondary">
             Đặt Lại
           </button>

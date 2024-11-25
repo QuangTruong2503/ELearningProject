@@ -82,7 +82,7 @@ function CourseCurriculum({ attended, lessons = [], exams = [] }) {
                   <li className="list-group-item" key={index}>
                     <div className="d-flex justify-content-between">
                       {attended ? (
-                        <NavLink>{item.exam_name}</NavLink>
+                        <NavLink to={`/exam/${item.exam_id}`}>{item.exam_name}</NavLink>
                       ) : (
                         <p>{item.exam_name}</p>
                       )}

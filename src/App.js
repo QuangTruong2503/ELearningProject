@@ -16,6 +16,8 @@ import CreateCourses from './Pages/Courses/CreateCourses.js';
 import AttendedCourses from './Pages/MyCourses/AttendedCourses.js';
 import ManageCourse from './Pages/Courses/ManageCourse/ManageCourse.js';
 import ProfileUserPage from './Pages/ProfileUserPage.js';
+import ExamDetail from './Pages/Exam/ExamDetail.js';
+import Quizz from './Pages/Exam/Quizz.js';
 function App() {
   return (
     <HashRouter>
@@ -46,6 +48,10 @@ function App() {
           <Route path='/course/create' Component={CreateCourses}/>
           {/* ManageCourse */}
           <Route path='/manage-course/:courseID/*' Component={ManageCourse}/>
+
+          {/* Exam */}
+          <Route path='exam/:examID' Component={ExamDetail}/>
+          <Route path='exam/:examID/quizz' Component={Quizz}/>
         </Routes>
       </div>
       <SpeedInsights />
