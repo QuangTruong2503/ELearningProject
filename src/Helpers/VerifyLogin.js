@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 const apiURL = process.env.REACT_APP_API_URL;
 const Cookies = require('js-cookie'); 
 
+//Lay du lieu token tu cookies de xac nhan tai khoan
 export const fetchVerifyLogin = async () =>{
     const loginCookies = Cookies.get('loginData');
     if(loginCookies === undefined)

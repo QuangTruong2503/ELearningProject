@@ -41,3 +41,4 @@ export const fetchUpdateExam = async (data) =>{
     const result = await response.json();
     return result;
 }
+

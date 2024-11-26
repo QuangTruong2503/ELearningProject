@@ -13,3 +13,17 @@ export const fetchCreateSubmission = async (data, examID, studentID) =>{
     const result = await response.json();
     return result;
 }
+
+//Kiểm tra người dùng đã hoàn thành bài thi chưa
+export const fetchCheckUserDoExam = async (userID, examID) =>{
+    const response = await fetch(`${apiURL}/Submissions/check/exam-user-available?userID=${userID}&examID=${examID}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            // Thêm các header khác nếu cần
+        },
+    });
+    if (!response.ok) throw new Error('Error: ' + response.status);
+    const result = await response.json();
+    return result;
+}

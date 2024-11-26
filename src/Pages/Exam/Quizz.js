@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../../CssFolder/Exam.css";
-import {  useParams } from "react-router-dom";
+import {  useNavigate, useParams } from "react-router-dom";
 import {
   fetchQuestionNoCorrectAnswer} from "../../API/questionAPI";
 
@@ -8,9 +8,13 @@ import { fetchExamByID } from "../../API/examsAPI.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave } from "@fortawesome/free-regular-svg-icons";
 import CountdownTimer from "./CountDownTimer.js";
+import { fetchVerifyLogin } from "../../Helpers/VerifyLogin.js";
+import { fetchCheckUserDoExam } from "../../API/submissionsAPI.js";
+import { toast } from "react-toastify";
 
 function Quizz() {
   const { examID } = useParams();
+  const navigate = useNavigate();
   const [questionsData, setQuestionsData] = useState([
     {
       questionId: "",
@@ -39,9 +43,10 @@ function Quizz() {
   const [answers, setAnswers] = useState({});
   const optionLabels = ["A", "B", "C", "D", "E", "F", "G", "H"];
   const [isLoading, setIsLoading] = useState(true);
-  //Lấy dữ liệu các câu hỏi
+  
   useEffect(() => {
-    const handleGetData = async () => {
+     //Lấy dữ liệu các câu hỏi
+     const handleGetData = async () => {
       try {
         const questionResults = await fetchQuestionNoCorrectAnswer(examID);
         if (questionResults !== null) {
@@ -57,10 +62,26 @@ function Quizz() {
         setIsLoading(false);
       }
     };
-    handleGetData();
-  }, [examID]);
-
- 
+    //Kiem tra token
+    const handleVerifyLogin = async () => {
+      const data = await fetchVerifyLogin();
+      if (data !== null) {
+        const userID = data.userID;
+        const checkResult = await fetchCheckUserDoExam(userID, examID);
+        if(checkResult !== null && checkResult.success)
+        {
+          handleGetData();
+        }
+        else if(checkResult !== null && !checkResult.success)
+        {
+          toast.warning(checkResult.message)
+          navigate(`/exam/${examID}`)
+        }
+        
+      }
+    };
+    handleVerifyLogin();
+  }, [examID, navigate]);
   //Chọn câu trả lời
   const updateIsCorrect = (questionId, optionId) => {
     const questionIndex = questionsData.findIndex(
