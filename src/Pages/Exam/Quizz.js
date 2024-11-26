@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import "../../CssFolder/Exam.css";
-import { useParams } from "react-router-dom";
-import { fetchQuestionsByExam } from "../../API/questionAPI";
+import {  useParams } from "react-router-dom";
+import {
+  fetchQuestionNoCorrectAnswer} from "../../API/questionAPI";
 
-import { toast } from "react-toastify";
-import LoaderButton from "../../Component/Loader/LoaderButton.js";
 import { fetchExamByID } from "../../API/examsAPI.js";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSave } from "@fortawesome/free-regular-svg-icons";
+import CountdownTimer from "./CountDownTimer.js";
+
 function Quizz() {
   const { examID } = useParams();
   const [questionsData, setQuestionsData] = useState([
@@ -35,27 +38,29 @@ function Quizz() {
   });
   const [answers, setAnswers] = useState({});
   const optionLabels = ["A", "B", "C", "D", "E", "F", "G", "H"];
-  const [isLoading, setIsLoading] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(true);
   //Lấy dữ liệu các câu hỏi
   useEffect(() => {
     const handleGetData = async () => {
-      const questionResults = await fetchQuestionsByExam(
-        `Questions/by-examID?id=${examID}`
-      );
-      if (questionResults !== null) {
-        setQuestionsData(questionResults);
+      try {
+        const questionResults = await fetchQuestionNoCorrectAnswer(examID);
+        if (questionResults !== null) {
+          setQuestionsData(questionResults);
+        }
+        const examResult = await fetchExamByID(examID);
+        if (examResult !== null) {
+          setExam(examResult);
+        }
+      } catch (ex) {
+        console.error(ex.message);
+      } finally {
+        setIsLoading(false);
       }
     };
-    const hanldeGetExam = async () => {
-      const result = await fetchExamByID(examID);
-      if (result !== null) {
-        setExam(result);
-      }
-    };
-    hanldeGetExam();
     handleGetData();
   }, [examID]);
+
+ 
   //Chọn câu trả lời
   const updateIsCorrect = (questionId, optionId) => {
     const questionIndex = questionsData.findIndex(
@@ -87,9 +92,9 @@ function Quizz() {
   //Nhấn câu trong phiếu trả lời
   const handleMoveToQuestion = (questionID) => {
     const element = document.getElementById(`${questionID}`);
-    element.scrollIntoView({ behavior: "smooth" });
+    element.scrollIntoView({ behavior: "instant", block: "center", inline: "nearest" });
   };
-
+  //Kiểm tra tải lại trang
   useEffect(() => {
     const handleBeforeUnload = (event) => {
       if (Object.keys(answers).length > 0) {
@@ -109,85 +114,137 @@ function Quizz() {
   }, [answers]);
   return (
     <div id="questionContainer">
-      <h3 className="mt-4 mb-5 text-center">{exam.exam_name}</h3>
-      <div className="d-flex gap-2">
-        <div className="col-md-8">
-          {questionsData.map((question, index) => (
-            <div
-              key={question.questionId}
-              className="question card mb-4 p-3 shadow-sm"
-              id={question.questionId}
-            >
-              <div className="d-flex flex-column-reverse flex-lg-row flex-md-row justify-content-between mb-3">
-                <div className="position-relative w-100">
-                  <h5 className="text-primary">Câu {index + 1}</h5>
-                  <p
-                    dangerouslySetInnerHTML={{
-                      __html: question.questionText.replace(/\n/g, "<br>"),
-                    }}
-                    className="mb-0"
-                  ></p>
+      {isLoading ? (
+        <div className="skeleton">
+          <div className="skeleton-header text-center my-3"></div>
+          <div className="d-flex gap-2 flex-column flex-lg-row align-items-center align-items-lg-start">
+            <div className="col-lg-8 col-12">
+              {Array.from({ length: 5 }).map((_, index) => (
+                <div key={index} className="question card mb-4 p-3 shadow-sm">
+                  <div className="skeleton-title mb-3"></div>
+                  <div className="question-options d-flex flex-column gap-2">
+                    {Array.from({ length: 4 }).map((_, optionIndex) => (
+                      <div
+                        key={optionIndex}
+                        className="skeleton-option d-flex align-items-center mb-2 p-3"
+                      ></div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-              <div className="question-options d-flex flex-column gap-1 justify-content-evenly">
-                {question.options.map((option, optionIndex) => (
-                  <label
-                    key={option.optionId}
-                    className={`d-flex align-items-center mb-2 p-3 ${
-                      option.isCorrect
-                        ? "question-option--checked"
-                        : "question-option"
-                    }`}
-                  >
-                    <input
-                      type="checkbox"
-                      name={`question-${question.questionId}`}
-                      value={option.optionId}
-                      checked={option.isCorrect}
-                      onChange={() =>
-                        updateIsCorrect(question.questionId, option.optionId)
-                      }
-                      className="me-2 form-check-input d-none"
-                    />
-
-                    <span>
-                      <strong>{optionLabels[optionIndex]}</strong>.{" "}
-                      {option.optionText}
-                    </span>
-                  </label>
+              ))}
+            </div>
+            <div className="answer-sheet col-lg-4 col-12 rounded mb-2">
+              <div className="skeleton-title mb-3"></div>
+              <div className="grid">
+                {Array.from({ length: 5 }).map((_, index) => (
+                  <div
+                    key={index}
+                    className="skeleton-button d-flex justify-content-center gap-1 mb-2"
+                  ></div>
                 ))}
               </div>
+              <button
+                className="btn btn-primary disabled placeholder w-100"
+                aria-disabled="true"
+              ></button>
             </div>
-          ))}
-        </div>
-        <div className="answer-sheet col-md-4">
-          <h3>Phiếu trả lời</h3>
-          <div className="grid">
-            {questionsData.map((question, index) =>
-              // Câu trả lời đã chọn hay chưa
-              answers[question.questionId] !== undefined ? (
-                <button
-                  key={question.questionId}
-                  className="btn d-flex justify-content-center gap-1 mb-2 button-selected"
-                  onClick={() => handleMoveToQuestion(question.questionId)}
-                >
-                  <span>{index + 1}:</span>{" "}
-                  <span>{optionLabels[answers[question.questionId]]}</span>
-                </button>
-              ) : (
-                <button
-                  key={question.questionId}
-                  className="btn d-flex justify-content-center gap-1 mb-2"
-                  onClick={() => handleMoveToQuestion(question.questionId)}
-                >
-                  <span>{index + 1}:</span> <span></span>
-                </button>
-              )
-            )}
           </div>
-          <button className="submit">Nộp bài</button>
         </div>
-      </div>
+      ) : (
+        <div className="question-content">
+          <h3 className="mt-4 mb-5 text-center">{exam.exam_name}</h3>
+          <div className="text-primary d-block d-lg-none position-sticky bg-primary-subtle text-primary p-2 text-center mb-1" style={{top: "0", zIndex: '1000'}}>
+              <CountdownTimer exam_time={exam.exam_time} />
+          </div>
+          <div className="d-flex gap-2 flex-column flex-lg-row align-items-center align-items-lg-start">
+            <div className="col-lg-8 col-12">
+              {questionsData.map((question, index) => (
+                <div
+                  key={question.questionId}
+                  className="question card mb-4 p-3 shadow-sm"
+                  id={question.questionId}
+                >
+                  <div className="d-flex flex-column-reverse flex-lg-row flex-md-row justify-content-between mb-3">
+                    <div className="position-relative w-100">
+                      <h5 className="text-primary">Câu {index + 1}</h5>
+                      <p
+                        dangerouslySetInnerHTML={{
+                          __html: question.questionText.replace(/\n/g, "<br>"),
+                        }}
+                        className="mb-0"
+                      ></p>
+                    </div>
+                  </div>
+                  <div className="question-options d-flex flex-column gap-1 justify-content-evenly">
+                    {question.options.map((option, optionIndex) => (
+                      <label
+                        key={option.optionId}
+                        className={`d-flex align-items-center mb-2 p-3 ${
+                          option.isCorrect
+                            ? "question-option--checked"
+                            : "question-option"
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          name={`question-${question.questionId}`}
+                          value={option.optionId}
+                          checked={option.isCorrect}
+                          onChange={() =>
+                            updateIsCorrect(
+                              question.questionId,
+                              option.optionId
+                            )
+                          }
+                          className="me-2 form-check-input d-none"
+                        />
+
+                        <span>
+                          <strong>{optionLabels[optionIndex]}</strong>.{" "}
+                          {option.optionText}
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="answer-sheet col-lg-4 col-12 rounded mb-2">
+              <h3 className="">Phiếu trả lời</h3>
+              <div className="text-primary d-none d-lg-block">
+              <CountdownTimer exam_time={exam.exam_time} />
+              </div>
+              <div className="grid border-top border-primary border-2 py-1">
+                {questionsData.map((question, index) =>
+                  // Câu trả lời đã chọn hay chưa
+                  answers[question.questionId] !== undefined ? (
+                    <button
+                      key={question.questionId}
+                      className="btn d-flex justify-content-center gap-1 mb-2 button-selected"
+                      onClick={() => handleMoveToQuestion(question.questionId)}
+                    >
+                      <span>{index + 1}:</span>{" "}
+                      <span>{optionLabels[answers[question.questionId]]}</span>
+                    </button>
+                  ) : (
+                    <button
+                      key={question.questionId}
+                      className="btn d-flex justify-content-center gap-1 mb-2  btn-outline-secondary"
+                      onClick={() => handleMoveToQuestion(question.questionId)}
+                    >
+                      <span>{index + 1}:</span> <span></span>
+                    </button>
+                  )
+                )}
+              </div>
+              <button className="submit">
+                Nộp bài <FontAwesomeIcon icon={faSave} />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      
     </div>
   );
 }
