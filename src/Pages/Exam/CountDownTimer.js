@@ -1,26 +1,38 @@
 import React, { useState, useEffect } from "react";
 
-const CountdownTimer = ({ exam_time, submit }) => {
-  // Convert exam_time từ phút sang giây
-  const [timeLeft, setTimeLeft] = useState(exam_time * 60);
+const CountdownTimer = ({ started_at, exam_time, submit }) => {
+  // Xác định thời điểm kết thúc
+  const startedAt = new Date(started_at).getTime();
+  console.log(new Date(started_at).toISOString())
+  const examTime = exam_time * 60 * 1000;
+  const finishTime = startedAt + examTime;
+
+  // Tính toán thời gian còn lại
+  const calculateTimeLeft = () => {
+    const now = new Date().getTime();
+    return Math.max(Math.floor((finishTime - now) / 1000), 0);
+  };
+
+  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
 
   useEffect(() => {
-    // Chạy timer mỗi giây
+    const calculateTimeLeft = () => {
+      const now = new Date().getTime();
+      return Math.max(Math.floor((finishTime - now) / 1000), 0);
+    };
+    // Cập nhật thời gian còn lại mỗi giây
     const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer); // Dừng timer khi hết thời gian
-          submit(); // Gọi hàm submit
-          return 0;
-        }
-        return prev - 1; // Giảm thời gian
-      });
+      setTimeLeft(calculateTimeLeft());
+      if (calculateTimeLeft() <= 0) {
+        clearInterval(timer); // Dừng khi hết giờ
+        // submit(); // Gọi hàm submit
+      }
     }, 1000);
 
-    return () => clearInterval(timer); // Cleanup khi component unmount
-  }, [submit]);
+    return () => clearInterval(timer); // Dọn dẹp khi component bị hủy
+  }, [finishTime, submit]);
 
-  // Format thời gian thành phút và giây
+  // Format thời gian thành phút:giây
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
     const secs = seconds % 60;

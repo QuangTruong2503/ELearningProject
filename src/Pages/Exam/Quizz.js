@@ -9,11 +9,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave } from "@fortawesome/free-regular-svg-icons";
 import CountdownTimer from "./CountDownTimer.js";
 import { fetchVerifyLogin } from "../../Helpers/VerifyLogin.js";
-import { fetchCheckUserDoExam } from "../../API/submissionsAPI.js";
+import { fetchInsertAnswerBySubmission, fetchSubmissionByID } from "../../API/submissionsAPI.js";
 import { toast } from "react-toastify";
+import Questions from "../../Component/Exam/Questions.js";
 
 function Quizz() {
-  const { examID } = useParams();
+  const { submissionID } = useParams();
   const navigate = useNavigate();
   const [questionsData, setQuestionsData] = useState([
     {
@@ -40,13 +41,24 @@ function Quizz() {
     finished_at: "",
     course_id: "",
   });
+  const [submission, setSubmission] = useState({
+    "submission_id": "",
+    "exam_id": "",
+    "student_id": "",
+    "started_at": "",
+    "submitted_at": "",
+    "scores": 0
+  })
   const [answers, setAnswers] = useState({});
   const optionLabels = ["A", "B", "C", "D", "E", "F", "G", "H"];
   const [isLoading, setIsLoading] = useState(true);
-  
+  useEffect(() =>{
+    console.log(questionsData)
+  },[questionsData])
+  //Kiem tra dang nhap
   useEffect(() => {
      //Lấy dữ liệu các câu hỏi
-     const handleGetData = async () => {
+     const handleGetQuestionsData = async (examID) => {
       try {
         const questionResults = await fetchQuestionNoCorrectAnswer(examID);
         if (questionResults !== null) {
@@ -62,26 +74,40 @@ function Quizz() {
         setIsLoading(false);
       }
     };
-    //Kiem tra token
-    const handleVerifyLogin = async () => {
-      const data = await fetchVerifyLogin();
-      if (data !== null) {
-        const userID = data.userID;
-        const checkResult = await fetchCheckUserDoExam(userID, examID);
-        if(checkResult !== null && checkResult.success)
-        {
-          handleGetData();
+
+    //Lấy dữ liệu bài làm
+    const handleGetSubmissionByID = async (submissionID, userID) => {
+      try {
+        const result = await fetchSubmissionByID(submissionID, userID);
+        if (result !== null) {
+          if(!result.success)
+          {
+            toast.warning(result.message)
+            window.history.back();
+            return;
+          }
+          setSubmission(result.data);
+          if(result.data.submitted_at !== null)
+          {
+            navigate(`/exam/result.data.exam_id`)
+          }
+          await handleGetQuestionsData(result.data.exam_id);
         }
-        else if(checkResult !== null && !checkResult.success)
-        {
-          toast.warning(checkResult.message)
-          navigate(`/exam/${examID}`)
-        }
-        
+      } catch (ex) {
+        console.error(ex.message);
       }
     };
-    handleVerifyLogin();
-  }, [examID, navigate]);
+      //Kiem tra token
+      const handleVerifyLogin = async () => {
+        const result = await fetchVerifyLogin();
+        if(result !== null)
+        {
+          const userID = result.userID
+          await handleGetSubmissionByID(submissionID, userID);
+        }
+      };
+      handleVerifyLogin();
+  }, [submissionID, navigate]);
   //Chọn câu trả lời
   const updateIsCorrect = (questionId, optionId) => {
     const questionIndex = questionsData.findIndex(
@@ -110,11 +136,26 @@ function Quizz() {
       )
     );
   };
+
   //Nhấn câu trong phiếu trả lời
   const handleMoveToQuestion = (questionID) => {
     const element = document.getElementById(`${questionID}`);
-    element.scrollIntoView({ behavior: "instant", block: "center", inline: "nearest" });
+    element.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
   };
+  const handleSubmitAnswers = async (e) =>{
+    e.preventDefault()
+    const result = await fetchInsertAnswerBySubmission(questionsData, submissionID)
+    if(result !== null)
+    {
+      if(result.success)
+      {
+        toast.success(result.message)
+      }
+      else{
+        toast.error(result.message)
+      }
+    }
+  }
   //Kiểm tra tải lại trang
   useEffect(() => {
     const handleBeforeUnload = (event) => {
@@ -174,66 +215,15 @@ function Quizz() {
       ) : (
         <div className="question-content">
           <h3 className="mt-4 mb-5 text-center">{exam.exam_name}</h3>
-          <div className="text-primary d-block d-lg-none position-sticky bg-primary-subtle text-primary p-2 text-center mb-1" style={{top: "0", zIndex: '1000'}}>
-              <CountdownTimer exam_time={exam.exam_time} />
+          <div className="text-primary d-block d-lg-none position-sticky bg-primary-subtle text-primary px-2 text-center mb-1" style={{top: "0", zIndex: '1000'}}>
+          <CountdownTimer exam_time={exam.exam_time} started_at={submission.started_at} />
           </div>
           <div className="d-flex gap-2 flex-column flex-lg-row align-items-center align-items-lg-start">
-            <div className="col-lg-8 col-12">
-              {questionsData.map((question, index) => (
-                <div
-                  key={question.questionId}
-                  className="question card mb-4 p-3 shadow-sm"
-                  id={question.questionId}
-                >
-                  <div className="d-flex flex-column-reverse flex-lg-row flex-md-row justify-content-between mb-3">
-                    <div className="position-relative w-100">
-                      <h5 className="text-primary">Câu {index + 1}</h5>
-                      <p
-                        dangerouslySetInnerHTML={{
-                          __html: question.questionText.replace(/\n/g, "<br>"),
-                        }}
-                        className="mb-0"
-                      ></p>
-                    </div>
-                  </div>
-                  <div className="question-options d-flex flex-column gap-1 justify-content-evenly">
-                    {question.options.map((option, optionIndex) => (
-                      <label
-                        key={option.optionId}
-                        className={`d-flex align-items-center mb-2 p-3 ${
-                          option.isCorrect
-                            ? "question-option--checked"
-                            : "question-option"
-                        }`}
-                      >
-                        <input
-                          type="checkbox"
-                          name={`question-${question.questionId}`}
-                          value={option.optionId}
-                          checked={option.isCorrect}
-                          onChange={() =>
-                            updateIsCorrect(
-                              question.questionId,
-                              option.optionId
-                            )
-                          }
-                          className="me-2 form-check-input d-none"
-                        />
-
-                        <span>
-                          <strong>{optionLabels[optionIndex]}</strong>.{" "}
-                          {option.optionText}
-                        </span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
+            <Questions questionsData={questionsData} onChange={updateIsCorrect} />
             <div className="answer-sheet col-lg-4 col-12 rounded mb-2">
               <h3 className="">Phiếu trả lời</h3>
               <div className="text-primary d-none d-lg-block">
-              <CountdownTimer exam_time={exam.exam_time} />
+              <CountdownTimer exam_time={exam.exam_time} started_at={submission.started_at} />
               </div>
               <div className="grid border-top border-primary border-2 py-1">
                 {questionsData.map((question, index) =>
@@ -258,9 +248,11 @@ function Quizz() {
                   )
                 )}
               </div>
+              <form onSubmit={handleSubmitAnswers}>
               <button className="submit">
                 Nộp bài <FontAwesomeIcon icon={faSave} />
               </button>
+              </form>
             </div>
           </div>
         </div>
