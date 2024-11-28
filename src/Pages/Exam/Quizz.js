@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from "react";
 import "../../CssFolder/Exam.css";
-import {  useNavigate, useParams } from "react-router-dom";
-import {
-  fetchQuestionNoCorrectAnswer} from "../../API/questionAPI";
+import { useNavigate, useParams } from "react-router-dom";
+import { fetchQuestionNoCorrectAnswer } from "../../API/questionAPI";
 
 import { fetchExamByID } from "../../API/examsAPI.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave } from "@fortawesome/free-regular-svg-icons";
 import CountdownTimer from "./CountDownTimer.js";
 import { fetchVerifyLogin } from "../../Helpers/VerifyLogin.js";
-import { fetchInsertAnswerBySubmission, fetchSubmissionByID } from "../../API/submissionsAPI.js";
+import {
+  fetchInsertAnswerBySubmission,
+  fetchSubmissionByID,
+} from "../../API/submissionsAPI.js";
 import { toast } from "react-toastify";
 import Questions from "../../Component/Exam/Questions.js";
+import SaveModal from "../../Component/Modal/SaveModal.js";
+import LoaderButton from "../../Component/Loader/LoaderButton.js";
 
 function Quizz() {
   const { submissionID } = useParams();
@@ -42,23 +46,25 @@ function Quizz() {
     course_id: "",
   });
   const [submission, setSubmission] = useState({
-    "submission_id": "",
-    "exam_id": "",
-    "student_id": "",
-    "started_at": "",
-    "submitted_at": "",
-    "scores": 0
-  })
+    submission_id: "",
+    exam_id: "",
+    student_id: "",
+    started_at: "",
+    submitted_at: "",
+    scores: 0,
+  });
   const [answers, setAnswers] = useState({});
   const optionLabels = ["A", "B", "C", "D", "E", "F", "G", "H"];
   const [isLoading, setIsLoading] = useState(true);
-  useEffect(() =>{
-    console.log(questionsData)
-  },[questionsData])
+  const [isSaving, setIsSaving] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  useEffect(() => {
+    console.log(questionsData);
+  }, [questionsData]);
   //Kiem tra dang nhap
   useEffect(() => {
-     //Lấy dữ liệu các câu hỏi
-     const handleGetQuestionsData = async (examID) => {
+    //Lấy dữ liệu các câu hỏi
+    const handleGetQuestionsData = async (examID) => {
       try {
         const questionResults = await fetchQuestionNoCorrectAnswer(examID);
         if (questionResults !== null) {
@@ -80,16 +86,14 @@ function Quizz() {
       try {
         const result = await fetchSubmissionByID(submissionID, userID);
         if (result !== null) {
-          if(!result.success)
-          {
-            toast.warning(result.message)
+          if (!result.success) {
+            toast.warning(result.message);
             window.history.back();
             return;
           }
           setSubmission(result.data);
-          if(result.data.submitted_at !== null)
-          {
-            navigate(`/exam/result.data.exam_id`)
+          if (result.data.submitted_at !== null) {
+            navigate(`/exam/result.data.exam_id`);
           }
           await handleGetQuestionsData(result.data.exam_id);
         }
@@ -97,16 +101,15 @@ function Quizz() {
         console.error(ex.message);
       }
     };
-      //Kiem tra token
-      const handleVerifyLogin = async () => {
-        const result = await fetchVerifyLogin();
-        if(result !== null)
-        {
-          const userID = result.userID
-          await handleGetSubmissionByID(submissionID, userID);
-        }
-      };
-      handleVerifyLogin();
+    //Kiem tra token
+    const handleVerifyLogin = async () => {
+      const result = await fetchVerifyLogin();
+      if (result !== null) {
+        const userID = result.userID;
+        await handleGetSubmissionByID(submissionID, userID);
+      }
+    };
+    handleVerifyLogin();
   }, [submissionID, navigate]);
   //Chọn câu trả lời
   const updateIsCorrect = (questionId, optionId) => {
@@ -140,22 +143,33 @@ function Quizz() {
   //Nhấn câu trong phiếu trả lời
   const handleMoveToQuestion = (questionID) => {
     const element = document.getElementById(`${questionID}`);
-    element.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" });
+    element.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+      inline: "nearest",
+    });
   };
-  const handleSubmitAnswers = async (e) =>{
-    e.preventDefault()
-    const result = await fetchInsertAnswerBySubmission(questionsData, submissionID)
-    if(result !== null)
+  const handleSubmitAnswers = async () => {
+    if(isSubmitted)
     {
-      if(result.success)
-      {
-        toast.success(result.message)
-      }
-      else{
-        toast.error(result.message)
+      return;
+    }
+    setIsSubmitted(true)
+    const result = await fetchInsertAnswerBySubmission(
+      questionsData,
+      submissionID
+    );
+    if (result !== null) {
+      if (result.success) {
+        toast.success(result.message);
+        navigate(`/exam/${submission.exam_id}`);
+      } else {
+        toast.error(result.message);
+        setIsSaving(false) 
+        setIsSubmitted(false)
       }
     }
-  }
+  };
   //Kiểm tra tải lại trang
   useEffect(() => {
     const handleBeforeUnload = (event) => {
@@ -174,6 +188,9 @@ function Quizz() {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, [answers]);
+  useState(() =>{
+    console.log(questionsData)
+  },[questionsData])
   return (
     <div id="questionContainer">
       {isLoading ? (
@@ -215,16 +232,31 @@ function Quizz() {
       ) : (
         <div className="question-content">
           <h3 className="mt-4 mb-5 text-center">{exam.exam_name}</h3>
-          <div className="text-primary d-block d-lg-none position-sticky bg-primary-subtle text-primary px-2 text-center mb-1" style={{top: "0", zIndex: '1000'}}>
-          <CountdownTimer exam_time={exam.exam_time} started_at={submission.started_at} />
+          <div
+            className="text-primary d-block position-sticky bg-primary-subtle text-primary px-2 text-center mb-1"
+            style={{ top: "0", zIndex: "1000" }}
+          >
+            <CountdownTimer
+              exam_time={exam.exam_time}
+              started_at={submission.started_at}
+              submit={handleSubmitAnswers}
+            />
           </div>
           <div className="d-flex gap-2 flex-column flex-lg-row align-items-center align-items-lg-start">
-            <Questions questionsData={questionsData} onChange={updateIsCorrect} />
+            <Questions
+              questionsData={questionsData}
+              onChange={updateIsCorrect}
+            />
             <div className="answer-sheet col-lg-4 col-12 rounded mb-2">
               <h3 className="">Phiếu trả lời</h3>
-              <div className="text-primary d-none d-lg-block">
-              <CountdownTimer exam_time={exam.exam_time} started_at={submission.started_at} />
-              </div>
+              {/* CountdownTimer chỉ xuất hiện ở các màn hình lớn */} 
+              {/* <div className="text-primary d-none d-lg-block">
+                <CountdownTimer
+                  exam_time={0.3}
+                  started_at={submission.started_at}
+                  submit={handleSubmitAnswers}
+                />
+              </div> */}
               <div className="grid border-top border-primary border-2 py-1">
                 {questionsData.map((question, index) =>
                   // Câu trả lời đã chọn hay chưa
@@ -248,16 +280,35 @@ function Quizz() {
                   )
                 )}
               </div>
-              <form onSubmit={handleSubmitAnswers}>
-              <button className="submit">
-                Nộp bài <FontAwesomeIcon icon={faSave} />
-              </button>
-              </form>
+              <div>
+                {isSaving ? (
+                  <button
+                    className="submit"
+                    type="button"
+                    disabled
+                  >
+                    <LoaderButton />
+                  </button>
+                ) : (
+                  <button
+                    className="submit"
+                    type="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#saveModal"
+                  >
+                    Nộp bài <FontAwesomeIcon icon={faSave} />
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>
       )}
-      
+      <SaveModal
+        content={"Bạn có chắc chắn muốn nộp bài?"}
+        onSave={handleSubmitAnswers}
+        title={"XÁC NHẬN NỘP BÀI THI"}
+      />
     </div>
   );
 }

@@ -13,6 +13,19 @@ export const fetchSubmissionByID = async (submissionID, userID) =>{
     const result = await response.json();
     return result;
 }
+//Lấy dữ liệu theo bài làm và người dùng
+export const fetchSubmissionByExamAndUser = async (examID, userID) =>{
+    const response = await fetch(`${apiURL}/Submissions/by-exam-user?examID=${examID}&userID=${userID}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            // Thêm các header khác nếu cần
+        },
+    });
+    if (!response.ok) throw new Error('Error: ' + response.status);
+    const result = await response.json();
+    return result;
+}
 
 export const fetchInsertAnswerBySubmission = async (data, submissionID) =>{
     const response = await fetch(`${apiURL}/Submissions/insert-answers?submissionID=${submissionID}`, {

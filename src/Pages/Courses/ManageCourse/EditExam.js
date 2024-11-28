@@ -127,11 +127,10 @@ function EditExam() {
               Ngày Tạo
             </label>
             <input
-              type="datetime-local"
+              type="text"
               id="created_at"
               className="form-control"
-              value={examDetail.created_at}
-              readOnly
+              value={new Date(examDetail.created_at).toLocaleString()}
               disabled
             />
           </div>
@@ -143,7 +142,7 @@ function EditExam() {
               type="datetime-local"
               id="finished_at"
               className="form-control"
-              value={examDetail.finished_at}
+              value={(examDetail.finished_at).slice(0, 16)}
               onChange={handleChange}
             />
             <small>

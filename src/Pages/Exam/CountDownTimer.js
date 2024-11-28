@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 const CountdownTimer = ({ started_at, exam_time, submit }) => {
   // Xác định thời điểm kết thúc
   const startedAt = new Date(started_at).getTime();
-  console.log(new Date(started_at).toISOString())
   const examTime = exam_time * 60 * 1000;
   const finishTime = startedAt + examTime;
 
@@ -25,7 +24,7 @@ const CountdownTimer = ({ started_at, exam_time, submit }) => {
       setTimeLeft(calculateTimeLeft());
       if (calculateTimeLeft() <= 0) {
         clearInterval(timer); // Dừng khi hết giờ
-        // submit(); // Gọi hàm submit
+        submit(); // Gọi hàm submit
       }
     }, 1000);
 
