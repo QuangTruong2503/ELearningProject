@@ -53,7 +53,7 @@ function App() {
           {/* Exam */}
           <Route path='exam/:examID' Component={ExamDetail}/>
           <Route path='quizz/:submissionID' Component={Quizz}/>
-          <Route path='exam/result/:submissionID' Component={ExamResults}/>
+          <Route path='exam/:examID/result/:submissionID' Component={ExamResults}/>
         </Routes>
       </div>
       <SpeedInsights />

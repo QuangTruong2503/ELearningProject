@@ -1,3 +1,5 @@
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 
 // Define the types for props and data structure
@@ -19,9 +21,11 @@ interface Question {
 }
 
 interface QuestionsAndAnswerProps {
-  data: {
-    questionsData: Question[];
-  } | undefined;
+  data:
+    | {
+        questionsData: Question[];
+      }
+    | undefined;
 }
 
 const QuestionsAndAnswer: React.FC<QuestionsAndAnswerProps> = ({ data }) => {
@@ -29,6 +33,34 @@ const QuestionsAndAnswer: React.FC<QuestionsAndAnswerProps> = ({ data }) => {
 
   return (
     <div className="col-12 col-md-8">
+      <div className="d-flex justify-content-start">
+        <button
+          onClick={() => window.history.back()}
+          className="btn text-primary mb-5"
+        >
+          <FontAwesomeIcon icon={faArrowLeft} />
+          Quay lại
+        </button>
+      </div>
+      {data === undefined && (
+        <div className="skeleton">
+          <div >
+            {Array.from({ length: 5 }).map((_, index) => (
+              <div key={index} className="question card mb-4 p-3 shadow-sm">
+                <div className="skeleton-title mb-3"></div>
+                <div className="question-options d-flex flex-column gap-2">
+                  {Array.from({ length: 4 }).map((_, optionIndex) => (
+                    <div
+                      key={optionIndex}
+                      className="skeleton-option d-flex align-items-center mb-2 p-3"
+                    ></div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+      </div>
+      )}
       {data !== undefined &&
         data.questionsData.map((question, index) => (
           <div
@@ -66,8 +98,7 @@ const QuestionsAndAnswer: React.FC<QuestionsAndAnswerProps> = ({ data }) => {
                       : "question-option"
                   } ${
                     !option.is_correct &&
-                    option.option_id ===
-                      question.answersData.selected_option_id
+                    option.option_id === question.answersData.selected_option_id
                       ? "question-option--isWrong"
                       : "question-option"
                   }`}

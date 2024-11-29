@@ -157,7 +157,7 @@ const ExamDetail: React.FC = () => {
                   </li>
                   <li>
                     <NavLink
-                      to={`/exam/result/${submission.submission_id}`}
+                      to={`result/${submission.submission_id}`}
                       className="text-primary text-decoration-underline"
                     >
                       Xem chi tiết
