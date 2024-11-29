@@ -40,7 +40,19 @@ export const fetchCheckUserInCourseByExamID = async (userID, examID) =>{
     const result = await response.json();
     return result;
 }
-
+//Thêm mới bài thi trống
+export const fetchInsertNewExam = async (courseID) =>{
+    const response = await fetch(`${apiURL}/Exams/create-new?courseID=${courseID}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            // Thêm các header khác nếu cần
+        }
+    });
+    if (!response.ok) throw new Error('Error: ' + response.status);
+    const result = await response.json();
+    return result;
+}
 //Cập nhật dữ liệu exam
 export const fetchUpdateExam = async (data) =>{
     const response = await fetch(`${apiURL}/Exams/update-exam`, {

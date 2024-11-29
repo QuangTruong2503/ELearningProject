@@ -57,10 +57,7 @@ function Quizz() {
   const optionLabels = ["A", "B", "C", "D", "E", "F", "G", "H"];
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  useEffect(() => {
-    console.log(questionsData);
-  }, [questionsData]);
+
   //Kiem tra dang nhap
   useEffect(() => {
     //Lấy dữ liệu các câu hỏi
@@ -150,11 +147,7 @@ function Quizz() {
     });
   };
   const handleSubmitAnswers = async () => {
-    if(isSubmitted)
-    {
-      return;
-    }
-    setIsSubmitted(true)
+    setIsSaving(true)
     const result = await fetchInsertAnswerBySubmission(
       questionsData,
       submissionID
@@ -166,7 +159,6 @@ function Quizz() {
       } else {
         toast.error(result.message);
         setIsSaving(false) 
-        setIsSubmitted(false)
       }
     }
   };
@@ -188,9 +180,6 @@ function Quizz() {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, [answers]);
-  useState(() =>{
-    console.log(questionsData)
-  },[questionsData])
   return (
     <div id="questionContainer">
       {isLoading ? (
@@ -236,6 +225,7 @@ function Quizz() {
             className="text-primary d-block position-sticky bg-primary-subtle text-primary px-2 text-center mb-1"
             style={{ top: "0", zIndex: "1000" }}
           >
+            {/* Bộ đếm thời gian */}
             <CountdownTimer
               exam_time={exam.exam_time}
               started_at={submission.started_at}
@@ -249,14 +239,6 @@ function Quizz() {
             />
             <div className="answer-sheet col-lg-4 col-12 rounded mb-2">
               <h3 className="">Phiếu trả lời</h3>
-              {/* CountdownTimer chỉ xuất hiện ở các màn hình lớn */} 
-              {/* <div className="text-primary d-none d-lg-block">
-                <CountdownTimer
-                  exam_time={0.3}
-                  started_at={submission.started_at}
-                  submit={handleSubmitAnswers}
-                />
-              </div> */}
               <div className="grid border-top border-primary border-2 py-1">
                 {questionsData.map((question, index) =>
                   // Câu trả lời đã chọn hay chưa

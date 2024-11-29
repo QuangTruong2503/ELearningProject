@@ -59,7 +59,7 @@ function ExamQuestions({ examData }) {
     // Function to divide totalScore among all questions
     const distributeScoresEvenly = () => {
       if (questionsData.length === 0) {
-        alert("Không có câu hỏi nào để phân phối điểm.");
+        console.error("Không có câu hỏi nào để phân phối điểm.");
         return;
       }
 
@@ -143,10 +143,10 @@ function ExamQuestions({ examData }) {
       scores: 1.0,
       examId: examID,
       options: [
-        { optionId: uuidv4(), optionText: "Lựa chọn A", isCorrect: true },
-        { optionId: uuidv4(), optionText: "Lựa chọn B", isCorrect: false },
-        { optionId: uuidv4(), optionText: "Lựa chọn C", isCorrect: false },
-        { optionId: uuidv4(), optionText: "Lựa chọn D", isCorrect: false },
+        { optionId: uuidv4(), optionText: "Lựa chọn", isCorrect: true },
+        { optionId: uuidv4(), optionText: "Lựa chọn", isCorrect: false },
+        { optionId: uuidv4(), optionText: "Lựa chọn", isCorrect: false },
+        { optionId: uuidv4(), optionText: "Lựa chọn", isCorrect: false },
       ],
     };
 

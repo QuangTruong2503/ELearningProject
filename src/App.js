@@ -15,9 +15,10 @@ import CoursesDetail from './Pages/Courses/CoursesDetail.js';
 import CreateCourses from './Pages/Courses/CreateCourses.js';
 import AttendedCourses from './Pages/MyCourses/AttendedCourses.js';
 import ManageCourse from './Pages/Courses/ManageCourse/ManageCourse.js';
-import ProfileUserPage from './Pages/ProfileUserPage.js';
-import ExamDetail from './Pages/Exam/ExamDetail.js';
+import ProfileUserPage from './Pages/ProfileUserPage.tsx';
+import ExamDetail from './Pages/Exam/ExamDetail.tsx';
 import Quizz from './Pages/Exam/Quizz.js';
+import ExamResults from './Pages/Exam/ExamResults.js';
 function App() {
   return (
     <HashRouter>
@@ -52,6 +53,7 @@ function App() {
           {/* Exam */}
           <Route path='exam/:examID' Component={ExamDetail}/>
           <Route path='quizz/:submissionID' Component={Quizz}/>
+          <Route path='exam/result/:submissionID' Component={ExamResults}/>
         </Routes>
       </div>
       <SpeedInsights />
