@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 
-function ManageCourseDashboard({
+function ManageDashboard({
   data = [
     {
       name: "",
@@ -47,4 +47,4 @@ function ManageCourseDashboard({
   );
 }
 
-export default ManageCourseDashboard;
+export default ManageDashboard;

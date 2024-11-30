@@ -19,6 +19,7 @@ import ProfileUserPage from './Pages/ProfileUserPage.tsx';
 import ExamDetail from './Pages/Exam/ExamDetail.tsx';
 import Quizz from './Pages/Exam/Quizz.js';
 import ExamResults from './Pages/Exam/ExamResults.js';
+import ManageAccount from './Pages/User/ManageAccount.js';
 function App() {
   return (
     <HashRouter>
@@ -37,7 +38,7 @@ function App() {
 
           {/* User */}
           <Route path='user/:userID' Component={ProfileUserPage}/>
-
+          <Route path='account/*' Component={ManageAccount}/>
           {/* My Courses */}
           <Route path='/my-courses' Component={MyCourses}/>
 

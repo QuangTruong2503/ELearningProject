@@ -1,6 +1,7 @@
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
+import { NavLink } from "react-router-dom";
 
 // Define the types for props and data structure
 interface Option {
@@ -24,27 +25,34 @@ interface QuestionsAndAnswerProps {
   data:
     | {
         questionsData: Question[];
+        exam: Exam;
       }
     | undefined;
 }
-
+interface Exam {
+  exam_id: string;
+  exam_name: string;
+}
 const QuestionsAndAnswer: React.FC<QuestionsAndAnswerProps> = ({ data }) => {
   const optionLabels = ["A", "B", "C", "D", "E", "F", "G", "H"];
-
   return (
     <div className="col-12 col-md-8">
-      <div className="d-flex justify-content-start">
-        <button
-          onClick={() => window.history.back()}
-          className="btn text-primary mb-5"
-        >
-          <FontAwesomeIcon icon={faArrowLeft} />
-          Quay lại
-        </button>
-      </div>
+      {data !== undefined && (
+        <div>
+          <div className="d-flex justify-content-start">
+            <NavLink to={`/exam/${data.exam.exam_id}`}
+              className=" text-primary"
+            >
+              <FontAwesomeIcon icon={faArrowLeft} />
+              Quay lại
+            </NavLink>
+          </div>
+          <h3 className="text-center mb-5">{data.exam.exam_name}</h3>
+        </div>
+      )}
       {data === undefined && (
         <div className="skeleton">
-          <div >
+          <div>
             {Array.from({ length: 5 }).map((_, index) => (
               <div key={index} className="question card mb-4 p-3 shadow-sm">
                 <div className="skeleton-title mb-3"></div>
@@ -59,7 +67,7 @@ const QuestionsAndAnswer: React.FC<QuestionsAndAnswerProps> = ({ data }) => {
               </div>
             ))}
           </div>
-      </div>
+        </div>
       )}
       {data !== undefined &&
         data.questionsData.map((question, index) => (

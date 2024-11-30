@@ -37,23 +37,23 @@ function JoinedUsers() {
     handleGetUsersJoinedCourse();
   }, [courseID]);
   return (
-    <div class="container py-4">
+    <div className="container py-4">
       {data.data !== undefined && (
         <h5 className="mb-3">Thành viên: {data.data.length}</h5>
       )}
 
-      <div class="list-group" style={{ minHeight: "100px" }}>
+      <div className="list-group" style={{ minHeight: "100px" }}>
         {data.data !== undefined &&
           data.data.map((item, index) => (
-            <div class="list-group-item d-flex align-items-center" key={index}>
+            <div className="list-group-item d-flex align-items-center" key={index}>
               <img
                 src={item.avatar_url}
                 alt="Avatar"
-                class="rounded-circle me-3"
+                className="rounded-circle me-3"
                 style={{ width: "50px", height: '50px'}}
               />
               <div>
-                <NavLink to={`/user/${item.user_id}`} class="mb-0 text-black">
+                <NavLink to={`/user/${item.user_id}`} className="mb-0 text-black">
                   {item.first_name} {item.last_name}
                 </NavLink>
               </div>

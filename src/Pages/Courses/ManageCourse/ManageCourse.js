@@ -5,7 +5,7 @@ import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { fetchVerifyLogin } from "../../../Helpers/VerifyLogin.js";
 import { fetchCheckOwnerCourse } from "../../../API/coursesAPI.js";
 import { toast } from "react-toastify";
-import ManageCourseDashboard from "./ManageCourseDashboard.js";
+import ManageDashboard from "../../../Component/ManageDashboard.js";
 import EditCourse from "./EditCourse.js";
 import JoinedUsers from "./JoinedUsers.js";
 import Lessons from './Lessons.js'
@@ -93,7 +93,7 @@ function AdminPage() {
             ></button>
           </div>
           <div className="offcanvas-body">
-            <ManageCourseDashboard data={collapseData}/>
+            <ManageDashboard data={collapseData}/>
           </div>
         </div>
 
@@ -101,7 +101,7 @@ function AdminPage() {
         <div className="col-lg-3 d-md-none d-none d-lg-block h-auto">
           <div className="container mt-5 p-4 rounded shadow position-sticky sticky-top">
             <h5 className="border-bottom pb-2"> Quản lý khóa học</h5>
-            <ManageCourseDashboard data={collapseData}/>
+            <ManageDashboard data={collapseData}/>
           </div>
         </div>
 
