@@ -51,3 +51,15 @@ a{
   min-height: 50vh;
   justify-content: center;
 }
+
+.vertical-line {
+  padding: 0 1.5rem;
+}
+.vertical-line::after{
+  border-left: 1px solid rgba(156, 163, 175, .50); /* Đường kẻ dọc */
+  content: "";
+  height: 100%; /* Chiều cao của đường kẻ */
+  box-sizing: border-box;
+  display: block;
+  width: 1px;
+}
