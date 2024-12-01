@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { fetchVerifyLogin } from "../../Helpers/VerifyLogin";
+import { fetchChangePassword } from "../../API/user";
+import { toast } from "react-toastify";
 
 interface Password {
   current_password: string;
@@ -11,12 +13,11 @@ function ChangePassword() {
   const [passwords, setPasswords] = useState<Password>({
     current_password: "",
     new_password: "",
-    confirm_password: ""
+    confirm_password: "",
   });
-  const [userID, setUserID] = useState('');
+  const [userID, setUserID] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [passwordError, setPasswordError] = useState("");
-  const [isPasswordValid, setIsPasswordValid] = useState(false);
   useEffect(() => {
     //Kiểm tra đăng nhập
     const handleVerifyLogin = async () => {
@@ -35,10 +36,10 @@ function ChangePassword() {
 
     if (minLength && hasNumberOrSpecialChar) {
       setPasswordError("");
-      setIsPasswordValid(true);
     } else {
-      setPasswordError("Mật khẩu phải có ít nhất 8 ký tự và chứa ít nhất 1 số hoặc ký tự đặc biệt.");
-      setIsPasswordValid(false);
+      setPasswordError(
+        "Mật khẩu phải có ít nhất 8 ký tự và chứa ít nhất 1 số hoặc ký tự đặc biệt."
+      );
     }
   };
 
@@ -46,7 +47,7 @@ function ChangePassword() {
     const { name, value } = e.target;
     setPasswords((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
 
     // Nếu thay đổi mật khẩu mới hoặc mật khẩu xác nhận, kiểm tra tính hợp lệ
@@ -59,17 +60,47 @@ function ChangePassword() {
     setShowPassword((prev) => !prev);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (passwords.new_password !== passwords.confirm_password) {
-      setPasswordError("Mật khẩu xác nhận không khớp.");
-      setIsPasswordValid(false);
+    if (passwords.current_password === passwords.new_password) {
+      setPasswordError("Mật khẩu mới không được giống mật khẩu cũ.");
       return;
     }
-
-    if (isPasswordValid) {
-      // Logic thay đổi mật khẩu thành công
-      alert("Mật khẩu đã được thay đổi thành công!");
+    if (passwords.new_password !== passwords.confirm_password) {
+      setPasswordError("Mật khẩu xác nhận không khớp.");
+      return;
+    }
+    try {
+      const result = await fetchChangePassword(
+        userID,
+        passwords.current_password,
+        passwords.new_password
+      );
+      toast.promise(
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            const success = result.success;
+            if (success) {
+              resolve("");
+              setPasswords((prev) => ({
+                ...prev,
+                current_password: "",
+                new_password: "",
+                confirm_password: "",
+              }));
+            } else {
+              reject("Fail");
+            }
+          }, 1000);
+        }),
+        {
+          pending: "Tiến hành đổi mật khẩu...",
+          success: result.message,
+          error: result.message,
+        }
+      );
+    } catch {
+      toast.error("Xảy ra lỗi khi thay đổi mật khẩu");
     }
   };
 
@@ -87,6 +118,7 @@ function ChangePassword() {
               onChange={handleChange}
               className="form-control"
               placeholder="Nhập mật khẩu cũ"
+              required
             />
           </div>
           <div className="form-group mb-3">
@@ -125,11 +157,14 @@ function ChangePassword() {
               id="flexCheckDefault"
               onChange={handleShowPassword}
             />
-            <label className="form-check-label cursor-pointer" htmlFor="flexCheckDefault">
+            <label
+              className="form-check-label cursor-pointer"
+              htmlFor="flexCheckDefault"
+            >
               Hiện mật khẩu
             </label>
           </div>
-          <button type="submit" className="btn btn-primary" disabled={!isPasswordValid}>
+          <button type="submit" className="btn btn-primary">
             Xác nhận
           </button>
         </form>
