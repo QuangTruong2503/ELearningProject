@@ -14,8 +14,8 @@ function AccountButton() {
   const navigate = useNavigate();
   const loginCookiesName = "loginData";
   const handleLogout = () => {
-    Cookies.remove(loginCookiesName);
     window.location.href = "/";
+    Cookies.remove(loginCookiesName);
   };
   const [decodedData, setDecodedData] = useState({});
   //Lấy dữ liệu từ Cookies
@@ -87,6 +87,7 @@ function AccountButton() {
           </button>
         </li>
       </ul>
+      {/* Dành cho màn hình lớn */}
       <div className="dropdown d-none d-lg-flex align-items-center">
         <button
           className="btn p-0 border-0 d-none d-lg-block d-lg-flex gap-1 align-items-center"
@@ -99,11 +100,11 @@ function AccountButton() {
             width="40"
             height="40"
             className=""
-            style={{ borderRadius: "50%", objectFit: "fill" }}
+            style={{ borderRadius: "50%", objectFit: "cover" }}
           />
           <span>{userData.userName}</span>
         </button>
-        {/* Dành cho màn hình lớn */}
+        
         <ul
           className="dropdown-header--content mt-2 list-group list-unstyled"
           aria-labelledby="dropdownMenuButton"

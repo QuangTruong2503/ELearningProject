@@ -4,12 +4,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import ManageDashboard from "../../Component/ManageDashboard.js";
 import Profile from "./Profile.tsx";
+import ChangePassword from "./ChangePassword.tsx";
 
 function ManageAccount() {
     const collapseData = [
         {
           name: "Thông tin tài khoản",
           url: "profile",
+        },
+        {
+          name: "Đổi mật khẩu",
+          url: "password",
         },
       ];
   return (
@@ -63,6 +68,7 @@ function ManageAccount() {
             <div className="container mt-5 p-4 rounded shadow min-vh-100">
                 <Routes>
                     <Route path="profile" Component={Profile}/>
+                    <Route path="password" Component={ChangePassword}/>
                 </Routes>
             </div>
           

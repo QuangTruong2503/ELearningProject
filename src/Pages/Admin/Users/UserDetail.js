@@ -157,13 +157,13 @@ function UserDetail({ userID, onClose, onSave }) {
                     >
                       Chọn ảnh <FontAwesomeIcon icon={faImage} />
                     </label>
-                    <input
-                      id="uploadImage"
-                      type="file"
-                      accept="image/*"
-                      className="d-none"
-                      onChange={handleImageChange}
-                    />
+                      <input
+                        id="uploadImage"
+                        type="file"
+                        accept="image/*"
+                        className="d-none"
+                        onChange={handleImageChange}
+                      />
                   </div>
                 </div>
                 <div className="form-group mb-3">
