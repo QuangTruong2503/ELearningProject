@@ -29,9 +29,11 @@ function AllSubjects() {
       <div className="position-relative subject-topics">
         <div className="topics-container">
           {subjects.length === 0 ? (
-            <div className="topic-card placeholder">
-              <div className="skeleton skeleton-text"></div>
-            </div>
+            (Array.from({length: 8}).map((_, index) => (
+              <div className="topic-card placeholder" key={index}>
+                <div className="skeleton skeleton-text"></div>
+              </div>
+            )))
           ) : (
             subjects.slice(0, 8).map((subject, index) => (
               <div className="topic-card" key={index}>

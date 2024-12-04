@@ -29,7 +29,9 @@ function ExamResults() {
         }
       };
       handleVerifyLogin();
-    },[submissionID])
+     
+    },[submissionID]);
+    
   return (
     <div className='d-flex align-items-center justify-content-center my-5'>
       <QuestionsAndAnswer data={questionsData}/>

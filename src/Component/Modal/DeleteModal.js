@@ -5,8 +5,6 @@ function DeleteModal({title, content, onDelete, onClose}) {
     <div
       className="modal fade"
       id="staticBackdrop"
-      data-bs-backdrop="static"
-      data-bs-keyboard="false"
       tabIndex="-1"
       aria-labelledby="staticBackdropLabel"
       aria-hidden="false"

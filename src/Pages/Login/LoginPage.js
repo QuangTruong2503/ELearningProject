@@ -44,6 +44,8 @@ export const LoginPage = () => {
       }
     } catch (err) {
       console.error(err.message);
+    }
+    finally{
       setIsLoading(false);
     }
   };

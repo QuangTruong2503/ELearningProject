@@ -45,6 +45,7 @@ const Profile: React.FC = () => {
       const fileSize = file.size / 1024 / 1024;
       if (fileSize > 3) {
         toast.warning("File ảnh không được vượt quá 3MB");
+        setIsSavingImage(false)
         return;
       }
       const imageUploaded = await fetchUploadCloudinaryOneImage(file, "Users");

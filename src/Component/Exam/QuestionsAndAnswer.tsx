@@ -20,21 +20,43 @@ interface Question {
     selected_option_id: string;
   };
 }
+interface User{
+  first_name: string;
+  last_name: string;
+}
+
+interface Submission{
+  started_at: Date;
+  submitted_at: Date;
+  scores: number;
+}
 
 interface QuestionsAndAnswerProps {
   data:
     | {
         questionsData: Question[];
         exam: Exam;
+        user: User;
+        submission: Submission;
       }
     | undefined;
 }
 interface Exam {
   exam_id: string;
   exam_name: string;
+  total_score: number;
 }
 const QuestionsAndAnswer: React.FC<QuestionsAndAnswerProps> = ({ data }) => {
   const optionLabels = ["A", "B", "C", "D", "E", "F", "G", "H"];
+  // Hàm tính thời gian làm xong bài
+  const handleCalcTime = (start, submit) =>{
+    const startTime = new Date(start).getTime()
+    const submitTime = new Date(submit).getTime()
+    const time = Math.max(Math.floor((submitTime - startTime) / 1000), 0)
+    const minutes = Math.floor(time / 60)
+    const secs = time % 60
+    return `${String(minutes).padStart(2, "0")} phút ${String(secs).padStart(2, "0")} giây`
+  }
   return (
     <div className="col-12 col-md-8">
       {data !== undefined && (
@@ -48,6 +70,21 @@ const QuestionsAndAnswer: React.FC<QuestionsAndAnswerProps> = ({ data }) => {
             </NavLink>
           </div>
           <h3 className="text-center mb-5">{data.exam.exam_name}</h3>
+          {/* Thong tin */}
+          <div className="mb-3 d-flex flex-column gap-2">
+            <div className="d-flex gap-2">
+              <strong>Tên người làm:</strong>
+              <span>{data.user.first_name} {data.user.last_name}</span>
+            </div>
+            <div className="d-flex gap-2">
+              <strong>Điểm số:</strong>
+              <span>{data.submission.scores}/{data.exam.total_score}</span>
+            </div>
+            <div className="d-flex gap-2">
+              <strong>Thời gian làm bài:</strong>
+              <span>{handleCalcTime(data.submission.started_at, data.submission.submitted_at)}</span>
+            </div>
+          </div>
         </div>
       )}
       {data === undefined && (
