@@ -7,7 +7,6 @@ import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 export const LoginPage = () => {
   document.title = 'Đăng nhập';
-  const loginCookies = Cookies.get("loginData");
   const [isLoading, setIsLoading] = useState(false);
   const [loginData, setLoginData] = useState({
     userNameOrEmail: "",
@@ -37,8 +36,8 @@ export const LoginPage = () => {
       else{
         const convertData = JSON.stringify(result.data);
         toast.success(result.message);
+        setCookies("loginData", convertData);
         setTimeout(() =>{
-          setCookies("loginData", convertData);
           window.location.href = '/';
         }, 1500)
       }
@@ -50,11 +49,11 @@ export const LoginPage = () => {
     }
   };
   useEffect(() => {
-    if (loginCookies !== undefined) {
+    if (Cookies.get("loginData") !== undefined) {
         window.location.href = '/';
     }
     window.scrollTo(0, 0);
-  }, [loginCookies]);
+  }, []);
   return (
     <section className="d-flex align-items-center">
       <div className="container py-5 h-100">
