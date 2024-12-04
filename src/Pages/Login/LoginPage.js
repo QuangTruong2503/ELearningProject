@@ -36,9 +36,9 @@ export const LoginPage = () => {
       if (!result.isLogin) return toast.error(result.message);
       else{
         const convertData = JSON.stringify(result.data);
-        setCookies("loginData", convertData);
         toast.success(result.message);
         setTimeout(() =>{
+          setCookies("loginData", convertData);
           window.location.href = '/';
         }, 1500)
       }
