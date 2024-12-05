@@ -1,4 +1,6 @@
-import React from "react";
+import { faChartPie } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 
 function AdminDashboard({
@@ -9,55 +11,68 @@ function AdminDashboard({
     },
   ],
 }) {
+  const [path, setPath] = useState("");
+  const url = new URL(window.location.href);
+  const hash = url.hash;
+  useEffect(() => {
+    
+
+    // Loại bỏ dấu `#` và lấy phần "users/all"
+    const path = hash.substring(1); // "/admin/users/all"
+    const targetPath = path.split("/").slice(2).join("/"); // "users/all"
+
+    setPath(targetPath); // "users/all"
+  }, [hash]);
   return (
-    <ul className="nav flex-column">
-      <div className="accordion accordion-flush" id="accordionDashboard">
+    <ul className="nav flex-column list-unstyled">
+      <li className={`py-2 mb-2 d-none d-lg-block ${
+                    path === 'chart' ? "manage-course--item-focus px-2" : ""
+                  }`}>
+      <NavLink className={'text-black d-flex gap-2 align-items-center'} to={`chart`}>
+        <FontAwesomeIcon icon={faChartPie}/>
+        <span>Dashboard</span>
+      </NavLink>
+      {/* Dành cho màn nhỏ */}
+      </li>
+      <li data-bs-dismiss="offcanvas" className={`py-2 mb-2 d-block d-lg-none ${
+                    path === 'chart' ? "manage-course--item-focus px-2" : ""
+                  }`}>
+      <NavLink className={'text-black d-flex gap-2 align-items-center'} to={`chart`}>
+        <FontAwesomeIcon icon={faChartPie}/>
+        <span>Dashboard</span>
+      </NavLink>
+      </li>
         {data.map((item, index) => (
-          <div className="accordion-item border-0" key={index}>
-            <h2 className="accordion-header">
-              <button
-                className="accordion-button collapsed bg-light text-dark"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target={`#flush-collapse-${index}`}
-                aria-expanded="true"
-                aria-controls={`flush-collapse-${index}`}
-              >
-                {item.title}
-              </button>
-            </h2>
-            <div
-              id={`flush-collapse-${index}`}
-              className="accordion-collapse collapse"
-              data-bs-parent="#accordionDashboard"
-            >
-              <div className="accordion-body p-0">
-                <ul className="list-group">
-                  {item.data.map((dataItem, dataIndex) => (
-                    <li
-                      className="list-group-item border-0 p-2"
-                      key={dataIndex}
-                    >
-                      <NavLink
-                        to={dataItem.url}
-                        className="nav-link d-flex align-items-center text-decoration-none text-primary"
-                      >
-                        <span className="d-none d-lg-block">
-                          {dataItem.name}
-                        </span>
-                        {/* Hiển thị trong offcanvas và tự đóng khi nhấn */}
-                        <span data-bs-dismiss="offcanvas" className="d-lg-none">
-                          {dataItem.name}
-                        </span>
-                      </NavLink>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+          <div className="my-1 " key={index}>
+            <div className="d-flex gap-2 align-items-center">
+            <strong>{item.title}</strong>
             </div>
+            <ul className="list-unstyled p-2 ">
+              {item.data.map((content, contentIndex) => (
+                <div>
+                  <li
+                  className={`p-2 ms-3 mb-2 d-none d-lg-block ${
+                    path === content.url ? "manage-course--item-focus" : ""
+                  }`}
+                  key={contentIndex}
+                >
+                  <NavLink className={'text-black'} to={content.url}>{content.name}</NavLink>
+                </li>
+                {/* Dành cho màn nhỏ */}
+                <li
+                  data-bs-dismiss="offcanvas"
+                  className={`p-2 ms-3 mb-2 d-lg-none d-block ${
+                    path === content.url ? "manage-course--item-focus" : ""
+                  }`}
+                  key={contentIndex}
+                >
+                  <NavLink className={'text-black'} to={content.url}>{content.name}</NavLink>
+                </li>
+                </div>
+              ))}
+            </ul>
           </div>
         ))}
-      </div>
     </ul>
   );
 }

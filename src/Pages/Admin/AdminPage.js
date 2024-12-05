@@ -77,7 +77,7 @@ function AdminPage() {
         {/* Sidebar cho màn hình lớn */}
         <div className="col-lg-3 d-md-none d-none d-lg-block h-auto">
           <div className="container mt-5 p-4 rounded shadow position-sticky sticky-top">
-            <h5 className="border-bottom pb-2">Dashboard</h5>
+            <h5 className="border-bottom pb-2">Quản lý hệ thống</h5>
             <AdminDashboard data={collapseData}/>
           </div>
         </div>

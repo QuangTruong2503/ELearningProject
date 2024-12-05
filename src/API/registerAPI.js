@@ -14,7 +14,7 @@ export const checkAccountExists = async (username, email) =>{
 }
 
 export const registerAccount = async (data) =>{
-    const response = await fetch(`${apiURL}/Users`,{
+    const response = await fetch(`${apiURL}/Users/register`,{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

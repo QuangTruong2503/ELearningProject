@@ -75,6 +75,7 @@ const RegisterPage = () => {
     e.preventDefault();
     try {
       setIsLoading(true);
+      console.log(registerData)
       const result = await registerAccount(registerData);
       if (!result.isSuccess) {
         toast.error(result.message);

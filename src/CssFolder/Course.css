@@ -87,7 +87,6 @@
 
   .manage-course--item-focus{
     border-left: 4px solid #2579f2;
-    scale: 1.02;
     font-weight: 500;
   }
   .manage-course--item-focus a{
