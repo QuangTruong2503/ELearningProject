@@ -8,6 +8,7 @@ import {
 import PaginationsComponent from "../PaginationsComponent";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faFileWord,
   faGear,
   faPencil,
   faPlus,
@@ -17,34 +18,48 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "react-toastify";
 import LoaderButton from "../Loader/LoaderButton";
-function ExamQuestions({ examData }) {
-  const { examID } = useParams();
-  const [questionsData, setQuestionsData] = useState([
-    {
-      questionId: "",
-      questionText: "",
-      scores: 2.5,
-      examId: "",
-      options: [
-        {
-          optionId: "",
-          optionText: "",
-          isCorrect: false,
-        },
-      ],
-    },
+import AddQuestionsByWord from "../Exam/AddQuestionsByWord.tsx";
+import { downloadFromGoogleDrive } from "../../Helpers/downloadDriveFile";
+
+// Định nghĩa kiểu dữ liệu
+interface Option {
+  optionId: string;
+  optionText: string;
+  isCorrect: boolean;
+}
+
+interface Question {
+  questionId: string;
+  questionText: string;
+  scores: number;
+  examId: string;
+  options: Option[];
+}
+
+interface ExamData {
+  total_score: number;
+}
+
+interface ExamQuestionsProps {
+  examData: ExamData;
+}
+
+const ExamQuestions: React.FC<ExamQuestionsProps> = ({ examData }) => {
+  const { examID } = useParams<{ examID: string }>();
+  const [questionsData, setQuestionsData] = useState<Question[]>([
   ]);
 
-  const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
-  const [questionsPerPage] = useState(5); // Số câu mỗi trang
+  const [currentPage, setCurrentPage] = useState<number>(1); // Trang hiện tại
+  const [questionsPerPage] = useState<number>(5); // Số câu mỗi trang
   const optionLabels = ["A", "B", "C", "D", "E", "F", "G", "H"];
-  const [editing, setEditing] = useState("");
-  const [reload, setReload] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [editing, setEditing] = useState<string | null>(null);
+  const [reload, setReload] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  //Lấy dữ liệu các câu hỏi
+  // Lấy dữ liệu các câu hỏi
   useEffect(() => {
     const handleGetData = async () => {
+      if (!examID) return;
       const questionResults = await fetchQuestionsByExam(
         `Questions/by-examID?id=${examID}`
       );
@@ -54,12 +69,11 @@ function ExamQuestions({ examData }) {
     };
     handleGetData();
   }, [examID, reload]);
-  //Tính điểm cho các câu hỏi
+
+  // Tính điểm cho các câu hỏi
   useEffect(() => {
-    // Function to divide totalScore among all questions
     const distributeScoresEvenly = () => {
       if (questionsData.length === 0) {
-        console.error("Không có câu hỏi nào để phân phối điểm.");
         return;
       }
 
@@ -78,22 +92,20 @@ function ExamQuestions({ examData }) {
   }, [questionsData, examData]);
 
   // Lấy dữ liệu của trang hiện tại
-  const indexOfLastQuestion = currentPage * questionsPerPage; // Index của câu cuối trong trang
-  const indexOfFirstQuestion = indexOfLastQuestion - questionsPerPage; // Index của câu đầu trong trang
+  const indexOfLastQuestion = currentPage * questionsPerPage;
+  const indexOfFirstQuestion = indexOfLastQuestion - questionsPerPage;
   const currentQuestions = questionsData.slice(
     indexOfFirstQuestion,
     indexOfLastQuestion
-  ); // Lấy danh sách câu hỏi cho trang hiện tại
+  );
 
-  // Cập nhật trạng thái khi thay đổi trang
-  const paginate = (pageNumber) => {
+  const paginate = (pageNumber: number) => {
     setCurrentPage(pageNumber);
-    // Scroll page
     const element = document.getElementById("questionContainer");
-    element.scrollIntoView({ behavior: "smooth" });
+    element?.scrollIntoView({ behavior: "smooth" });
   };
-  //Cập nhật câu hỏi đúng
-  const updateIsCorrect = (questionId, optionId) => {
+
+  const updateIsCorrect = (questionId: string, optionId: string) => {
     setQuestionsData((prevQuestions) =>
       prevQuestions.map((question) =>
         question.questionId === questionId
@@ -108,8 +120,8 @@ function ExamQuestions({ examData }) {
       )
     );
   };
-  //Cập nhật dữ liệu câu hỏi
-  const handleQuestionTextChange = (questionId, newText) => {
+
+  const handleQuestionTextChange = (questionId: string, newText: string) => {
     setQuestionsData((prevQuestions) =>
       prevQuestions.map((question) =>
         question.questionId === questionId
@@ -118,8 +130,12 @@ function ExamQuestions({ examData }) {
       )
     );
   };
-  //Cập nhật dữ liệu các tùy chọn
-  const handleOptionChange = (questionId, optionId, newValue) => {
+
+  const handleOptionChange = (
+    questionId: string,
+    optionId: string,
+    newValue: string
+  ) => {
     setQuestionsData((prevQuestions) =>
       prevQuestions.map((question) =>
         question.questionId === questionId
@@ -135,13 +151,13 @@ function ExamQuestions({ examData }) {
       )
     );
   };
-  //Thêm câu hỏi mới
+
   const handleAddQuestion = () => {
-    const newQuestion = {
-      questionId: uuidv4(), // Tạo ID tạm thời
+    const newQuestion: Question = {
+      questionId: uuidv4(),
       questionText: "Câu hỏi mới",
       scores: 1.0,
-      examId: examID,
+      examId: examID || "",
       options: [
         { optionId: uuidv4(), optionText: "Lựa chọn", isCorrect: true },
         { optionId: uuidv4(), optionText: "Lựa chọn", isCorrect: false },
@@ -151,17 +167,16 @@ function ExamQuestions({ examData }) {
     };
 
     setQuestionsData((prevQuestions) => [newQuestion, ...prevQuestions]);
-    setEditing(newQuestion.questionId); // Đặt câu hỏi vừa thêm vào chế độ chỉnh sửa
+    setEditing(newQuestion.questionId);
   };
-  //Xóa câu hỏi
-  const handleDeleteQuestion = (questionID) => {
+
+  const handleDeleteQuestion = (questionID: string) => {
     const filteredQuestions = questionsData.filter(
       (question) => question.questionId !== questionID
     );
     setQuestionsData(filteredQuestions);
   };
 
-  //Upsert dữ liệu
   const handleUpsertQuestions = async () => {
     setIsLoading(true);
     try {
@@ -171,20 +186,53 @@ function ExamQuestions({ examData }) {
       } else {
         toast.error("Gặp lỗi khi cập nhật dữ liệu");
       }
-    } catch (ex) {
+    } catch (ex: any) {
       console.log(ex.message);
     } finally {
       setIsLoading(false);
     }
   };
+
+  const handleAddQuestionByWord = (updatedQuestions: Question[]) => {
+    setQuestionsData((prev) => [...updatedQuestions, ...prev]);
+  };
+
   return (
     <div id="questionContainer">
       <hr />
       <h3 className="my-4 text-center">Các Câu Hỏi Trong Bài Kiểm Tra</h3>
-      <div className="d-flex justify-content-end mb-2">
-        <button className="btn btn-success" onClick={handleAddQuestion}>
-          Thêm Câu hỏi <FontAwesomeIcon icon={faPlus} />
+      <div className="d-flex justify-content-end mb-2 dropdown">
+        <button
+          className="btn btn-primary dropdown-toggle"
+          type="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          Tùy chọn
         </button>
+        <ul className="dropdown-menu">
+          <li>
+            <button className="btn text-success" onClick={handleAddQuestion}>
+              <FontAwesomeIcon icon={faPlus} /> Thêm câu hỏi
+            </button>
+          </li>
+          <li>
+            <button
+              className="btn"
+              onClick={() =>
+                downloadFromGoogleDrive(
+                  "13V_NtA-64Q2kzlhXQWiESFW0OP8ezkF5",
+                  "File_cau_hoi_mau"
+                )
+              }
+            >
+              <FontAwesomeIcon icon={faFileWord} /> Tải file mẫu
+            </button>
+          </li>
+          <li>
+            <AddQuestionsByWord onQuestionsUpdate={handleAddQuestionByWord} />
+          </li>
+        </ul>
       </div>
       {currentQuestions.map((question) => (
         <div
@@ -193,17 +241,13 @@ function ExamQuestions({ examData }) {
         >
           <div className="d-flex flex-column-reverse flex-lg-row flex-md-row justify-content-between mb-3">
             <div className="position-relative d-inline-flex w-100">
-                {/* Mở input để nhập */}
               {editing === question.questionId ? (
                 <textarea
                   className="form-control w-100"
                   rows={3}
                   value={question.questionText}
                   onChange={(e) =>
-                    handleQuestionTextChange(
-                      question.questionId,
-                      e.target.value
-                    )
+                    handleQuestionTextChange(question.questionId, e.target.value)
                   }
                 ></textarea>
               ) : (
@@ -216,7 +260,6 @@ function ExamQuestions({ examData }) {
               )}
             </div>
             <div>
-                {/* Mở chế độ edit */}
               {editing === question.questionId ? (
                 <button
                   className="btn btn-success fs-6 ms-2"
@@ -245,9 +288,7 @@ function ExamQuestions({ examData }) {
                     <li>
                       <button
                         className="dropdown-item btn text-danger"
-                        onClick={() =>
-                          handleDeleteQuestion(question.questionId)
-                        }
+                        onClick={() => handleDeleteQuestion(question.questionId)}
                       >
                         Xóa <FontAwesomeIcon icon={faTrash} />
                       </button>
@@ -291,7 +332,6 @@ function ExamQuestions({ examData }) {
                     }
                     className="me-2 form-check-input d-none"
                   />
-
                   <span>
                     <strong>{optionLabels[optionIndex]}</strong>.{" "}
                     {option.optionText}
@@ -303,7 +343,6 @@ function ExamQuestions({ examData }) {
         </div>
       ))}
 
-      {/* Phân trang */}
       <PaginationsComponent
         currentPage={currentPage}
         totalPage={Math.ceil(questionsData.length / questionsPerPage)}
@@ -318,10 +357,7 @@ function ExamQuestions({ examData }) {
           Đặt lại
         </button>
         {isLoading ? (
-          <button
-            className="btn btn-success"
-            type="button"
-          >
+          <button className="btn btn-success" type="button">
             <LoaderButton />
           </button>
         ) : (
@@ -335,6 +371,6 @@ function ExamQuestions({ examData }) {
       </div>
     </div>
   );
-}
+};
 
 export default ExamQuestions;

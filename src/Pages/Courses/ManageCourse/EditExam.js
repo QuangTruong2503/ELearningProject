@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { fetchExamByID, fetchUpdateExam } from "../../../API/examsAPI";
-import ExamQuestions from "../../../Component/ManageCourse/ExamQuestions";
+import ExamQuestions from "../../../Component/ManageCourse/ExamQuestions.tsx";
 import { toast } from "react-toastify";
 import LoaderButton from "../../../Component/Loader/LoaderButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
