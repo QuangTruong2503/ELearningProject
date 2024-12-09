@@ -4,8 +4,10 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import Cookies from "js-cookie";
 import AccountButton from "./AccountButton";
-import AttendCourse from "./AttendCourse";
 import logoImage from "../../Images/qstudy-high-resolution-logo-transparent.png";
+import SearchBox from "./SearchBox";
+import AttendedCourse from "./AttendCourse.js";
+
 function HeaderComponent() {
   const loginCookiesName = "loginData";
   const loginCookies = Cookies.get(loginCookiesName);
@@ -40,6 +42,7 @@ function HeaderComponent() {
             </li>
             )}
           </ul>
+          <SearchBox />
           {loginCookies === undefined && (
             <div className="d-flex gap-2">
               <NavLink className="btn btn-outline-primary" to={"/register"}>
@@ -52,12 +55,12 @@ function HeaderComponent() {
           )}
           {loginCookies !== undefined && (
             <div className="d-flex flex-lg-row flex-column gap-2">
-              <AttendCourse />
               <AccountButton />
             </div>
           )}
         </div>
       </div>
+      <AttendedCourse />
     </nav>
   );
 }

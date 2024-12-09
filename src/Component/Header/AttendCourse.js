@@ -43,26 +43,6 @@ function AttendCourse() {
     }, []);
   return (
     <div>
-      <button
-        type="button"
-        className="btn btn-primary d-none d-lg-block"
-        data-bs-toggle="modal"
-        data-bs-target="#attendCourseModal"
-      >
-        Nhập mã
-      </button>
-      {/* Danh cho man hinh nho */}
-      <ul className="list-group list-unstyled d-lg-none text-blue">
-      <li>
-        <button
-        className="nav-link d-lg-none"
-        data-bs-toggle="modal"
-        data-bs-target="#attendCourseModal"
-      >
-        Nhập mã
-      </button>
-        </li>
-      </ul>
       <div
         className="modal fade"
         id="attendCourseModal"

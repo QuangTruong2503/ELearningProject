@@ -5,6 +5,7 @@ import { fetchVerifyLogin } from "../../Helpers/VerifyLogin";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBook,
+  faCalculator,
   faRightFromBracket,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
@@ -38,6 +39,17 @@ function AccountButton() {
       {/* Dành cho màn hình nhỏ */}
       <ul className="d-lg-none mt-2 list-group list-unstyled">
         <hr />
+        <li>
+        <button
+        type="button"
+          className="btn w-100 d-flex gap-2 align-items-center px-0"
+          data-bs-toggle="modal"
+          data-bs-target="#attendCourseModal"
+        >
+          <FontAwesomeIcon icon={faCalculator}/>
+          <span>Nhập mã</span>
+        </button>
+        </li>
         {decodedData.roleID === "admin" && (
           <li>
             <button
@@ -105,7 +117,7 @@ function AccountButton() {
           />
           <span>{userData.userName}</span>
         </button>
-        
+
         <ul
           className="dropdown-header--content mt-2 list-group list-unstyled"
           aria-labelledby="dropdownMenuButton"
@@ -115,6 +127,17 @@ function AccountButton() {
             <span className="dropdown-item-text">
               {userData?.firstName} {userData?.lastName}
             </span>
+          </li>
+          <li>
+            <button
+              type="button"
+              className="btn d-none d-lg-block w-100 d-lg-flex gap-2 align-items-center px-3"
+              data-bs-toggle="modal"
+              data-bs-target="#attendCourseModal"
+            >
+              <FontAwesomeIcon icon={faCalculator} />
+              <span>Nhập mã</span>
+            </button>
           </li>
           {decodedData.roleID === "admin" && (
             <li>

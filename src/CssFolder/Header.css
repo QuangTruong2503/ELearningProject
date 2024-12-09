@@ -26,6 +26,9 @@
 .dropdown-header--content a:hover{
     background-color: #f1f1f1;
 }
+.dropdown-header--content button:hover{
+    background-color: #f1f1f1;
+}
 .dropdown-header--content a:focus{
     background-color: #dfdfdf;
 }
