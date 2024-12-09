@@ -64,14 +64,14 @@ function ListCourses({
         <h3>{title}</h3>
       </div>
       <div className="course-overview">
-        <h4>Course overview</h4>
+        <h4>Danh Sách Khóa Học</h4>
         <div className="d-flex flex-lg-row flex-md-row align-items-center justify-content-between mb-4 gap-2 flex-column">
           <div className="d-flex gap-2">
             <form onSubmit={handleGetMyCourses}>
               <input
                 type="text"
                 className="form-control"
-                placeholder="Search"
+                placeholder="Tìm kiếm"
                 onChange={(e) => setSearchValues(e.target.value)}
               />
             </form>

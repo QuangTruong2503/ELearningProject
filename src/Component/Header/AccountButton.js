@@ -13,11 +13,10 @@ import "../../CssFolder/Header.css";
 function AccountButton() {
   const navigate = useNavigate();
   const loginCookiesName = "loginData";
+  //Dang Xuat
   const handleLogout = () => {
     window.location.href = "/";
-    setTimeout(() =>{
-      Cookies.remove(loginCookiesName);
-    },300)
+    Cookies.remove(loginCookiesName);
   };
   const [decodedData, setDecodedData] = useState({});
   //Lấy dữ liệu từ Cookies
