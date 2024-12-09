@@ -8,7 +8,7 @@ export const fetchVerifyLogin = async () =>{
     const loginCookies = Cookies.get('loginData');
     if(loginCookies === undefined)
     {
-        window.location.href = '/'
+        window.location.href = '/';
     }
     else
     {

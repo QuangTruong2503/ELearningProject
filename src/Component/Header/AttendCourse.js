@@ -34,7 +34,6 @@ function AttendCourse() {
     useEffect(() =>{
         const handleVerifyLogin = async () => {
             const data = await fetchVerifyLogin();
-            //Nếu vai trò là student thì trở về màn hình chính
             if (data !== undefined) {
               setUserData(data)
             }

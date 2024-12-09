@@ -60,7 +60,9 @@ function HeaderComponent() {
           )}
         </div>
       </div>
-      <AttendedCourse />
+      {loginCookies !== undefined && (
+        <AttendedCourse />
+      )}
     </nav>
   );
 }
