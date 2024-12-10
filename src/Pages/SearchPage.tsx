@@ -1,71 +1,99 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { fetchCoursesBySearch } from "../API/coursesAPI";
 
-interface Courses{
-    course_id: string,
-    course_name: string,
-    description: string,
-    is_public: boolean,
-    thumbnail: string,
-    teacherFullName: string
+interface Courses {
+  course_id: string;
+  course_name: string;
+  description: string;
+  is_public: boolean;
+  thumbnail: string;
+  teacherFullName: string;
 }
 
 function SearchPage() {
   const { searchValue } = useParams();
   const navigate = useNavigate();
-  const [courses, setCourses] = useState<Courses[] | null>([
-    {
-      "course_id": "452c4491-9fe1-11ef-8f8b-ce039959f5d6",
-      "course_name": "Lịch Sử Việt Nam",
-      "thumbnail": "https://res.cloudinary.com/brandocloud/image/upload/v1731773101/ELearning/Courses/nhung-cuon-sach-ve-lich-su-viet-nam-anh-dai-dien_diw5is.jpg",
-      "description": "Lịch sử Việt Nam từ thời kỳ dựng nước đến hiện đại",
-      "is_public": true,
-      "teacherFullName": "Nguyen Minh"
-    },
-    {
-      "course_id": "e69be797-af21-447b-bac6-4224bdb145e5",
-      "course_name": "Lịch Sử Thế Giới",
-      "thumbnail": "https://res.cloudinary.com/brandocloud/image/upload/v1731773137/ELearning/Courses/20230914_DJAouDtAWd_tmepbw.jpg",
-      "description": "Khóa học về lịch sử thế giới",
-      "is_public": true,
-      "teacherFullName": "Trần Vũ Quang Trường"
+  const [courses, setCourses] = useState<Courses[]>([]);
+  const [filteredCourses, setFilteredCourses] = useState<Courses[]>(courses);
+  const [filterOption, setFilterOption] = useState<string>("all");
+
+  useEffect(() => {
+    const handleFetchBySearch = async () =>{
+      const results = await fetchCoursesBySearch(searchValue)
+      if(results !== null)
+      {
+        setCourses(results)
+      }
     }
-  ]);
+    //Lọc dữ liệu
+    let filtered = [...courses];
+    if (filterOption === "public") {
+      filtered = courses.filter((course) => course.is_public);
+    } else if (filterOption === "private") {
+      filtered = courses.filter((course) => !course.is_public);
+    } else if (filterOption === "name-az") {
+      filtered = [...courses].sort((a, b) =>
+        a.course_name.localeCompare(b.course_name)
+      );
+    }
+    handleFetchBySearch();
+    setFilteredCourses(filtered);
+  }, [filterOption, courses, searchValue]);
+
+
   return (
-    <div className="list-courses--content">
-      {courses && courses.length > 0 ? (
-        courses.map((item, index) => (
-          <div
-            className="courses-card"
-            key={index}
-            // Nếu được gọi trong MyCourse thì sẽ chuyển đến trang quản lý khi nhấn
-            onClick={() => {
-              navigate(`/course/${item.course_id}`);
-            }}
-          >
-            <img src={item.thumbnail} alt="Course thumbnail" />
-            <div
-              className="d-flex flex-column align-items-start justify-content-start gap-1"
-              style={{ padding: "10px" }}
-            >
-              <h5 className="card-title">{item.course_name}</h5>
-              <p className="card-text">Đăng bởi: {item.teacherFullName}</p>
-              <p className="card-text">
-                Trạng thái:{" "}
-                <span
-                  className={`badge ${
-                    item.is_public ? "bg-success" : "bg-warning"
-                  }`}
+    <div className="container my-5 mx-auto">
+      <h5 className="mb-4">Tìm kiếm theo: {`"${searchValue}"`}</h5>
+      <div className="shadow min-vh-100 p-4 rounded-2">
+      <div className="d-flex justify-content-end align-items-center mb-4">
+        <select
+          id="filter"
+          className="form-select w-auto"
+          value={filterOption}
+          onChange={(e) => setFilterOption(e.target.value)}
+        >
+          <option value="all">Tất cả</option>
+          <option value="public">Công khai</option>
+          <option value="private">Riêng tư</option>
+          <option value="name-az">Tên A - Z</option>
+        </select>
+      </div>
+        <div className="list-courses--content">
+          {filteredCourses && filteredCourses.length > 0 ? (
+            filteredCourses.map((item, index) => (
+              <div
+                className="courses-card"
+                key={index}
+                onClick={() => {
+                  navigate(`/course/${item.course_id}`);
+                }}
+              >
+                <img src={item.thumbnail} alt="Course thumbnail" />
+                <div
+                  className="d-flex flex-column align-items-start justify-content-start gap-1"
+                  style={{ padding: "10px" }}
                 >
-                  {item.is_public ? "Công khai" : "Riêng tư"}
-                </span>
-              </p>
-            </div>
-          </div>
-        ))
-      ) : (
-        <p>Không có khóa học nào.</p>
-      )}
+                  <h5 className="card-title">{item.course_name}</h5>
+                  <p className="card-text">Đăng bởi: {item.teacherFullName}</p>
+                  <p className="card-text">
+                    Trạng thái:{" "}
+                    <span
+                      className={`badge ${
+                        item.is_public ? "bg-success" : "bg-warning"
+                      }`}
+                    >
+                      {item.is_public ? "Công khai" : "Riêng tư"}
+                    </span>
+                  </p>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p>Không có khóa học nào.</p>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

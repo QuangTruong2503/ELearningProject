@@ -70,6 +70,30 @@ export const fetchCoursesByTeacher = async (url) =>{
         throw error; // Propagate error for further handling by caller
     }
 }
+
+//Tìm dữ liệu theo tên
+export const fetchCoursesBySearch = async (searchValue) =>{
+    try {
+        const response = await fetch(`${apiURL}/Courses/search-by-name?searchValue=${searchValue}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
+
+        const result = await response.json();
+        return result;
+
+    } catch (error) {
+        console.error("Failed to fetch public courses by subject:", error);
+        throw error; // Propagate error for further handling by caller
+    }
+}
+
 //Kiểm tra người dùng là người sở hữu khóa học
 export const fetchCheckOwnerCourse = async (userID, courseID) =>{
     const response = await fetch(`${apiURL}/Courses/check-owner-course?userID=${userID}&courseID=${courseID}`, {
