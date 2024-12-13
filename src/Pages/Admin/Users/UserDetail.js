@@ -85,12 +85,12 @@ function UserDetail({ userID, onClose, onSave }) {
     //Lấy dữ liệu người dùng theo ID người dùng
     const handleFetchUserByID = async () => {
       const result = await fetchUserByID(userID);
-      if (result.data === undefined) {
+      if (result === undefined) {
         setIsLoading(false);
         setDataEmpty(true);
         return;
       }
-      const data = result.data;
+      const data = result;
       setFormData({
         user_id: data.user_id,
         user_name: data.user_name,
@@ -125,118 +125,133 @@ function UserDetail({ userID, onClose, onSave }) {
 
   return (
     <div className="modal show d-block modal-background" tabIndex="-1">
-      <div className="modal-dialog">
-        {isLoading && !dataEmpty && (
-          <div className="modal-content justify-content-center align-items-center">
-            <SpinnerLoader />
+  <div className="modal-dialog modal-dialog-centered modal-lg">
+    <div className="modal-content">
+      {isLoading && !dataEmpty ? (
+        <div className="d-flex justify-content-center align-items-center p-5">
+          <SpinnerLoader />
+        </div>
+      ) : !dataEmpty ? (
+        <>
+          <div className="modal-header">
+            <h5 className="modal-title fw-bold">Thông Tin Người Dùng</h5>
+            <button
+              type="button"
+              className="btn-close"
+              onClick={onClose}
+            ></button>
           </div>
-        )}
-        {!isLoading && !dataEmpty && (
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title">Thông Tin Người Dùng</h5>
-              <button
-                type="button"
-                className="btn-close"
-                onClick={onClose}
-              ></button>
-            </div>
-            <div className="modal-body">
-              <form onSubmit={handleSubmit}>
-                <div className="form-group mb-3 d-flex flex-column">
-                  <label>Hình ảnh</label>
-                  <div className="d-flex align-items-end">
-                    <img
-                      style={{ width: "128px", height: "128px", borderRadius: '50%',objectFit: 'cover' }}
-                      src={formData.avatar_url}
-                      alt="Avatar"
-                    />
-                    <label
-                      htmlFor="uploadImage"
-                      className="btn btn-outline-success d-inline-block mx-2"
-                    >
-                      Chọn ảnh <FontAwesomeIcon icon={faImage} />
-                    </label>
-                      <input
-                        id="uploadImage"
-                        type="file"
-                        accept="image/*"
-                        className="d-none"
-                        onChange={handleImageChange}
-                      />
-                  </div>
+          <div className="modal-body">
+            <form onSubmit={handleSubmit}>
+              <div className="form-group mb-4">
+                <label className="form-label fw-bold">Hình ảnh</label>
+                <div className="d-flex align-items-center">
+                  <img
+                    className="rounded-circle border"
+                    style={{ width: "128px", height: "128px", objectFit: "cover" }}
+                    src={formData.avatar_url}
+                    alt="Avatar"
+                  />
+                  <label
+                    htmlFor="uploadImage"
+                    className="btn btn-outline-success mx-3"
+                  >
+                    Chọn ảnh <FontAwesomeIcon icon={faImage} />
+                  </label>
+                  <input
+                    id="uploadImage"
+                    type="file"
+                    accept="image/*"
+                    className="d-none"
+                    onChange={handleImageChange}
+                  />
                 </div>
-                <div className="form-group mb-3">
-                  <label>Tên tài khoản</label>
+              </div>
+
+              <div className="row">
+                <div className="col-md-6 form-group mb-3">
+                  <label className="form-label fw-bold">Tên tài khoản</label>
                   <input
                     type="text"
                     name="user_name"
                     value={formData.user_name}
                     onChange={handleChange}
-                    className="form-control"
+                    className="form-control shadow-sm"
+                    placeholder="Nhập tên tài khoản"
                   />
                 </div>
-                <div className="form-group mb-3">
-                  <label>Họ</label>
-                  <input
-                    type="text"
-                    name="first_name"
-                    value={formData.first_name}
-                    onChange={handleChange}
-                    className="form-control"
-                  />
-                </div>
-                <div className="form-group mb-3">
-                  <label>Tên</label>
-                  <input
-                    type="text"
-                    name="last_name"
-                    value={formData.last_name}
-                    onChange={handleChange}
-                    className="form-control"
-                  />
-                </div>
-                <div className="form-group mb-3">
-                  <label>Email</label>
+                <div className="col-md-6 form-group mb-3">
+                  <label className="form-label fw-bold">Email</label>
                   <input
                     type="email"
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="form-control"
+                    className="form-control shadow-sm"
+                    placeholder="Nhập email"
                   />
                 </div>
-                <div className="form-group mb-3">
-                  <label>Vai trò</label>
-                  <select
-                    name="role_id"
-                    value={formData.role_id}
+              </div>
+
+              <div className="row">
+                <div className="col-md-6 form-group mb-3">
+                  <label className="form-label fw-bold">Họ</label>
+                  <input
+                    type="text"
+                    name="first_name"
+                    value={formData.first_name}
                     onChange={handleChange}
-                    className="form-control"
-                  >
-                    <option value="student">Student</option>
-                    <option value="teacher">Teacher</option>
-                    <option value="admin">Admin</option>
-                  </select>
+                    className="form-control shadow-sm"
+                    placeholder="Nhập họ"
+                  />
                 </div>
-              
-                {/* Button lưu dữ liệu */}
-                <div className="d-flex justify-content-center">
-                  <button type="submit" className="btn btn-primary p-2 w-50">
-                    {isSaving ? <LoaderButton /> : "Lưu thay đổi"}
-                  </button>
+                <div className="col-md-6 form-group mb-3">
+                  <label className="form-label fw-bold">Tên</label>
+                  <input
+                    type="text"
+                    name="last_name"
+                    value={formData.last_name}
+                    onChange={handleChange}
+                    className="form-control shadow-sm"
+                    placeholder="Nhập tên"
+                  />
                 </div>
-              </form>
-            </div>
+              </div>
+
+              <div className="form-group mb-4">
+                <label className="form-label fw-bold">Vai trò</label>
+                <select
+                  name="role_id"
+                  value={formData.role_id}
+                  onChange={handleChange}
+                  className="form-select shadow-sm"
+                >
+                  <option value="student">Student</option>
+                  <option value="teacher">Teacher</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </div>
+
+              <div className="d-flex justify-content-center">
+                <button
+                  type="submit"
+                  className="btn btn-primary px-4 py-2 shadow w-50"
+                >
+                  {isSaving ? <LoaderButton /> : "Lưu thay đổi"}
+                </button>
+              </div>
+            </form>
           </div>
-        )}
-        {!isLoading && dataEmpty && (
-          <div className="text-center">
-            <h3>Không có dữ liệu người dùng!</h3>
-          </div>
-        )}
-      </div>
+        </>
+      ) : (
+        <div className="text-center p-5">
+          <h3 className="text-muted">Không có dữ liệu người dùng!</h3>
+        </div>
+      )}
     </div>
+  </div>
+</div>
+
   );
 }
 

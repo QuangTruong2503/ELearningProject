@@ -150,11 +150,6 @@ function UsersTable({ reloadData, data = [] }) {
                           </button>
                         </li>
                         <li>
-                          <a className="dropdown-item" href="/">
-                            Another action
-                          </a>
-                        </li>
-                        <li>
                           <button
                             type="button"
                             className="btn text-danger dropdown-item"

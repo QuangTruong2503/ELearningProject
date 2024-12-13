@@ -152,11 +152,6 @@ function UsersTable({ reloadData, data = [] }) {
                         </button>
                       </li>
                       <li>
-                        <a className="dropdown-item" href="/">
-                          Another action
-                        </a>
-                      </li>
-                      <li>
                       <button
                             type="button"
                             className="btn text-danger dropdown-item"
@@ -194,7 +189,7 @@ function UsersTable({ reloadData, data = [] }) {
 
       {/* Modal xóa dữ liệu */}
       <DeleteModal
-        title={"Xóa dữ liệu người dung"}
+        title={"Xóa dữ liệu người dùng"}
         content={
           "Bạn có chắc chắn muốn xóa người dùng này? Sau khi xóa các thông tin liên quan như: Khóa học, bài làm... sẽ bị xóa."
         }

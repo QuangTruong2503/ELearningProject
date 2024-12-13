@@ -54,7 +54,7 @@ function AccountButton() {
           <li>
             <button
               className="dropdown-item text-primary py-2 d-flex gap-2"
-              onClick={() => navigate("/admin")}
+              onClick={() => navigate("/admin/dashboard")}
             >
               <span>
                 <FontAwesomeIcon icon={faCodepen} />
@@ -142,7 +142,7 @@ function AccountButton() {
           {decodedData.roleID === "admin" && (
             <li>
               <NavLink
-                to={`/admin`}
+                to={`/admin/dashboard`}
                 className="dropdown-item text-primary py-2 d-flex gap-2"
               >
                 <span>

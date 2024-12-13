@@ -26,18 +26,18 @@ function AdminDashboard({
   return (
     <ul className="nav flex-column list-unstyled">
       <li className={`py-2 mb-2 d-none d-lg-block ${
-                    path === 'chart' ? "manage-course--item-focus px-2" : ""
+                    path === 'dashboard' ? "manage-course--item-focus px-2" : ""
                   }`}>
-      <NavLink className={'text-black d-flex gap-2 align-items-center'} to={`chart`}>
+      <NavLink className={'text-black d-flex gap-2 align-items-center'} to={`dashboard`}>
         <FontAwesomeIcon icon={faChartPie}/>
         <span>Dashboard</span>
       </NavLink>
-      {/* Dành cho màn nhỏ */}
+      {/* Dành cho màn nhỏ khi nhấn sẽ ẩn canvas */}
       </li>
       <li data-bs-dismiss="offcanvas" className={`py-2 mb-2 d-block d-lg-none ${
-                    path === 'chart' ? "manage-course--item-focus px-2" : ""
+                    path === 'dashboard' ? "manage-course--item-focus px-2" : ""
                   }`}>
-      <NavLink className={'text-black d-flex gap-2 align-items-center'} to={`chart`}>
+      <NavLink className={'text-black d-flex gap-2 align-items-center'} to={`dashboard`}>
         <FontAwesomeIcon icon={faChartPie}/>
         <span>Dashboard</span>
       </NavLink>
@@ -58,7 +58,7 @@ function AdminDashboard({
                 >
                   <NavLink className={'text-black'} to={content.url}>{content.name}</NavLink>
                 </li>
-                {/* Dành cho màn nhỏ */}
+                {/* Dành cho màn nhỏ khi nhấn sẽ ẩn canvas */}
                 <li
                   data-bs-dismiss="offcanvas"
                   className={`p-2 ms-3 mb-2 d-lg-none d-block ${

@@ -7,6 +7,7 @@ import { faBars } from "@fortawesome/free-solid-svg-icons";
 import Courses from "./Courses/Courses.js";
 import { fetchVerifyLogin } from "../../Helpers/VerifyLogin.js";
 import { toast } from "react-toastify";
+import DashBoard from "./Charts/DashBoard.js";
 function AdminPage() {
     const collapseData = [
       {
@@ -86,6 +87,8 @@ function AdminPage() {
         <div className="col-md-12 col-lg-9 px-4">
             <div className="container mt-5 p-4 rounded shadow">
                 <Routes>
+                    {/* Dashboard */}
+                    <Route path="dashboard" element={<DashBoard />}/>
                     {/* Users */}
                     <Route path="users/all" element={<Users />} />
                     {/* Courses */}
