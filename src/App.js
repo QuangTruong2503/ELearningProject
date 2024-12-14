@@ -21,6 +21,7 @@ import Quizz from './Pages/Exam/Quizz.js';
 import ExamResults from './Pages/Exam/ExamResults.js';
 import ManageAccount from './Pages/User/ManageAccount.js';
 import SearchPage from './Pages/SearchPage.tsx';
+import CoursesBySubjectPage from './Pages/CoursesBySubjectPage.tsx'
 function App() {
   return (
     <HashRouter>
@@ -58,6 +59,7 @@ function App() {
           <Route path='exam/:examID/result/:submissionID' Component={ExamResults}/>
 
           <Route path='search/:searchValue' Component={SearchPage}/>
+          <Route path='courses/subject/:subjectID' Component={CoursesBySubjectPage}/>
         </Routes>
       </div>
       <SpeedInsights />
