@@ -92,11 +92,11 @@ export const LoginPage = () => {
                   />
                 </div>
 
-                <div className="d-flex justify-content-end mb-4">
+                {/* <div className="d-flex justify-content-end mb-4">
                   <a href="/login" className="text-decoration-none">
                     Quên mật khẩu?
                   </a>
-                </div>
+                </div> */}
 
                 <div className="d-flex justify-content-center mb-3">
                   <button

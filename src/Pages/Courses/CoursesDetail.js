@@ -39,6 +39,7 @@ function CoursesDetail() {
     e.preventDefault();
     setIsActing(true);
     if (Cookies.get("loginData") === undefined) {
+      toast.warning("Bạn cần đăng nhập để tham gia khóa học!")
       navigate("/login");
       return;
     }
