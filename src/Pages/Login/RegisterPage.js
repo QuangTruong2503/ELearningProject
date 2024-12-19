@@ -193,12 +193,12 @@ const RegisterPage = () => {
                     />
                   </div>
                   <div className="mb-4">
-                    <label className="form-label" htmlFor="password">
+                    <label className="form-label" htmlFor="registerPassword">
                       Mật khẩu
                     </label>
                     <input
                       type={showPassword ? "text" : "password"}
-                      id="password"
+                      id="registerPassword"
                       className={`form-control ${
                         passwordMatch ? "" : "border-danger"
                       }`}
