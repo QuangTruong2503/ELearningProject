@@ -149,6 +149,9 @@ function Lessons() {
           <div className="mb-4 text-center">
             <h3>Lesson Details</h3>
           </div>
+          <button className="btn btn-primary mb-3" onClick={handleAddLesson}>
+              Thêm bài học <FontAwesomeIcon icon={faPlus} />
+            </button>
           <div className="accordion" id="lessonAccordion">
             {lessons.map((lesson, index) => (
               <div className="accordion-item" key={index}>
@@ -274,15 +277,35 @@ function Lessons() {
                       </li>
                     </ul>
                   </div>
-                  {/* Delete Lesson Button */}
+                  {/* Edit and Delete Lesson Buttons */}
                   <div className="text-end mt-3">
                     <button
-                      className="btn btn-danger my-1"
+                      className="btn btn-outline-secondary me-2"
+                      onClick={() =>
+                        setEditingLessonId(
+                          editingLessonId === lesson.lessonData.lesson_ID
+                            ? null
+                            : lesson.lessonData.lesson_ID
+                        )
+                      }
+                    >
+                      {editingLessonId === lesson.lessonData.lesson_ID ? (
+                        <>
+                          Lưu <FontAwesomeIcon icon={faSave} />
+                        </>
+                      ) : (
+                        <>
+                          Sửa <FontAwesomeIcon icon={faPencil} />
+                        </>
+                      )}
+                    </button>
+                    <button
+                      className="btn btn-danger"
                       onClick={() =>
                         handleDeleteLesson(lesson.lessonData.lesson_ID)
                       }
                     >
-                      Xóa bài học <FontAwesomeIcon icon={faTrashCan} />
+                      Delete <FontAwesomeIcon icon={faTrashCan} />
                     </button>
                   </div>
                 </div>
@@ -291,21 +314,24 @@ function Lessons() {
           </div>
 
           <div className="mt-4">
-            <button className="btn btn-primary me-2" onClick={handleAddLesson}>
-              Thêm bài học <FontAwesomeIcon icon={faPlus} />
-            </button>
             <button
               className="btn btn-outline-secondary"
               onClick={handleRefreshData}
             >
-              Tải lại <FontAwesomeIcon icon={faArrowRotateLeft} />
+              Hủy thay đổi <FontAwesomeIcon icon={faArrowRotateLeft} />
             </button>
-            <button
-              className="btn btn-success ms-2"
-              onClick={handleSubmitChange}
-            >
-              Lưu thay đổi <FontAwesomeIcon icon={faSave} />
-            </button>
+            {isSaving ? (
+              <button className="btn btn-success ms-2">
+                <LoaderButton />
+              </button>
+            ) : (
+              <button
+                className="btn btn-success ms-2"
+                onClick={handleSubmitChange}
+              >
+                Lưu thay đổi <FontAwesomeIcon icon={faSave} />
+              </button>
+            )}
           </div>
         </>
       )}
