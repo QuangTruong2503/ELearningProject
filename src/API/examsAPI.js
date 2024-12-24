@@ -26,7 +26,19 @@ export const fetchExamByID = async (id) =>{
     const result = await response.json();
     return result;
 }
-
+//Lấy dữ liệu theo examID
+export const fetchGetStudentsStatus = async (examID) =>{
+    const response = await fetch(`${apiURL}/Exams/GetStudentsStatus/${examID}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            // Thêm các header khác nếu cần
+        },
+    });
+    if (!response.ok) throw new Error('Error: ' + response.status);
+    const result = await response.json();
+    return result;
+}
 //Kiểm tra người dùng ở trong khóa học với exam
 export const fetchCheckUserInCourseByExamID = async (userID, examID) =>{
     const response = await fetch(`${apiURL}/Exams/check-user-in-course-by-exam?userID=${userID}&examID=${examID}`, {

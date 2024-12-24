@@ -1,8 +1,8 @@
 const apiURL = process.env.REACT_APP_API_URL;
 
 //Lây dữ liệu tất thống kê người dùng đăng ký theo tháng
-export const fetchUserRegisterByMonth = async () =>{
-    const response = await fetch(`${apiURL}/Charts/user-register-by-months`, {
+export const fetchUserRegisterByMonth = async (year) =>{
+    const response = await fetch(`${apiURL}/Charts/user-register-by-months?year=${year}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

@@ -62,12 +62,12 @@ const QuestionsAndAnswer: React.FC<QuestionsAndAnswerProps> = ({ data }) => {
       {data !== undefined && (
         <div>
           <div className="d-flex justify-content-start">
-            <NavLink to={`/exam/${data.exam.exam_id}`}
-              className=" text-primary"
+            <button onClick={() => window.history.back()}
+              className="btn text-primary d-flex gap-2 align-items-center"
             >
               <FontAwesomeIcon icon={faArrowLeft} />
-              Quay lại
-            </NavLink>
+              <span>Quay lại</span>
+            </button>
           </div>
           <h3 className="text-center mb-5">{data.exam.exam_name}</h3>
           {/* Thong tin */}

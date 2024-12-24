@@ -10,6 +10,7 @@ import {
   faEllipsisVertical,
   faPen,
   faPlus,
+  faTable,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
@@ -128,10 +129,10 @@ function Exams() {
                       </li>
                       <li>
                         <button
-                          className="dropdown-item text-success d-flex align-items-center gap-2"
+                          className="dropdown-item d-flex align-items-center gap-2"
                           onClick={() => navigate(`results/${item.exam_id}`)}
                         >
-                          <FontAwesomeIcon icon={faPen} />
+                          <FontAwesomeIcon icon={faTable} />
                           <span>Bài kiểm tra</span>
                         </button>
                       </li>
