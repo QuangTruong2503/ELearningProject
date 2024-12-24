@@ -126,6 +126,15 @@ function Exams() {
                           <span>Chỉnh sửa</span>
                         </button>
                       </li>
+                      <li>
+                        <button
+                          className="dropdown-item text-success d-flex align-items-center gap-2"
+                          onClick={() => navigate(`results/${item.exam_id}`)}
+                        >
+                          <FontAwesomeIcon icon={faPen} />
+                          <span>Bài kiểm tra</span>
+                        </button>
+                      </li>
                       {/* Delete Button */}
                       <li>
                         <button

@@ -6,6 +6,7 @@ import { fetchVerifyLogin } from "../../../Helpers/VerifyLogin.js";
 import { fetchCheckOwnerCourse } from "../../../API/coursesAPI.js";
 import { toast } from "react-toastify";
 import ManageDashboard from "../../../Component/ManageDashboard.js";
+import ResultWithExam from "./ResultWithExam.tsx";
 import EditCourse from "./EditCourse.js";
 import JoinedUsers from "./JoinedUsers.js";
 import Lessons from './Lessons.js'
@@ -114,7 +115,7 @@ function AdminPage() {
 
                     <Route path="exams" Component={Exams}/>
                     <Route path="exams/detail/:examID" Component={EditExam}/>
-
+                    <Route path="exams/results/:examID" Component={ResultWithExam}/>
 
                     <Route path="joined-users" Component={JoinedUsers}/>
                     <Route path="finish-course" Component={FinishCourse}/>
