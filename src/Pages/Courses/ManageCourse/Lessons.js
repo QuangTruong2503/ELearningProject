@@ -147,7 +147,7 @@ function Lessons() {
       ) : (
         <>
           <div className="mb-4 text-center">
-            <h3>Lesson Details</h3>
+            <h3>Các Bài Học Hiện Có</h3>
           </div>
           <button className="btn btn-primary mb-3" onClick={handleAddLesson}>
               Thêm bài học <FontAwesomeIcon icon={faPlus} />
