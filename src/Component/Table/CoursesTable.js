@@ -12,6 +12,7 @@ import CourseDetail from "../../Pages/Admin/Courses/CourseDetail.js";
 import DeleteModal from "../Modal/DeleteModal.js";
 import { fetchDeleteData } from "../../API/fetchAPI.js";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 function UsersTable({ reloadData, data = [] }) {
   const [datas, setDatas] = useState([]);
@@ -20,6 +21,8 @@ function UsersTable({ reloadData, data = [] }) {
   const [isLoading, setIsLoading] = useState(true);
   const [searchValues, setSearchValues] = useState("");
   
+  const navigate = useNavigate();
+
   const handleReloadData = async () => {
     setIsLoading(true)
     const results = await fetchCourses(`Courses?page=${datas.currentPage}&searchName=${searchValues}`);
@@ -147,6 +150,15 @@ function UsersTable({ reloadData, data = [] }) {
                             onClick={() => handleEdit(course.courseID)}
                           >
                             Chỉnh sửa
+                          </button>
+                        </li>
+                        <li>
+                          <button
+                            className="dropdown-item text-primary"
+                            type="button"
+                            onClick={() => navigate(`/manage-course/${course.courseID}/details`)}
+                          >
+                            Xem chi tiết
                           </button>
                         </li>
                         <li>
