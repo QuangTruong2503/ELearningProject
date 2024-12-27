@@ -1,4 +1,4 @@
-import { HashRouter, Route, Routes } from 'react-router-dom';
+import {  BrowserRouter, Route, Routes } from 'react-router-dom';
 import {SpeedInsights} from '@vercel/speed-insights/react';
 import './CssFolder/App.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -24,7 +24,7 @@ import SearchPage from './Pages/SearchPage.tsx';
 import CoursesBySubjectPage from './Pages/CoursesBySubjectPage.tsx'
 function App() {
   return (
-    <HashRouter>
+    <BrowserRouter>
       <HeaderComponent></HeaderComponent>
 
       <div className='web-content container-lg'>
@@ -66,7 +66,7 @@ function App() {
       <Footer></Footer>
       <ScrollToTopButton />
       <ToastContainer  stacked={true}/>
-    </HashRouter>
+    </BrowserRouter>
   );
 }
 
